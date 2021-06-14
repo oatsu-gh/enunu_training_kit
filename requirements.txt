@@ -1,0 +1,7 @@
+numpy
+cython
+hydra-core<1.1
+utaupy>=1.12.0
+tqdm
+pydub
+pyyaml
