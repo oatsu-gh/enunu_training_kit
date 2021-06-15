@@ -6,7 +6,7 @@ pip install wheel
 pip install numpy cython
 pip install hydra-core<1.1
 pip install utaupy tqdm pydub pyyaml
-pip install torch==1.8.1+cu111 torchvision==0.9.1+cu111 torchaudio===0.8.1 -f "https://download.pytorch.org/whl/torch_stable.html"
+pip install torch==1.9.0+cu111 torchvision==0.10.0+cu111 torchaudio===0.9.0 -f https://download.pytorch.org/whl/torch_stable.html
 
 git clone "https://github.com/r9y9/nnsvs"
 pip install ./nnsvs
