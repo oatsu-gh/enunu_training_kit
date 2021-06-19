@@ -1,8 +1,8 @@
 # @package _group_
 
 out_dir: exp
-nepochs: 60
-checkpoint_epoch_interval: 100
+nepochs: 150
+checkpoint_epoch_interval: 50
 
 stream_wise_loss: false
 use_detect_anomaly: true
