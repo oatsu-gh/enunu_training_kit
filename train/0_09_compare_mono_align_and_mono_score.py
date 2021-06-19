@@ -13,6 +13,7 @@ from sys import argv
 
 import utaupy as up
 import yaml
+from natsort import natsorted
 from tqdm import tqdm
 
 
@@ -41,8 +42,8 @@ def main(path_config_yaml):
     with open(path_config_yaml, 'r') as fy:
         config = yaml.load(fy, Loader=yaml.FullLoader)
     out_dir = config['out_dir']
-    mono_align_files = sorted(glob(f'{out_dir}/mono_align_round/*.lab'))
-    mono_score_files = sorted(glob(f'{out_dir}/mono_score_round/*.lab'))
+    mono_align_files = natsorted(glob(f'{out_dir}/mono_align_round/*.lab'))
+    mono_score_files = natsorted(glob(f'{out_dir}/mono_score_round/*.lab'))
 
     # 音素数と音素記号が一致するか確認する。
     print('Comparing mono-align-LAB and mono-score-LAB')

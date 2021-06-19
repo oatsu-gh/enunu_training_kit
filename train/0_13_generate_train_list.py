@@ -17,6 +17,7 @@ from sys import argv
 from typing import Union
 
 import yaml
+from natsort import natsorted
 
 
 def generate_train_list(out_dir, interval: Union[int, None] = None):
@@ -28,7 +29,7 @@ def generate_train_list(out_dir, interval: Union[int, None] = None):
     """
     # 学習対象のファイル一覧を取得
     utt_list = glob(f'{join(out_dir)}/acoustic/wav/*.wav')
-    utt_list = sorted([splitext(basename(path))[0] for path in utt_list])
+    utt_list = natsorted([splitext(basename(path))[0] for path in utt_list])
 
     if interval is None:
         len_utt_list = len(utt_list)

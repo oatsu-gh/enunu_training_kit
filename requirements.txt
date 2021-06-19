@@ -1,7 +1,11 @@
 numpy
 cython
-hydra-core<1.1
+hydra-core=1.0.6
 utaupy>=1.12.0
 tqdm
 pydub
 pyyaml
+torch==1.9.0+cu111
+torchvision==0.10.0+cu111
+torchaudio===0.9.0
+natsort

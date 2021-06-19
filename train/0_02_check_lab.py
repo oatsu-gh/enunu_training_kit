@@ -14,13 +14,14 @@ from pprint import pprint
 import utaupy as up
 import yaml
 from tqdm import tqdm
+from natsort import natsorted
 
 
 def check_lab_files(lab_dir):
     """
     時刻がちゃんとしてるか点検
     """
-    mono_lab_files = sorted(glob(f'{lab_dir}/*.lab'))
+    mono_lab_files = natsorted(glob(f'{lab_dir}/*.lab'))
     # 発声時間が短すぎないか点検
     invalid_lab_files = []
     for path_mono in tqdm(mono_lab_files):
