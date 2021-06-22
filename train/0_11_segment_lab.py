@@ -234,4 +234,4 @@ if __name__ == '__main__':
     print('[ Stage 0 ] [ Step 3b ] ')
     print('Segment labels in full_align_round, mono_align, full_score_round, mono_score_round.')
     print('----------------------------------------------------------------------------------')
-    main(argv[1], mode='long')
+    main(argv[1], mode='short')
