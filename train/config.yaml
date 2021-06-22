@@ -68,7 +68,7 @@ acoustic_train: myconfig
 acoustic_data: myconfig
 
 # Pretrained model dir (leave empty to disable)
-pretrained_expdir:
+pretrained_expdir: exp/karasu_enunu_training_kit
 
 ###########################################################
 #                SYNTHESIS SETTING                        #
@@ -80,4 +80,4 @@ acoustic_synthesis: defaults
 # latest.pth or best.pth
 timelag_eval_checkpoint: best_loss.pth
 duration_eval_checkpoint: best_loss.pth
-acoustic_eval_checkpoint: latest.pth
+acoustic_eval_checkpoint: best_loss.pth
