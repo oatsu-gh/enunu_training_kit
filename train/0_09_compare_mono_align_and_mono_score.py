@@ -29,9 +29,9 @@ def compare_lab_file(path_mono_label, path_sinsy_mono):
     )
     for mono_align_phoneme, mono_score_phoneme in zip(mono_label, sinsy_mono):
         assert mono_align_phoneme.symbol == mono_score_phoneme.symbol, \
-            'DB同梱のラベル("{}", {})と楽譜から生成したラベル("{}", {})の音素記号が一致しません。'.format(
-                mono_align_phoneme.symbol, path_mono_label,
-                mono_score_phoneme.symbol, path_sinsy_mono
+            'DB同梱のラベル({}, "{}")と楽譜から生成したラベル({}, "{}")の音素記号が一致しません。\n'.format(
+                path_mono_label, mono_align_phoneme,
+                path_sinsy_mono, mono_score_phoneme
             )
 
 
