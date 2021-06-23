@@ -68,7 +68,7 @@ acoustic_train: myconfig
 acoustic_data: myconfig
 
 # Pretrained model dir (leave empty to disable)
-pretrained_expdir: exp/karasu_enunu_training_kit
+pretrained_expdir:
 
 ###########################################################
 #                SYNTHESIS SETTING                        #
