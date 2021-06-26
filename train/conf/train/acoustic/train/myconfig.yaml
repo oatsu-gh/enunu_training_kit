@@ -17,7 +17,7 @@ optim:
   lr_scheduler:
     name: StepLR
     params:
-      step_size: 50
+      step_size: 20
       gamma: 0.5
 
 resume:
