@@ -1,0 +1,29 @@
+# @package _global_
+
+defaults:
+  - hydra/job_logging: colorlog
+  - hydra/hydra_logging: colorlog
+
+  # Musical/linguistic context -> time-lag (onset fluctuations)
+  - timelag: defaults
+
+  # Musical/linguistic context -> phoneme durations
+  - duration: defaults
+
+  # Musical/linguistic context -> acoustic parameters (f0, mgc, bap, vuv)
+  - acoustic: static_deltadelta
+
+
+# Common settings for timelag/duration/acoustic features
+
+verbose: 100
+
+utt_list: path/to/list.txt
+
+out_dir: dump
+
+# question path used for timelag, duration and acoustic models
+question_path:
+
+# Musical/linguistic feature extraction common settings
+log_f0_conditioning: true

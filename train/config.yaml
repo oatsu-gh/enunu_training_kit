@@ -40,9 +40,9 @@ sample_rate: 44100
 #                FEATURE EXTRACTION SETTING               #
 ###########################################################
 
-timelag_features: defaults
-duration_features: defaults
-acoustic_features: static_deltadelta
+timelag_features: myconfig
+duration_features: myconfig
+acoustic_features: myconfig
 
 ###########################################################
 #                TRAINING SETTING                         #
