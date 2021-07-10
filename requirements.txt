@@ -5,7 +5,7 @@ utaupy>=1.12.0
 tqdm
 pydub
 pyyaml
-torch==1.9.0+cu111
-torchvision==0.10.0+cu111
-torchaudio===0.9.0
+torch==1.7.1
+torchaudio==0.7.0
 natsort
+bandmat
