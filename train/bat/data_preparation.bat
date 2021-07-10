@@ -1,5 +1,9 @@
 @ REM Copyright (c) 2021 oatsu
 
+@ if not defined python (
+    set python=python
+)
+
 @ %python% 0_01_copy_files.py config.yaml
 @ %python% 0_02_check_lab.py config.yaml
 @ %python% 0_03_force_ust_end_with_rest.py config.yaml
