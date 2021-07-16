@@ -115,3 +115,4 @@ fi
 if [ ${stage} -le 7 ] && [ ${stop_stage} -ge 7 ]; then
     echo "stage 7: Copy models to release directory"
     python prepare_model_for_release_enunu.py
+fi
