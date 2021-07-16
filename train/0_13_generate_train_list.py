@@ -36,7 +36,7 @@ def generate_train_list(out_dir, interval: Union[int, None] = None):
 
     if interval is None:
         for i in (23, 19, 17, 13, 11):
-            if (len_utt_list + 5 > i) and (len_utt_list % i != 0):
+            if (i < len_utt_list + 5) and (len_utt_list % i != 0):
                 interval = i
                 break
         else:
