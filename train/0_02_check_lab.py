@@ -29,10 +29,10 @@ def check_lab_files(lab_dir, threshold=0):
     if len(invalid_lab_files) != threshold:
         print('LABファイルの発声時刻に不具合があります。以下のファイルを点検してください。')
         pprint(invalid_lab_files)
-        sys.exit(1)
+        raise Exception
 
 
-def reapair_too_short_phoneme(lab_dir, threshold=5) -> None:
+def repair_too_short_phoneme(lab_dir, threshold=5) -> None:
     """
     LABファイルの中の発声時刻が短すぎる音素(5ms未満の時とか)を修正する。
     直前の音素の長さを削る。
@@ -79,7 +79,7 @@ def main(path_config_yaml):
     # LABファイルを点検する
     print(f'Checking LAB files in {lab_dir}')
     check_lab_files(lab_dir)
-    reapair_too_short_phoneme(lab_dir)
+    repair_too_short_phoneme(lab_dir)
 
 
 if __name__ == '__main__':
