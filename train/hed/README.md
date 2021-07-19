@@ -1,4 +1,4 @@
-# nnsvs_kuroppoid > recipe > svs-world-conv > hed
+# hed
 
 NNSVS向けHTSフルコンテキストラベル用ファイル
 
