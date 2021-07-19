@@ -63,56 +63,72 @@ fi
 
 # Prepare files in singing-database for training
 if [ ${stage} -le 0 ] && [ ${stop_stage} -ge 0 ]; then
-    echo "stage 0: Data preparation"
+    echo "##########################################"
+    echo "#  stage 0: Data preparation             #"
+    echo "##########################################"
     rm -rf data dump
-    bash data_prep.sh ./config.yaml
+    python preprocess_data.py
 fi
 
 
 # Analyze .wav and .lab files
 if [ ${stage} -le 1 ] && [ ${stop_stage} -ge 1 ]; then
-    echo "stage 1: Feature generation"
+    echo "##########################################"
+    echo "#  stage 1: Feature generation           #"
+    echo "##########################################"
     . $NNSVS_COMMON_ROOT/feature_generation.sh
 fi
 
 
 # Train time-lag model
 if [ ${stage} -le 2 ] && [ ${stop_stage} -ge 2 ]; then
-    echo "stage 2: Training time-lag model"
+    echo "##########################################"
+    echo "#  stage 2: Time-lag model training      #"
+    echo "##########################################"
     . $NNSVS_COMMON_ROOT/train_timelag.sh
 fi
 
 
 # Train duration model
 if [ ${stage} -le 3 ] && [ ${stop_stage} -ge 3 ]; then
-    echo "stage 3: Training duration model"
+    echo "##########################################"
+    echo "#  stage 3: Duration model training      #"
+    echo "##########################################"
     . $NNSVS_COMMON_ROOT/train_duration.sh
 fi
 
 
 # Train acoustic model
 if [ ${stage} -le 4 ] && [ ${stop_stage} -ge 4 ]; then
-    echo "stage 4: Training acoustic model"
+    echo "##########################################"
+    echo "#  stage 4: Training acoustic model      #"
+    echo "##########################################"
     . $NNSVS_COMMON_ROOT/train_acoustic.sh
 fi
 
 
 # Generate models from timelag/duration/acoustic models
 if [ ${stage} -le 5 ] && [ ${stop_stage} -ge 5 ]; then
-    echo "stage 5: Generate features"
+    echo "##########################################"
+    echo "#  stage 5: Feature generation           #"
+    echo "##########################################"
     . $NNSVS_COMMON_ROOT/generate.sh
 fi
 
 
 # Synthesis wav files
 if [ ${stage} -le 6 ] && [ ${stop_stage} -ge 6 ]; then
-    echo "stage 6: Synthesis waveforms"
+    echo "##########################################"
+    echo "#  stage 6: Waveform synthesis           #"
+    echo "##########################################"
     . $NNSVS_COMMON_ROOT/synthesis.sh
 fi
 
 
 # Copy the models to release directory
 if [ ${stage} -le 7 ] && [ ${stop_stage} -ge 7 ]; then
-    echo "stage 7: Copy models to release directory"
+    echo "##########################################"
+    echo "#  stage 7: Release preparation          #"
+    echo "##########################################"
     python prepare_model_for_release_enunu.py
 fi
