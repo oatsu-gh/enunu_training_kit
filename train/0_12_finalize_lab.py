@@ -31,10 +31,11 @@ def lab_fix_offset(path_lab):
     ファイルは上書きする。
     """
     label = up.label.load(path_lab)
-    offset = label[0].start
+    # どのくらいずらすか
+    dt = label[0].start
     for phoneme in label:
-        phoneme.start -= offset
-        phoneme.end -= offset
+        phoneme.start -= dt
+        phoneme.end -= dt
     label.write(path_lab)
 
 
@@ -101,8 +102,9 @@ def segment_wav(path_wav_in, acoustic_wav_dir, corresponding_full_align_round_se
         wav_slice.export(path_wav_seg_out, format='wav')
 
 
-def prepare_data_for_acoustic_models(
-        full_align_round_seg_files: list, full_score_round_seg_files: list, wav_files: list, acoustic_dir):
+def prepare_data_for_acoustic_models(full_align_round_seg_files: list,
+                                     full_score_round_seg_files: list,
+                                     wav_files: list, acoustic_dir: str):
     """
     acousticモデル用に音声ファイルとラベルファイルを複製する。
     """
@@ -163,10 +165,12 @@ def main(path_config_yaml):
 
     # フルラベルのオフセット修正をして、acoustic用のフォルダに保存する。
     # wavファイルをlabファイルのセグメントに合わせて切断
+    # wavファイルの前後にどのくらい余白を設けるか
     print('Preparing data for acoustic models')
     acoustic_dir = f'{out_dir}/acoustic'
-    prepare_data_for_acoustic_models(
-        full_align_round_seg_files, full_score_round_seg_files, wav_files, acoustic_dir)
+    prepare_data_for_acoustic_models(full_align_round_seg_files,
+                                     full_score_round_seg_files,
+                                     wav_files, acoustic_dir)
 
 
 if __name__ == '__main__':
