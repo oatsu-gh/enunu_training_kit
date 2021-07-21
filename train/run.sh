@@ -137,6 +137,6 @@ if [ ${stage} -le 7 ] && [ ${stop_stage} -ge 7 ]; then
     echo "##########################################"
     echo "#  stage 7: Release preparation          #"
     echo "##########################################"
-    python prepare_model_for_release_enunu.py
+    python prepare_release.py
     echo ""
 fi
