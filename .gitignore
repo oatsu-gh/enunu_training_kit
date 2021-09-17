@@ -3,6 +3,7 @@ singing_database
 
 *.ini
 *.lab
+*.log
 *.mid
 *.ust
 *.wav
