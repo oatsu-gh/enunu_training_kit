@@ -3,6 +3,7 @@
 """
 USTファイルの最終ノートを休符にする。
 """
+import logging
 from glob import glob
 from os.path import join
 from sys import argv
@@ -19,6 +20,9 @@ def force_ust_files_end_with_rest(ust_dir):
     ust_files = glob(f'{ust_dir}/*.ust')
     for path_ust in tqdm(ust_files):
         ust = up.ust.load(path_ust)
+        if ust.notes[-1].lyric != 'R':
+            info_message = f'USTの末尾に休符がありません。({path_ust})'
+            logging.info(info_message)
         ust.make_finalnote_R()
         ust.write(path_ust)
 
@@ -39,7 +43,4 @@ def main(path_config_yaml):
 
 
 if __name__ == '__main__':
-    if len(argv) == 1:
-        main('config.yaml')
-    else:
-        main(argv[1].strip('"'))
+    main(argv[1].strip('"'))

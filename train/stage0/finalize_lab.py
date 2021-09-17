@@ -29,6 +29,7 @@ def lab_fix_offset(path_lab):
     """
     ラベルの開始時刻をゼロにする。(音声を切断したため。)
     ファイルは上書きする。
+    offset: 最初に余裕をどのくらい持たせるか[100ns]
     """
     label = up.label.load(path_lab)
     # どのくらいずらすか
@@ -87,10 +88,9 @@ def segment_wav(path_wav_in, acoustic_wav_dir, corresponding_full_align_round_se
 
     full_align_round_seg_files: full_align_round_seg の中にあるファイル(切断時刻のデータを持っている)
     """
-    # TODO: 処理が遅いと思うので、並列実行できるようにする。
     # 音声ファイルを読み取る
     wav = AudioSegment.from_file(path_wav_in, format='wav')
-    for path_lab in tqdm(corresponding_full_align_round_seg_files):
+    for path_lab in corresponding_full_align_round_seg_files:
         label = up.label.load(path_lab)
         # 切断時刻を取得
         t_start_ms = round(label[0].start / 10000)
@@ -174,12 +174,6 @@ def main(path_config_yaml):
 
 
 if __name__ == '__main__':
-    print('----------------------------------------------------------------------------------')
-    print('[ Stage 0 ] [ Step 4 ] ')
-    print('- Segment WAV files and save to acoustic model directory.')
-    print('- Copy LAB files to each model directory.')
-    print('- Fix offset of LAB files for acoustic and duration model.')
-    print('----------------------------------------------------------------------------------')
     if len(argv) == 1:
         main('config.yaml')
     else:
