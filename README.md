@@ -52,3 +52,4 @@ UST ファイルが同梱されている歌唱データベースから、[ENUNU]
   - DBチェック機能を強化（[ENUNU/train](https://github.com/oatsu-gh/ENUNU/tree/main/train) から複製）
 - v1.0.0 (2021-11-03)
   - Python Embeddable + Portable Git をポータブル環境にした。（[ENUNU/train](https://github.com/oatsu-gh/ENUNU/tree/main/train) から複製）
+  - LICENSE を GPL 2 に変更
