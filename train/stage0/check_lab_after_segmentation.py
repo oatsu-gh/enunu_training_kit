@@ -23,10 +23,10 @@ def check_lab_files(lab_dir, threshold=0):
         label = up.label.load(path_mono)
         if not label.is_valid(threshold):
             invalid_lab_files.append(path_mono)
-            logging.error('LABファイルの発声時刻に不具合があります。(%s)', path_mono)
+            logging.error('LAB파일의 발성 시각에 오류가 있습니다. (%s)', path_mono)
             print()
     if len(invalid_lab_files) != 0:
-        message = '  \n'.join(['LABファイルの発声時刻に不具合があります。以下のファイルを点検してください。'] + invalid_lab_files)
+        message = '  \n'.join(['LAB파일의 발성 시각에 오류가 있습니다. 아래의 파일을 점검해주세요.'] + invalid_lab_files)
         # logging.exception(message)
         raise Exception(message)
 
@@ -45,7 +45,7 @@ def main(path_config_yaml):
     lab_dir = join(out_dir, 'lab')
     # LABファイルを点検する
     for lab_dir in [f'{out_dir}/full_align_round_seg', f'{out_dir}/mono_align_round_seg']:
-        print(f'Checking LAB files in {lab_dir}')
+        print(f'{lab_dir} 안에서 LAB 파일을 확인하는 중...')
         check_lab_files(lab_dir)
 
 

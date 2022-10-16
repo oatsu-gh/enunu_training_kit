@@ -30,7 +30,7 @@ def ust2full(path_ust_dir_in, path_full_dir_out, path_table, exclude_songs):
     for path_ust in tqdm(ust_files):
         songname = splitext(basename(path_ust))[0]
         if songname in exclude_songs:
-            print(f'Skip excluded song: {songname}')
+            print(f'제외된 노래 건너 뜀: {songname}')
         else:
             path_full = f'{path_full_dir_out}/{songname}.lab'
             ust2hts(path_ust, path_full, path_table, strict_sinsy_style=False)
@@ -46,7 +46,7 @@ def compare_number_of_ustfiles_and_labfiles(ust_dir, mono_align_dir):
     mono_files = natsorted(glob(f'{mono_align_dir}/*.lab'))
     # 個数が合うか点検
     assert len(ust_files) == len(mono_files), \
-        f'USTファイル数({len(ust_files)})とLABファイル数({len(mono_files)})が一致しません'
+        f'UST 파일 개수({len(ust_files)})와 LAB 파일 개수({len(mono_files)})가 일치하지 않습니다.'
 
 
 def compare_name_of_ustfiles_and_labfiles(ust_dir, mono_align_dir):
@@ -68,10 +68,10 @@ def compare_name_of_ustfiles_and_labfiles(ust_dir, mono_align_dir):
     # すべての名前が一致したか確認
     if len(songnames_dont_match) != 0:
         for path_ust_and_path_lab in songnames_dont_match:
-            logging.error('USTファイル名とLABファイル名が一致しません:')
-            logging.error('  path_ust: %s', path_ust_and_path_lab[0])
-            logging.error('  path_lab: %s', path_ust_and_path_lab[1])
-        raise ValueError('USTファイル名とLABファイル名が一致しませんでした。ファイル名を点検してください')
+            logging.error('UST 파일 이름과 LAB 파일의 이름이 일치하지 않습니다:')
+            logging.error('  ust 경로: %s', path_ust_and_path_lab[0])
+            logging.error('  lab 경로: %s', path_ust_and_path_lab[1])
+        raise ValueError('UST 파일 이름과 LAB 파일 이름이 일치하지 않습니다. 파일명을 점검해주세요.')
 
 
 def main(path_config_yaml):
@@ -98,7 +98,7 @@ def main(path_config_yaml):
     compare_number_of_ustfiles_and_labfiles(ust_dir, mono_align_dir)
     compare_name_of_ustfiles_and_labfiles(ust_dir, mono_align_dir)
 
-    print('Converting UST files to full-LAB files')
+    print('UST 파일들을 full-LAB 파일들로 변환 중...')
     # USTからフルラベルを生成
     ust2full(ust_dir, full_score_dir, path_table, exclude_songs=exclude_songs)
 

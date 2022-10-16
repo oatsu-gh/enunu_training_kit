@@ -56,7 +56,7 @@ def main(path_config_yaml):
     # コンテキストのもとになるフルラベルファイル一覧
     full_score_files = sorted(glob(f'{out_dir}/full_score_round/*.lab'))
 
-    print('Copying times of mono-LAB (mono_align_round) to full-LAB (full_score_round) and save into full_align_round')
+    print('mono-LAB(mono_align_round) 시간을 full-LAB(full_score_round)로 복사 후, full_align_round에 저장 중...')
     for path_mono_align, path_full_score in zip(tqdm(mono_align_files), full_score_files):
         path_full_align = f'{full_align_dir}/{basename(path_full_score)}'
         copy_mono_align_time_to_full(path_mono_align, path_full_score, path_full_align)
@@ -65,6 +65,6 @@ def main(path_config_yaml):
 if __name__ == '__main__':
     print('----------------------------------------------------------------------------------')
     print('[ Stage 0 ] [ Step 3a ]')
-    print('Copy mono_align phonemes to full_score and save in full_align.')
+    print('mono_align 음소를 full_score로 복사하고 full_align으로 저장합니다.')
     print('----------------------------------------------------------------------------------')
     main(argv[1])

@@ -21,7 +21,7 @@ def force_ust_files_end_with_rest(ust_dir):
     for path_ust in tqdm(ust_files):
         ust = up.ust.load(path_ust)
         if ust.notes[-1].lyric != 'R':
-            info_message = f'USTの末尾に休符がありません。({path_ust})'
+            info_message = f'UST의 끝에 쉼표가 없습니다. ({path_ust})'
             logging.info(info_message)
         ust.make_finalnote_R()
         ust.write(path_ust)
@@ -38,7 +38,7 @@ def main(path_config_yaml):
     out_dir = config['out_dir'].strip('"')
     ust_dir = join(out_dir, 'ust')
     # oto2kabの仕様に合わせて、USTが休符で終わるようにする。
-    print('Overwriting UST file so that it end with rest note.')
+    print('UST 파일이 쉼표로 끝나도록 덮어씌우는 중...')
     force_ust_files_end_with_rest(ust_dir)
 
 

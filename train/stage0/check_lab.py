@@ -28,7 +28,7 @@ def check_lab_files(lab_dir, threshold=0):
         if not label.is_valid(threshold):
             invalid_lab_files.append(path_mono)
     if len(invalid_lab_files) != threshold:
-        print('LABファイルの発声時刻に不具合があります。以下のファイルを点検してください。')
+        print('LAB파일의 발성 시각에 오류가 있습니다. 아래의 파일을 점검해주세요.')
         pprint(invalid_lab_files)
         raise Exception
 
@@ -49,11 +49,11 @@ def repair_too_short_phoneme(lab_dir, threshold=5) -> None:
             continue
         # 短い音素が連続しても不具合が起こらないように逆向きにループする
         if label[0].duration < threshold_100ns:  # pylint: disable=no-member
-            raise ValueError(f'最初の音素が短いです。修正できません。: {label[0]} ({path_mono})')
+            raise ValueError(f'첫 음소가 짧습니다. 수정할 수 없습니다. : {label[0]} ({path_mono})')
         for i, phoneme in enumerate(reversed(label)):
             # 発声時間が閾値より短い場合
             if phoneme.duration < threshold_100ns:
-                logging.info('短い音素を修正します。: %s (%s)', phoneme, path_mono)
+                logging.info('짧은 음소를 수정합니다. : %s (%s)', phoneme, path_mono)
                 # 閾値との差分を計算する。この分だけずらす。
                 delta_t = threshold_100ns - phoneme.duration
                 # 対象の音素の開始時刻をずらして、発生時間を伸ばす。
@@ -78,7 +78,7 @@ def main(path_config_yaml):
     out_dir = expanduser(join(config_dir, config['out_dir'])).strip('"')
     lab_dir = join(out_dir, 'lab')
     # LABファイルを点検する
-    print(f'Checking LAB files in {lab_dir}')
+    print(f'{lab_dir} 안에서 LAB 파일을 확인하는 중...')
     check_lab_files(lab_dir)
     repair_too_short_phoneme(lab_dir)
 

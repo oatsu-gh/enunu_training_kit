@@ -55,12 +55,12 @@ def prepare_data_for_timelag_models(
     makedirs(label_phone_score_dir, exist_ok=True)
 
     # 手動設定したフルラベルファイルを複製
-    print('Copying full_align_round_seg files')
+    print('full_align_round_seg 파일 복사 중...')
     for path_lab in tqdm(full_align_round_seg_files):
         copy(path_lab, f'{label_phone_align_dir}/{basename(path_lab)}')
 
     # 楽譜から生成したフルラベルファイルを複製
-    print('Copying full_score_round_seg files')
+    print('full_score_round_seg 파일 복사 중...')
     for path_lab in tqdm(full_score_round_seg_files):
         copy(path_lab, f'{label_phone_score_dir}/{basename(path_lab)}')
 
@@ -73,7 +73,7 @@ def prepare_data_for_duration_models(full_align_round_seg_files: list, duration_
     makedirs(label_phone_align_dir, exist_ok=True)
 
     # 手動設定したフルラベルファイルを複製
-    print('Copying full_align_round_seg files')
+    print('full_align_round_seg 파일 복사 중...')
     for path_lab_in in tqdm(full_align_round_seg_files):
         path_lab_out = f'{label_phone_align_dir}/{basename(path_lab_in)}'
         copy(path_lab_in, path_lab_out)
@@ -117,7 +117,7 @@ def prepare_data_for_acoustic_models(full_align_round_seg_files: list,
     makedirs(label_phone_score_dir, exist_ok=True)
 
     # wavファイルを分割して保存する
-    print('Split wav files')
+    print('wav 파일들 분리 중...')
     for path_wav in tqdm(wav_files):
         songname = splitext(basename(path_wav))[0]
         corresponding_full_align_round_seg_files = [
@@ -126,14 +126,14 @@ def prepare_data_for_acoustic_models(full_align_round_seg_files: list,
         segment_wav(path_wav, wav_dir, corresponding_full_align_round_seg_files)
 
     # 手動設定したフルラベルファイルを複製
-    print('Copying full_align_round_seg files')
+    print('full_align_round_seg 파일 복사 중...')
     for path_lab_in in tqdm(full_align_round_seg_files):
         path_lab_out = f'{label_phone_align_dir}/{basename(path_lab_in)}'
         copy(path_lab_in, path_lab_out)
         lab_fix_offset(path_lab_out)
 
     # 楽譜から生成したフルラベルファイルを複製
-    print('Copying full_score_round_seg files')
+    print('full_score_round_seg 파일 복사 중...')
     for path_lab_in in tqdm(full_score_round_seg_files):
         path_lab_out = f'{label_phone_score_dir}/{basename(path_lab_in)}'
         copy(path_lab_in, path_lab_out)
@@ -153,20 +153,20 @@ def main(path_config_yaml):
     wav_files = natsorted(glob(f'{out_dir}/wav/*.wav', recursive=True))
 
     # フルラベルをtimelag用のフォルダに保存する。
-    print('Preparing data for time-lag models')
+    print('지연 시간 모델에 대한 데이터 준비 중...')
     timelag_dir = f'{out_dir}/timelag'
     prepare_data_for_timelag_models(full_align_round_seg_files,
                                     full_score_round_seg_files, timelag_dir)
 
     # フルラベルのオフセット修正をして、duration用のフォルダに保存する。
-    print('Preparing data for acoustic models')
+    print('음향 모델에 대한 데이터 준비 중...')
     duration_dir = f'{out_dir}/duration'
     prepare_data_for_duration_models(full_align_round_seg_files, duration_dir)
 
     # フルラベルのオフセット修正をして、acoustic用のフォルダに保存する。
     # wavファイルをlabファイルのセグメントに合わせて切断
     # wavファイルの前後にどのくらい余白を設けるか
-    print('Preparing data for acoustic models')
+    print('음향 모델에 대한 데이터 준비 중...')
     acoustic_dir = f'{out_dir}/acoustic'
     prepare_data_for_acoustic_models(full_align_round_seg_files,
                                      full_score_round_seg_files,

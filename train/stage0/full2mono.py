@@ -36,7 +36,7 @@ def main(path_config_yaml):
 
     full_score_dir = join(out_dir, 'full_score_round')
     mono_score_dir = join(out_dir, 'mono_score_round')
-    print(f'Copying full-score-LAB an mono-score-LAB into {mono_score_dir}')
+    print(f'full-score-LAB 및 mono-score-LAB을 {mono_score_dir}에 복사 중...')
     full_files_to_mono_files(full_score_dir, mono_score_dir)
 
 

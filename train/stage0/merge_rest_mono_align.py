@@ -53,7 +53,7 @@ def main(path_config_yaml):
         config = yaml.load(fy, Loader=yaml.FullLoader)
     out_dir = config['out_dir']
     mono_lab_dir = join(out_dir, 'lab')
-    print(f'Merging rests of mono-LAB files in {mono_lab_dir}')
+    print(f'{mono_lab_dir}에서 mono-LAB 파일의 무음부 병합 중...')
     merge_rests_mono_labfiles(mono_lab_dir)
 
 

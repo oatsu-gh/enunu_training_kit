@@ -32,7 +32,7 @@ def generate_train_list(out_dir, interval: Union[int, None] = None):
     utt_list = natsorted([splitext(basename(path))[0] for path in utt_list])
     len_utt_list = len(utt_list)
     if len_utt_list == 0:
-        raise Exception(f'There are no wav files in "{join(out_dir)}/acoustic/wav".')
+        raise Exception(f'"{join(out_dir)}/acoustic/wav"에 wav 파일들이 없습니다.')
 
     if interval is None:
         for i in (23, 19, 17, 13, 11):
@@ -44,10 +44,10 @@ def generate_train_list(out_dir, interval: Union[int, None] = None):
 
     # 評価用が5分の1より多いと困るので
     elif interval <= 5:
-        raise ValueError('Argument "interval" must be larger than 5.')
+        raise ValueError('인수 "interval"은 5보다 커야합니다.')
     makedirs(join(out_dir, 'list'), exist_ok=True)
 
-    print(f'generate_train_list.py: interval = {interval}')
+    print(f'generate_train_list.py: 간격 = {interval}')
 
     # 各種曲名リストを作る
     eval_list = [songname for idx, songname in enumerate(utt_list) if idx % interval == 0]

@@ -141,7 +141,7 @@ def main(path_config_yaml):
 
     # フルラベルを処理する。
     lab_files = glob(f'{out_dir}/full_score/*.lab')
-    print('Merging rests of full-LAB files')
+    print('full-LAB 파일의 무음부 병합 중...')
     for path_full in tqdm(lab_files):
         song = up.hts.load(path_full).song
         # 休符を結合してもとのフルラベルを上書き

@@ -34,17 +34,17 @@ def phoneme_is_ok(path_mono_align_lab, path_mono_score_lab):
     for mono_align_phoneme, mono_score_phoneme in zip(mono_align_label, mono_score_label):
         if mono_align_phoneme.symbol != mono_score_phoneme.symbol:
             error_message = '\n'.join([
-                f'DB同梱のラベルと楽譜から生成したラベルの音素記号が一致しません。({basename(path_mono_align_lab)})',
-                f'  DB同梱のラベル  : {mono_align_phoneme}\t({path_mono_align_lab})',
-                f'  楽譜からのラベル: {mono_score_phoneme}\t({path_mono_score_lab})'
+                f'DB 동봉의 라벨과 악보에서 생성된 라벨의 음소기호가 일치하지 않습니다. ({basename(path_mono_align_lab)})',
+                f'  DB동봉의 라벨  : {mono_align_phoneme}\t({path_mono_align_lab})',
+                f'  악보의 라벨    : {mono_score_phoneme}\t({path_mono_score_lab})'
             ])
             logging.error(error_message)
             return False
     if len(mono_align_label) != len(mono_score_label):
         error_message = '\n'.join([
-            f'DB同梱のラベルと楽譜から生成したラベルの音素数が一致しません。({basename(path_mono_align_lab)})',
-            f'  DB同梱ラベルの音素数    : {len(mono_align_label)}\t({path_mono_align_lab})',
-            f'  楽譜からのラベルの音素数: {len(mono_score_label)}\t({path_mono_score_lab})'
+            f'DB동봉의 라벨과 악보에서 생성된 라벨의 음소 갯수가 일치하지 않습니다. ({basename(path_mono_align_lab)})',
+            f'  DB동봉 라벨의 음소 갯수 : {len(mono_align_label)}\t({path_mono_align_lab})',
+            f'  악보의 라벨의 음소 갯수 : {len(mono_score_label)}\t({path_mono_score_lab})'
         ])
         logging.error(error_message)
         return False
@@ -59,7 +59,7 @@ def force_start_with_zero(path_mono_align_lab):
     mono_align_label = up.label.load(path_mono_align_lab)
     if mono_align_label[0].start != 0:
         warning_message = \
-            'DB同梱のラベルの最初の音素開始時刻が0ではありません。0に修正して処理を続行します。({})'.format(
+            'DB동봉의 라벨의 첫 음소 개시 시각이 0이 아닙니다. 0으로 수정해서 처리를 진행해주세요. ({})'.format(
                 basename(path_mono_align_lab))
         logging.warning(warning_message)
         mono_align_label[0].start = 0
@@ -123,7 +123,7 @@ def offet_is_ok(path_mono_align_lab,
     duration_difference = mono_align_label[0].duration - mono_score_label[0].duration
     if not lower_threshold < duration_difference < upper_threshold:
         warning_message = \
-            'DB同梱のラベルの前奏が楽譜より {} ミリ秒以上早いか、{} ミリ秒以上長いです。({} ms) ({})'.format(
+            'DB동봉의 라벨의 전주가 악보보다 {}ms 이상 빠르거나, {}ms 이상 깁니다. ({} ms) ({})'.format(
                 round(lower_threshold / 10000),
                 round(upper_threshold / 10000),
                 round(duration_difference / 10000),
@@ -167,16 +167,16 @@ def vowel_durations_are_ok(path_mono_align_lab,
             continue
         if phoneme_align.symbol in vowels and not lower_threshold < duration_difference < upper_threshold:
             warning_message = '\n'.join([
-                'DB同梱のラベルが楽譜から生成したラベルの母音より {} ミリ秒以上短いか、{} ミリ秒以上長いです。平均値 ± {}σ の範囲外です。({} ms) ({})'.format(
+                'DB동봉의 라벨이 악보에서 생성된 라벨의 모음보다 {} ms 이상 짧거나, {} ms 이상 깁니다. 평균치 ± {}σ 의 범위 밖 입니다. ({} ms) ({})'.format(
                     round(lower_threshold / 10000),
                     round(upper_threshold / 10000),
                     k,
                     round(duration_difference / 10000),
                     basename(path_mono_align_lab)),
-                f'  直前の音素: {mono_align_label[i-1].symbol}',
-                f'  DB同梱のラベル  : {phoneme_align}\t({phoneme_align.duration / 10000} ms)\t{path_mono_align_lab}',
-                f'  楽譜からのラベル: {phoneme_score}\t({phoneme_score.duration / 10000} ms)\t{path_mono_score_lab}',
-                f'  直後の音素: {mono_align_label[i+1].symbol}'
+                f'  직전 음소: {mono_align_label[i-1].symbol}',
+                f'  DB동봉의 라벨 : {phoneme_align}\t({phoneme_align.duration / 10000} ms)\t{path_mono_align_lab}',
+                f'  악보의 라벨   : {phoneme_score}\t({phoneme_score.duration / 10000} ms)\t{path_mono_score_lab}',
+                f'  직전 음소: {mono_align_label[i+1].symbol}'
             ])
             logging.warning(warning_message)
             ok_flag = False
@@ -195,34 +195,34 @@ def main(path_config_yaml):
     duration_check_mode = config['stage0']['vowel_duration_check']
 
     # mono_align_labの最初の音素が時刻0から始まるようにする。
-    print('Overwriting mono-align-LAB so that it starts with zero.')
+    print('mono-align-LAB의 시작을 0으로 덮어씌웁니다.')
     for path_mono_align in tqdm(mono_align_files):
         force_start_with_zero(path_mono_align)
 
     # 音素記号や最初の休符の長さが一致するか確認する。
-    print('Comparing mono-align-LAB and mono-score-LAB')
+    print('mono-align-LAB과 mono-score-LAB을 비교 중...')
     invalid_basenames = []
     for path_mono_align, path_mono_score in zip(tqdm(mono_align_files), mono_score_files):
         if not phoneme_is_ok(path_mono_align, path_mono_score):
             invalid_basenames.append(basename(path_mono_align))
 
     # 母音のdurationの統計値を取得
-    print('Calculating median, mean and stdev of duration difference')
+    print('지속 시간 차이의 중위수, 평균 및 stdev 계산 중...')
     _, mean_100ns, stdev_100ns = calc_median_mean_pstdev(
         mono_align_files, mono_score_files)
 
     # 前奏の長さを点検
-    print('Checking first pau duration')
+    print('첫 pau의 길이를 확인 중...')
     for path_mono_align, path_mono_score in zip(tqdm(mono_align_files), mono_score_files):
         if not offet_is_ok(path_mono_align, path_mono_score,
                            mean_100ns, stdev_100ns, mode=duration_check_mode):
             invalid_basenames.append(basename(path_mono_align))
     if len(invalid_basenames) > 0:
-        raise Exception('DBから生成したラベルと楽譜から生成したラベルに不整合があります。'
-                        'ログファイルを参照して修正して下さい。')
+        raise Exception('DB에서 생성된 라벨과 악보에서 생성된 라벨에 부정합이 있습니다.'
+                        '로그 파일을 참조하여 수정해주세요.')
 
     # 音素長をチェックする。
-    print('Comparing mono-align-LAB durations and mono-score-LAB durations')
+    print('mono-align-LAB 길이와 mono-score-LAB 길이를 비교 중...')
     for path_mono_align, path_mono_score in zip(tqdm(mono_align_files), mono_score_files):
         vowel_durations_are_ok(path_mono_align, path_mono_score,
                                mean_100ns, stdev_100ns, mode=duration_check_mode)

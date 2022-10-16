@@ -37,7 +37,7 @@ def all_wav_files_are_mono(wav_dir_in) -> bool:
     # モノラルではないファイルが含まれるとき
     for path_wav, channels in zip(wav_files, all_channnels):
         if not channels == 1:
-            logging.error('モノラル音声ではありません。: %s', path_wav)
+            logging.error('Mono 음성이 아닙니다. : %s', path_wav)
     return False
 
 
@@ -57,7 +57,7 @@ def all_wav_files_are_same_sampling_rate(wav_dir_in) -> bool:
     mode_frame_rate = mode(all_frame_rates)
     for path_wav, rate in zip(wav_files, all_frame_rates):
         if rate != mode_frame_rate:
-            logging.error('サンプリングレートが他のファイルと一致しません。: %s', path_wav)
+            logging.error('샘플레이트가 다른 파일과 일치하지 않습니다. : %s', path_wav)
     return False
 
 
@@ -77,7 +77,7 @@ def all_wav_files_are_same_bit_depth(wav_dir_in) -> bool:
     mode_bit_depth = mode(all_sample_widths)
     for path_wav, width in zip(wav_files, all_sample_widths):
         if width != mode_bit_depth:
-            logging.error('ビット深度が他のファイルと一致しません。: %s', path_wav)
+            logging.error('비트 심도가 다른 파일과 일치하지 않습니다. : %s', path_wav)
     return False
 
 
@@ -85,7 +85,7 @@ def main(path_config_yaml):
     """
     全体処理を実行する
     """
-    print('Checking WAV files')
+    print('WAV 파일들을 확인하는 중...')
     with open(path_config_yaml, 'r') as fy:
         config = yaml.safe_load(fy)
 
@@ -95,11 +95,11 @@ def main(path_config_yaml):
 
     # 全ファイルがモノラルか確認する
     if not all_wav_files_are_mono(wav_dir_in):
-        raise ValueError('モノラルではない音声ファイルがあります。ログを確認して修正して下さい。')
+        raise ValueError('Mono가 아닌 음성 파일이 있습니다. 로그를 확인해서 수정해주세요.')
     if not all_wav_files_are_same_sampling_rate(wav_dir_in):
-        raise ValueError('サンプリングレートが異なる音声ファイルがあります。ログを確認して修正して下さい。')
+        raise ValueError('샘플레이트가 다른 음성 파일이 있습니다. 로그를 확인해서 수정해주세요.')
     if not all_wav_files_are_same_bit_depth(wav_dir_in):
-        raise ValueError('ビット深度が異なる音声ファイルがあります。ログを確認して修正して下さい。')
+        raise ValueError('비트 심도가 다른 음성 파일이 있습니다. 로그를 확인해서 수정해주세요.')
 
 
 if __name__ == '__main__':

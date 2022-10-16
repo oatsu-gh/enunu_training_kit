@@ -74,7 +74,7 @@ def split_mono_label_middle(label: Label, frequency) -> List[Label]:
     pauが10回出現するたびに分割する。
     """
     if frequency <= 0:
-        raise ValueError('Argument "frequency" must be positive integer.')
+        raise ValueError('인수 "frequency"는 양의 정수여야 합니다.')
 
     new_label = Label()
     result = [new_label]
@@ -145,7 +145,7 @@ def split_full_label_middle(full_label: HTSFullLabel, frequency: int) -> List[HT
     pauが10回出現するたびに分割する。
     """
     if frequency <= 0:
-        raise ValueError('Argument "frequency" must be positive integer.')
+        raise ValueError('인수 "frequency"는 양의 정수여야 합니다.')
     new_label = HTSFullLabel()
     result = [new_label]
 
@@ -198,69 +198,6 @@ def split_full_label_long(full_label: HTSFullLabel) -> list:
         del result[-1]
     return result
 
-def split_mono_label_middle_ext(label: Label, frequency) -> List[Label]:
-    """
-    モノラベルを分割する。分割後の複数のLabelからなるリストを返す。
-    pauが10回出現するたびに分割する。
-    """
-    if frequency <= 0:
-        raise ValueError('Argument "frequency" must be positive integer.')
-
-    new_label = Label()
-    result = [new_label]
-    new_label.append(label[0])
-
-    # pauが出現する回数をカウントする
-    counter = 0
-    for phoneme in label[1:-1]:
-        if phoneme.symbol == 'pau':
-            counter += 1
-            # pauが出現してfrequency回目のとき
-            if counter == frequency:
-                new_label = Label()
-                result.append(new_label)
-                # 回数をリセット
-                counter = 0
-        new_label.append(phoneme)
-    # 最後の音素を追加
-    new_label.append(label[-1])
-    return result
-
-
-def split_full_label_middle_ext(full_label: HTSFullLabel, frequency: int) -> List[HTSFullLabel]:
-    """
-    モノラベルを分割する。分割後の複数のLabelからなるリストを返す。
-    pauが10回出現するたびに分割する。
-    """
-    if frequency <= 0:
-        raise ValueError('Argument "frequency" must be positive integer.')
-    new_label = HTSFullLabel()
-    result = [new_label]
-
-    new_label.append(full_label[0])
-    # pauが出現する回数をカウントする
-    counter = 0
-    for oneline in full_label[1:-1]:
-        if oneline.phoneme.identity == 'pau':
-            counter += 1
-            if counter == frequency:
-                new_label = HTSFullLabel()
-                result.append(new_label)
-                counter = 0
-        new_label.append(oneline)
-    # 最後の行を追加
-    new_label.append(full_label[-1])
-    # 休符だけの後奏部分があった場合は直前のラベルにまとめる。
-
-    # for line in result:
-    #     if line.phoneme.identity == 'sil':
-            
-
-    if len(result) >= 2 and all_phonemes_are_rest(result[-1]):
-        result[-2] += result[-1]
-        del result[-1]
-    return result
-
 
 def split_label(label: Union[Label, HTSFullLabel], mode: str, middle_frequency: int
                 ) -> List[Union[Label, HTSFullLabel]]:
@@ -268,16 +205,14 @@ def split_label(label: Union[Label, HTSFullLabel], mode: str, middle_frequency: 
     ラベルを分割してリストにして返す。フルラベルとモノラベルを自動で使い分ける。
     mode: 'short' か 'long' のいずれか
     """
-    if mode not in ('short', 'middle', 'long', 'middle_ext'):
-        raise ValueError('Argument "mode" must be "short" or "middle" or "middle_ext" or "long".')
+    if mode not in ('short', 'middle', 'long'):
+        raise ValueError('인수 "mode"는 "short", "middle" 또는 "long"이어야 합니다.')
 
     if isinstance(label, Label):
         if mode == 'short':
             result = split_mono_label_short(label)
         elif mode == 'middle':
             result = split_mono_label_middle(label, middle_frequency)
-        elif mode == 'middle_ext':
-            result = split_mono_label_middle_ext(label, middle_frequency)
         elif mode == 'long':
             result = split_mono_label_long(label)
     elif isinstance(label, HTSFullLabel):
@@ -285,8 +220,6 @@ def split_label(label: Union[Label, HTSFullLabel], mode: str, middle_frequency: 
             result = split_full_label_short(label)
         elif mode == 'middle':
             result = split_full_label_middle(label, middle_frequency)
-        elif mode == 'middle_ext':
-            result = split_full_label_middle_ext(label, middle_frequency)
         elif mode == 'long':
             result = split_full_label_long(label)
     return result

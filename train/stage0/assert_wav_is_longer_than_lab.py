@@ -44,7 +44,7 @@ def compare_wav_files_and_lab_files(wav_dir_in, lab_dir_in):
     lab_files = natsorted(glob(f'{lab_dir_in}/*.lab'))
     for path_wav, path_lab in zip(tqdm(wav_files), lab_files):
         if not wav_is_longer_than_lab(path_wav, path_lab):
-            warning_message = f'WAV is shorter than LAB or score. ({path_wav}) ({path_lab})'
+            warning_message = f'WAV가 LAB나 악보보다 짧습니다. ({path_wav}) ({path_lab})'
             warning(warning_message)
 
 
@@ -52,7 +52,7 @@ def main(path_config_yaml):
     """
     configを読み取ってフォルダを指定し、全体の処理を実行する。
     """
-    print('Asserting WAV files are longer than full_align_round label files')
+    print('WAV 파일이 full_align_round 레이블 파일보다 깁니다.')
     with open(path_config_yaml, 'r') as fy:
         config = yaml.load(fy, Loader=yaml.FullLoader)
     out_dir = config['out_dir']
@@ -62,9 +62,9 @@ def main(path_config_yaml):
     full_align_dir_in = join(out_dir, 'full_align_round')
     full_score_dir_in = join(out_dir, 'full_score_round')
     # 点検する
-    print('Comparing length of LAB and WAV')
+    print('LAB 길이와 WAV 길이 비교 중...')
     compare_wav_files_and_lab_files(wav_dir_in, full_align_dir_in)
-    print('Comparing length of score and WAV')
+    print('악보 길이와 WAV 길이 비교 중...')
     compare_wav_files_and_lab_files(wav_dir_in, full_score_dir_in)
 
 

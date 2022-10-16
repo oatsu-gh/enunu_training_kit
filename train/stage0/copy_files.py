@@ -22,7 +22,7 @@ def copy_target_files(db_root, out_dir, ext):
     target_files = glob(f'{db_root}/**/*.{ext}', recursive=True)
     if len(target_files) != 0:
         makedirs(join(out_dir, ext), exist_ok=True)
-        print(f'Copying {ext} files')
+        print(f'{ext} 파일들 복사 중...')
         for path in tqdm(target_files):
             shutil.copy2(path, join(out_dir, ext))
 
@@ -50,7 +50,7 @@ def main(path_config_yaml):
 
     make_gitignore(out_dir)
     # 移動元と移動先を標準出力
-    print(f'Copy files from "{db_root}" to "{out_dir}"')
+    print(f'"{db_root}"에서 "{out_dir}"으로 파일 복사 중...')
     # ファイルをコピー
     target_extensions = ('wav', 'xml', 'musicxml', 'ust', 'ini', 'lab')
     for ext in target_extensions:

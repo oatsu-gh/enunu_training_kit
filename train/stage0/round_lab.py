@@ -45,13 +45,13 @@ def main(path_config_yaml):
     # DBに同梱されていたLABファイルを丸める
     lab_dir_in = join(out_dir, 'lab')
     lab_dir_out = join(out_dir, 'mono_align_round')
-    print(f'Rounding mono-LAB files in {lab_dir_in}')
+    print(f'{lab_dir_in}에서 mono-LAB 파일들 반올림 중...')
     round_lab_files(lab_dir_in, lab_dir_out, step_size=step_size)
 
     # 楽譜からつくったフルラベルを丸める
     lab_dir_in = join(out_dir, 'full_score')
     lab_dir_out = join(out_dir, 'full_score_round')
-    print(f'Rounding full-LAB files in {lab_dir_in}')
+    print(f'{lab_dir_in}에서 full-LAB 파일들 반올림 중...')
     round_lab_files(lab_dir_in, lab_dir_out, step_size=step_size)
 
 
