@@ -1,10 +1,11 @@
 # Copyright (c) 2020 Ryuichi Yamamoto
 # Copyright (c) 2020 oatsu
 
-# Is trained with ENUNU specific recipe
 trained_for_enunu:      true
-# Table (lyric -> phonemes) file path.
-table_path:             dic/kana2phonemes_002_oto2lab.table
+
+table_path:             source/dic/hangul_ext.table
+question_path:          source/hed/korean_question_v2.1.hed
+lang_mode:              kor
 
 defaults:
     - hydra/job_logging: colorlog
@@ -12,45 +13,54 @@ defaults:
 
 verbose:                100
 
-# Setting for output WAV file.
 sample_rate:            44100
 gain_normalize:         false
 
-# How was the model trained.
 frame_period:           5
-question_path:          hed/jp_qst_crazy_mono_014_enunu_mdn_206D.hed
 log_f0_conditioning:    true
+vibrato_scale: 1.0
 
 # Use ground truth duration or not
 # if true, time-lag and duration models will not be used.
 ground_truth_duration:  false
 
-
 # If not empty, try to search statisics in the directory
-stats_dir:              dump/unnamed/norm
+stats_dir:              target/dump/ExpModel/norm
 # If not empty, try to search models in the directory
-model_dir:              exp/unnamed_portable_enunu_training_kit
+model_dir:              model_exp/ExpModel_cp6
 
 acoustic:
-    question_path:      null
-    checkpoint:         best_loss.pth
+    question_path:      source/hed/korean_question_v2.1.hed
+    checkpoint:         latest.pth
     in_scaler_path:     null
     out_scaler_path:    null
     # model_yaml:
     subphone_features:  coarse_coding
-    relative_f0:        true
-    post_filter:        true
+    relative_f0:        false
+    # 'post_ftiler' is legacy option for ENUNU prior to 5.1.
+    post_filter_type:   merlin
+    # change 'merlin' to 'nnsvs' if you trained a postfilter model
 
 duration:
+    question_path:      source/hed/korean_question_v2.1.hed
     checkpoint:         best_loss.pth
-    question_path:      null
     in_scaler_path:     null
     out_scaler_path:    null
 
 timelag:
-    question_path:      null
+    question_path:      source/hed/korean_question_v2.1.hed
     checkpoint:         best_loss.pth
     in_scaler_path:     null
     out_scaler_path:    null
     allowed_range:      [-150, 150]
     allowed_range_rest: [-150, 250]
+
+postfilter:
+    question_path:      source/hed/korean_question_v2.1.hed
+    checkpoint:         latest.pth
+    in_scaler_path:     null
+    out_scaler_path:    null
+
+vocoder:
+    checkpoint:         latest.pkl
+    in_scaler_path:     null

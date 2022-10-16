@@ -1,0 +1,1 @@
+"C:\Program Files\Git\bin\bash.exe" train\run_resf0.sh --stage %1 --stop_stage %2

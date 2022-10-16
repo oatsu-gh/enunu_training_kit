@@ -12,8 +12,9 @@ from stage0 import (assert_wav_is_longer_than_lab, check_lab,
                     copy_mono_time_to_full, finalize_lab,
                     force_ust_end_with_rest, full2mono, generate_train_list,
                     merge_rest_full_score, merge_rest_mono_align, round_lab,
-                    segment_lab, ust2lab)
+                    segment_lab)
 
+from enunu_kor_tool.utaupyk import _ust2lab as utaupyk_ust2lab, _ustx2ust as utaupyk_ustx2ust
 
 def main(path_config_yaml):
     """
@@ -24,6 +25,7 @@ def main(path_config_yaml):
     file_handler = logging.FileHandler(f'{__file__}.log', mode='w',)
     logging.basicConfig(level=logging.INFO, handlers=[stream_handler, file_handler])
 
+    utaupyk_ustx2ust.ustx2ust_main(path_config_yaml)
     # singing_databaseフォルダ の中にあるファイルを dataフォルダにコピーする。
     copy_files.main(path_config_yaml)
     # mono_align (labフォルダのファイル) の中の音素の発生時刻が負でないか点検する。
@@ -33,7 +35,7 @@ def main(path_config_yaml):
     # ustファイルの最後が休符じゃないときに警告する。
     force_ust_end_with_rest.main(path_config_yaml)
     # ustファイル を labファイル に変換して、full_score として保存する。
-    ust2lab.main(path_config_yaml)
+    utaupyk_ust2lab.ust2lab_main(path_config_yaml)
 
     # mono_align (labフォルダのファイル) の連続する休符を結合する。
     merge_rest_mono_align.main(path_config_yaml)

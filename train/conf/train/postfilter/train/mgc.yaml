@@ -1,0 +1,69 @@
+out_dir: target/exp
+log_dir: tensorboard/postfilter_mgc
+
+# Use automatic mixed precision training or not
+# only works on supported GPUs
+use_amp: true
+
+# steps can either be specified by steps or epochs
+max_train_steps: -1
+nepochs: 100
+checkpoint_epoch_interval: 40
+
+# [mgc, lf0, vuv, bap, vib, vib_flags]
+adv_streams: [false, false, false, true, false, false]
+
+# GAN type (lsgan or vanilla-gan)
+gan_type: lsgan
+
+mse_weight: 0.0
+adv_weight: 1.0
+fm_weight: 10.0
+
+mask_nth_mgc_for_adv_loss: 0
+
+# Mask out unvoiced frames in the adversarial loss
+vuv_mask: true
+
+stream_wise_loss: false
+use_detect_anomaly: false
+
+optim:
+  netG:
+    optimizer:
+      name: RAdam
+      params:
+        lr: 0.0001
+        betas: [0.5, 0.9]
+        weight_decay: 0.0
+    lr_scheduler:
+      name: StepLR
+      params:
+        step_size: 20
+        gamma: 0.5
+    clip_norm: 1.0
+  netD:
+    optimizer:
+      name: RAdam
+      params:
+        lr: 0.0001
+        betas: [0.5, 0.9]
+        weight_decay: 0.0
+    lr_scheduler:
+      name: StepLR
+      params:
+        step_size: 20
+        gamma: 0.5
+    clip_norm: 1.0
+
+resume:
+  netG:
+    checkpoint:
+    load_optimizer: false
+  netD:
+    checkpoint:
+    load_optimizer: false
+
+cudnn:
+  benchmark: false
+  deterministic: true

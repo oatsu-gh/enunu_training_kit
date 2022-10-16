@@ -9,8 +9,8 @@ dev:
   out_dir:
 
 # data loader
-num_workers: 2
-batch_size: 64
+num_workers: 4
+batch_size: 12
 pin_memory: true
 
 # Filter long segments that easily cause OOM error
@@ -19,8 +19,13 @@ filter_long_segments: false
 # 30 [sec] / 0.005 [sec] = 6000 [frames]
 filter_num_frames: 6000
 
+in_scaler_path: null
+out_scaler_path: null
+
 # mini-batch sampling
 # If max_time_frames is specified, (max_time_frames) frames are randomly sampled
 # to create a mini-batch. Otherwise, all frames are used.
 # consider setting the value (e.g., 256 or 512) to avoid GPU OOM.
 max_time_frames: -1
+
+sample_rate: 44100

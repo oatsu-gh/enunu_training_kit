@@ -1,0 +1,1 @@
+"C:\Program Files\Git\bin\bash.exe" train\run_vocoder.sh --stage %1 --stop_stage %2

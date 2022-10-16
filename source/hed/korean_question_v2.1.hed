@@ -1,0 +1,350 @@
+# feature dim: 282 for acoustic model, 278 for duration/timelag
+# in_rest_idx: 15
+# in_lf0_idx: 233
+
+
+# The following was copied from the "intunist/nnsvs-english-support" hed
+# tone flags
+QS      "falsetto"                         {*^F_*}
+QS      "head_voice"                       {*^H_*}
+QS      "soft"                             {*^SF_*}
+QS      "strong"                           {*^ST_*}
+QS      "open_wide_vowel"                  {*^OPN_*}
+QS      "closed_narrow_vowel"              {*^CLS_*}
+QS      "whisper_devoiced"                 {*^W_*}
+QS      "bright_resonance"                 {*^BR_*}
+QS      "dark_resonance"                   {*^DR_*}
+QS      "fry_rattle"                       {*^R_*}
+QS      "nasal_resonance"                  {*^N_*}
+# custom flags
+QS      "additional_1"                     {*^1_*}
+QS      "additional_2"                     {*^2_*}
+QS      "additional_3"                     {*^3_*}
+
+
+# Phonetic definitions
+
+QS "L-Silence"                                            {*^pau-*,*^sil-*,*^br-*}
+QS "C-Silence"                                            {*-pau+*,*-sil+*,*-br+*}
+QS "R-Silence"                                            {*+pau=*,*+sil=*,*+br=*}
+
+QS "L-Phone_Consonant_Yangsuneum"                         {*^b-*,*^pp-*,*^p-*,*^P-*,*^m-*,*^M-*}
+QS "C-Phone_Consonant_Yangsuneum"                         {*-b+*,*-pp+*,*-p+*,*-P+*,*-m+*,*-M+*}
+QS "R-Phone_Consonant_Yangsuneum"                         {*+b=*,*+pp=*,*+p=*,*+P=*,*+m=*,*+M=*}
+
+QS "L-Phone_Consonant_Chijoeum"                           {*^d-*,*^tt-*,*^t-*,*^s-*,*^ss-*,*^n-*,*^N-*,*^r-*,*^l-*,*^RR-*,*^L-*,*^T-*}
+QS "C-Phone_Consonant_Chijoeum"                           {*-d+*,*-tt+*,*-t+*,*-s+*,*-ss+*,*-n+*,*-N+*,*-r+*,*-l+*,*-RR+*,*-L+*,*-T+*}
+QS "R-Phone_Consonant_Chijoeum"                           {*+d=*,*+tt=*,*+t=*,*+s=*,*+ss=*,*+n=*,*+N=*,*+r=*,*+l=*,*+RR=*,*+L=*,*+T=*}
+
+QS "L-Phone_Consonant_Gyeonggugaeeum"                     {*^j-*,*^jj-*,*^ch-*}
+QS "C-Phone_Consonant_Gyeonggugaeeum"                     {*-j+*,*-jj+*,*-ch+*}
+QS "R-Phone_Consonant_Gyeonggugaeeum"                     {*+j=*,*+jj=*,*+ch=*}
+
+QS "L-Phone_Consonant_Yeongugaeeum"                       {*^g-*,*^kk-*,*^k-*,*^K-*,*^NG-*}
+QS "C-Phone_Consonant_Yeongugaeeum"                       {*-g+*,*-kk+*,*-k+*,*-K+*,*-NG+*}
+QS "R-Phone_Consonant_Yeongugaeeum"                       {*+g=*,*+kk=*,*+k=*,*+K=*,*+NG=*}
+
+QS "L-Phone_Consonant_Jangaeeum_Payeoreum_Pyeongeum"      {*^b-*,*^d-*,*^g-*,*^P-*,*^T-*,*^K-*}
+QS "C-Phone_Consonant_Jangaeeum_Payeoreum_Pyeongeum"      {*-b+*,*-d+*,*-g+*,*-P+*,*-T+*,*-K+*}
+QS "R-Phone_Consonant_Jangaeeum_Payeoreum_Pyeongeum"      {*+b=*,*+d=*,*+g=*,*+P=*,*+T=*,*+K=*}
+
+QS "L-Phone_Consonant_Jangaeeum_Payeoreum_Gyeongeum"      {*^pp-*,*^tt-*,*^kk-*}
+QS "C-Phone_Consonant_Jangaeeum_Payeoreum_Gyeongeum"      {*-pp+*,*-tt+*,*-kk+*}
+QS "R-Phone_Consonant_Jangaeeum_Payeoreum_Gyeongeum"      {*+pp=*,*+tt=*,*+kk=*}
+
+QS "L-Phone_Consonant_Jangaeeum_Payeoreum_Yugieum"        {*^p-*,*^t-*,*^k-*}
+QS "C-Phone_Consonant_Jangaeeum_Payeoreum_Yugieum"        {*-p+*,*-t+*,*-k+*}
+QS "R-Phone_Consonant_Jangaeeum_Payeoreum_Yugieum"        {*+p=*,*+t=*,*+k=*}
+
+QS "L-Phone_Consonant_Jangaeeum_Machareum_Pyeongeum"      {*^s-*,*^h-*}
+QS "C-Phone_Consonant_Jangaeeum_Machareum_Pyeongeum"      {*-s+*,*-h+*}
+QS "R-Phone_Consonant_Jangaeeum_Machareum_Pyeongeum"      {*+s=*,*+h=*}
+
+QS "L-Phone_Consonant_Gongmyeongeum_Bieum"                {*^m-*,*^M-*,*^n-*,*^N-*,*^NG-*}
+QS "C-Phone_Consonant_Gongmyeongeum_Bieum"                {*-m+*,*-M+*,*-n+*,*-N+*,*-NG+*}
+QS "R-Phone_Consonant_Gongmyeongeum_Bieum"                {*+m=*,*+M=*,*+n=*,*+N=*,*+NG=*}
+
+QS "L-Phone_Consonant_Gongmyeongeum_Yueum"                {*^r-*,*^l-*,*^RR-*,*^L-*}
+QS "C-Phone_Consonant_Gongmyeongeum_Yueum"                {*-r+*,*-l+*,*-RR+*,*-L+*}
+QS "R-Phone_Consonant_Gongmyeongeum_Yueum"                {*+r=*,*+l=*,*+RR=*,*+L=*}
+
+QS "L-Phone_Vowel_Jeonseol_Pyeongsun"                     {*^i-*,*^e-*}
+QS "C-Phone_Vowel_Jeonseol_Pyeongsun"                     {*-i+*,*-e+*}
+QS "R-Phone_Vowel_Jeonseol_Pyeongsun"                     {*+i=*,*+e=*}
+
+QS "L-Phone_Vowel_Jeonseol_Wonsun"                        {*^y-*,*^i-*,*^w-*,*^e-*}
+QS "C-Phone_Vowel_Jeonseol_Wonsun"                        {*-y+*,*-i+*,*-w+*,*-e+*}
+QS "R-Phone_Vowel_Jeonseol_Wonsun"                        {*+y=*,*+i=*,*+w=*,*+e=*}
+
+QS "L-Phone_Vowel_Huseol_Pyeongsun"                       {*^eu-*,*^eo-*,*^a-*}
+QS "C-Phone_Vowel_Huseol_Pyeongsun"                       {*-eu+*,*-eo+*,*-a+*}
+QS "R-Phone_Vowel_Huseol_Pyeongsun"                       {*+eu=*,*+eo=*,*+a=*}
+
+QS "L-Phone_Vowel_Huseol_Wonsun"                          {*^u-*,*^o-*}
+QS "C-Phone_Vowel_Huseol_Wonsun"                          {*-u+*,*-o+*}
+QS "R-Phone_Vowel_Huseol_Wonsun"                          {*+u=*,*+o=*}
+
+QS "L-Phone_Vowel_High"                                   {*^i-*,*^y-*,*^eu-*,*^u-*}
+QS "C-Phone_Vowel_High"                                   {*-i+*,*-y+*,*-eu+*,*-u+*}
+QS "R-Phone_Vowel_High"                                   {*+i=*,*+y=*,*+eu=*,*+u=*}
+
+QS "L-Phone_Vowel_Middle"                                 {*^e-*,*^w-*,*^eo-*,*^o-*}
+QS "C-Phone_Vowel_Middle"                                 {*-e+*,*-w+*,*-eo+*,*-o+*}
+QS "R-Phone_Vowel_Middle"                                 {*+e=*,*+w=*,*+eo=*,*+o=*}
+
+QS "L-Phone_Vowel_Low"                                    {*^e-*,*^a-*}
+QS "C-Phone_Vowel_Low"                                    {*-e+*,*-a+*}
+QS "R-Phone_Vowel_Low"                                    {*+e=*,*+a=*}
+
+QS "L-Phone_Lead_Consonant"                               {*^g-*,*^n-*,*^d-*,*^r-*,*^l-*,*^m-*,*^b-*,*^s-*,*^j-*,*^ch-*,*^k-*,*^t-*,*^p-*,*^h-*,*^kk-*,*^tt-*,*^pp-*,*^ss-*,*^jj-*}
+QS "C-Phone_Lead_Consonant"                               {*-g+*,*-n+*,*-d+*,*-r+*,*-l+*,*-m+*,*-b+*,*-s+*,*-j+*,*-ch+*,*-k+*,*-t+*,*-p+*,*-h+*,*-kk+*,*-tt+*,*-pp+*,*-ss+*,*-jj+*}
+QS "R-Phone_Lead_Consonant"                               {*+g=*,*+n=*,*+d=*,*+r=*,*+l=*,*+m=*,*+b=*,*+s=*,*+j=*,*+ch=*,*+k=*,*+t=*,*+p=*,*+h=*,*+kk=*,*+tt=*,*+pp=*,*+ss=*,*+jj=*}
+
+QS "L-Phone_Middle_Vowel"                                 {*^a-*,*^eo-*,*^o-*,*^u-*,*^eu-*,*^i-*,*^e-*,*^y-*,*^w-*}
+QS "C-Phone_Middle_Vowel"                                 {*-a+*,*-eo+*,*-o+*,*-u+*,*-eu+*,*-i+*,*-e+*,*-y+*,*-w+*}
+QS "R-Phone_Middle_Vowel"                                 {*+a=*,*+eo=*,*+o=*,*+u=*,*+eu=*,*+i=*,*+e=*,*+y=*,*+w=*}
+
+QS "L-Phone_Last_Consonant"                               {*^K-*,*^T-*,*^P-*,*^N-*,*^RR-*,*^L-*,*^M-*,*^NG-*}
+QS "C-Phone_Last_Consonant"                               {*-K+*,*-T+*,*-P+*,*-N+*,*-RR+*,*-L+*,*-M+*,*-NG+*}
+QS "R-Phone_Last_Consonant"                               {*+K=*,*+T=*,*+P=*,*+N=*,*+RR=*,*+L=*,*+M=*,*+NG=*}
+
+QS "L-Phone_Consonant"                                    {*^g-*,*^n-*,*^d-*,*^r-*,*^l-*,*^m-*,*^b-*,*^s-*,*^j-*,*^ch-*,*^k-*,*^t-*,*^p-*,*^h-*,*^kk-*,*^tt-*,*^pp-*,*^ss-*,*^jj-*,*^K-*,*^T-*,*^P-*,*^N-*,*^RR-*,*^L-*,*^M-*,*^NG-*}
+QS "C-Phone_Consonant"                                    {*-g+*,*-n+*,*-d+*,*-r+*,*-l+*,*-m+*,*-b+*,*-s+*,*-j+*,*-ch+*,*-k+*,*-t+*,*-p+*,*-h+*,*-kk+*,*-tt+*,*-pp+*,*-ss+*,*-jj+*,*-K+*,*-T+*,*-P+*,*-N+*,*-RR+*,*-L+*,*-M+*,*-NG+*}
+QS "R-Phone_Consonant"                                    {*+g=*,*+n=*,*+d=*,*+r=*,*+l=*,*+m=*,*+b=*,*+s=*,*+j=*,*+ch=*,*+k=*,*+t=*,*+p=*,*+h=*,*+kk=*,*+tt=*,*+pp=*,*+ss=*,*+jj=*,*+K=*,*+T=*,*+P=*,*+N=*,*+RR=*,*+L=*,*+M=*,*+NG=*}
+
+QS "L-Phone_Vowel"                                        {*^a-*,*^eo-*,*^o-*,*^u-*,*^eu-*,*^i-*,*^e-*,*^y-*,*^w-*}
+QS "C-Phone_Vowel"                                        {*-a+*,*-eo+*,*-o+*,*-u+*,*-eu+*,*-i+*,*-e+*,*-y+*,*-w+*}
+QS "R-Phone_Vowel"                                        {*+a=*,*+eo=*,*+o=*,*+u=*,*+eu=*,*+i=*,*+e=*,*+y=*,*+w=*}
+
+QS "L-Phone_Consonant_g_k_kk_K"                           {*^g-*,*^k-*,*^kk-*,*^K-*}
+QS "C-Phone_Consonant_g_k_kk_K"                           {*-g+*,*-k+*,*-kk+*,*-K+*}
+QS "R-Phone_Consonant_g_k_kk_K"                           {*+g=*,*+k=*,*+kk=*,*+K=*}
+
+QS "L-Phone_Consonant_d_t_tt_T"                           {*^d-*,*^t-*,*^tt-*,*^T-*}
+QS "C-Phone_Consonant_d_t_tt_T"                           {*-d+*,*-t+*,*-tt+*,*-T+*}
+QS "R-Phone_Consonant_d_t_tt_T"                           {*+d=*,*+t=*,*+tt=*,*+T=*}
+
+QS "L-Phone_Consonant_b_p_pp_P"                           {*^b-*,*^p-*,*^pp-*,*^P-*}
+QS "C-Phone_Consonant_b_p_pp_P"                           {*-b+*,*-p+*,*-pp+*,*-P+*}
+QS "R-Phone_Consonant_b_p_pp_P"                           {*+b=*,*+p=*,*+pp=*,*+P=*}
+
+QS "L-Phone_Consonant_j_jj_ch"                            {*^j-*,*^jj-*,*^ch-*}
+QS "C-Phone_Consonant_j_jj_ch"                            {*-j+*,*-jj+*,*-ch+*}
+QS "R-Phone_Consonant_j_jj_ch"                            {*+j=*,*+jj=*,*+ch=*}
+
+QS "L-Phone_Consonant_s_ss"                               {*^s-*,*^ss-*}
+QS "C-Phone_Consonant_s_ss"                               {*-s+*,*-ss+*}
+QS "R-Phone_Consonant_s_ss"                               {*+s=*,*+ss=*}
+
+QS "L-Phone_Consonant_n_N"                                {*^n-*,*^N-*}
+QS "C-Phone_Consonant_n_N"                                {*-n+*,*-N+*}
+QS "R-Phone_Consonant_n_N"                                {*+n=*,*+N=*}
+
+QS "L-Phone_Consonant_m_M"                                {*^m-*,*^M-*}
+QS "C-Phone_Consonant_m_M"                                {*-m+*,*-M+*}
+QS "R-Phone_Consonant_m_M"                                {*+m=*,*+M=*}
+
+QS "L-Phone_Consonant_r_l_RR_L"                           {*^r-*,*^l-*,*^RR-*,*^L-*}
+QS "C-Phone_Consonant_r_l_RR_L"                           {*-r+*,*-l+*,*-RR+*,*-L+*}
+QS "R-Phone_Consonant_r_l_RR_L"                           {*+r=*,*+l=*,*+RR=*,*+L=*}
+
+QS "C-VUV_Voiced"                                         {*-a+*,*-eo+*,*-o+*,*-u+*,*-eu+*,*-i+*,*-e+*,*-y+*,*-w+*,*-n+*,*-r+*,*-l+*,*-m+*,*-N+*,*-RR+*,*-L+*,*-M+*,*-NG+*,*-vf+*}
+
+QS "C-VUV_Unvoiced"                                       {*-sil+*,*-pau+*,*-br+*,*-exh+*,*-g+*,*-d+*,*-b+*,*-s+*,*-j+*,*-ch+*,*-k+*,*-t+*,*-p+*,*-h+*,*-kk+*,*-tt+*,*-pp+*,*-ss+*,*-jj+*,*-K+*,*-T+*,*-P+*}
+
+QS "L-Phone_pau"                 {*^pau-*}
+QS "C-Phone_pau"                 {*-pau+*}
+QS "R-Phone_pau"                 {*+pau=*}
+QS "L-Phone_sil"                 {*^sil-*}
+QS "C-Phone_sil"                 {*-sil+*}
+QS "R-Phone_sil"                 {*+sil=*}
+QS "L-Phone_vf"                  {*^vf-*}
+QS "C-Phone_vf"                  {*-vf+*}
+QS "R-Phone_vf"                  {*+vf=*}
+QS "L-Phone_exh"                 {*^exh-*}
+QS "C-Phone_exh"                 {*-exh+*}
+QS "R-Phone_exh"                 {*+exh=*}
+QS "L-Phone_trash"               {*^trash-*}
+QS "C-Phone_trash"               {*-trash+*}
+QS "R-Phone_trash"               {*+trash=*}
+QS "L-Phone_g"                   {*^g-*}
+QS "C-Phone_g"                   {*-g+*}
+QS "R-Phone_g"                   {*+g=*}
+QS "L-Phone_n"                   {*^n-*}
+QS "C-Phone_n"                   {*-n+*}
+QS "R-Phone_n"                   {*+n=*}
+QS "L-Phone_d"                   {*^d-*}
+QS "C-Phone_d"                   {*-d+*}
+QS "R-Phone_d"                   {*+d=*}
+QS "L-Phone_r"                   {*^r-*}
+QS "C-Phone_r"                   {*-r+*}
+QS "R-Phone_r"                   {*+r=*}
+QS "L-Phone_l"                   {*^l-*}
+QS "C-Phone_l"                   {*-l+*}
+QS "R-Phone_l"                   {*+l=*}
+QS "L-Phone_m"                   {*^m-*}
+QS "C-Phone_m"                   {*-m+*}
+QS "R-Phone_m"                   {*+m=*}
+QS "L-Phone_b"                   {*^b-*}
+QS "C-Phone_b"                   {*-b+*}
+QS "R-Phone_b"                   {*+b=*}
+QS "L-Phone_s"                   {*^s-*}
+QS "C-Phone_s"                   {*-s+*}
+QS "R-Phone_s"                   {*+s=*}
+QS "L-Phone_j"                   {*^j-*}
+QS "C-Phone_j"                   {*-j+*}
+QS "R-Phone_j"                   {*+j=*}
+QS "L-Phone_ch"                  {*^ch-*}
+QS "C-Phone_ch"                  {*-ch+*}
+QS "R-Phone_ch"                  {*+ch=*}
+QS "L-Phone_k"                   {*^k-*}
+QS "C-Phone_k"                   {*-k+*}
+QS "R-Phone_k"                   {*+k=*}
+QS "L-Phone_t"                   {*^t-*}
+QS "C-Phone_t"                   {*-t+*}
+QS "R-Phone_t"                   {*+t=*}
+QS "L-Phone_p"                   {*^p-*}
+QS "C-Phone_p"                   {*-p+*}
+QS "R-Phone_p"                   {*+p=*}
+QS "L-Phone_h"                   {*^h-*}
+QS "C-Phone_h"                   {*-h+*}
+QS "R-Phone_h"                   {*+h=*}
+QS "L-Phone_kk"                  {*^kk-*}
+QS "C-Phone_kk"                  {*-kk+*}
+QS "R-Phone_kk"                  {*+kk=*}
+QS "L-Phone_tt"                  {*^tt-*}
+QS "C-Phone_tt"                  {*-tt+*}
+QS "R-Phone_tt"                  {*+tt=*}
+QS "L-Phone_pp"                  {*^pp-*}
+QS "C-Phone_pp"                  {*-pp+*}
+QS "R-Phone_pp"                  {*+pp=*}
+QS "L-Phone_ss"                  {*^ss-*}
+QS "C-Phone_ss"                  {*-ss+*}
+QS "R-Phone_ss"                  {*+ss=*}
+QS "L-Phone_jj"                  {*^jj-*}
+QS "C-Phone_jj"                  {*-jj+*}
+QS "R-Phone_jj"                  {*+jj=*}
+QS "L-Phone_K"                   {*^K-*}
+QS "C-Phone_K"                   {*-K+*}
+QS "R-Phone_K"                   {*+K=*}
+QS "L-Phone_T"                   {*^T-*}
+QS "C-Phone_T"                   {*-T+*}
+QS "R-Phone_T"                   {*+T=*}
+QS "L-Phone_P"                   {*^P-*}
+QS "C-Phone_P"                   {*-P+*}
+QS "R-Phone_P"                   {*+P=*}
+QS "L-Phone_N"                   {*^N-*}
+QS "C-Phone_N"                   {*-N+*}
+QS "R-Phone_N"                   {*+N=*}
+QS "L-Phone_RR"                  {*^RR-*}
+QS "C-Phone_RR"                  {*-RR+*}
+QS "R-Phone_RR"                  {*+RR=*}
+QS "L-Phone_L"                   {*^L-*}
+QS "C-Phone_L"                   {*-L+*}
+QS "R-Phone_L"                   {*+L=*}
+QS "L-Phone_M"                   {*^M-*}
+QS "C-Phone_M"                   {*-M+*}
+QS "R-Phone_M"                   {*+M=*}
+QS "L-Phone_NG"                  {*^NG-*}
+QS "C-Phone_NG"                  {*-NG+*}
+QS "R-Phone_NG"                  {*+NG=*}
+QS "L-Phone_a"                   {*^a-*}
+QS "C-Phone_a"                   {*-a+*}
+QS "R-Phone_a"                   {*+a=*}
+QS "L-Phone_eo"                  {*^eo-*}
+QS "C-Phone_eo"                  {*-eo+*}
+QS "R-Phone_eo"                  {*+eo=*}
+QS "L-Phone_o"                   {*^o-*}
+QS "C-Phone_o"                   {*-o+*}
+QS "R-Phone_o"                   {*+o=*}
+QS "L-Phone_u"                   {*^u-*}
+QS "C-Phone_u"                   {*-u+*}
+QS "R-Phone_u"                   {*+u=*}
+QS "L-Phone_eu"                  {*^eu-*}
+QS "C-Phone_eu"                  {*-eu+*}
+QS "R-Phone_eu"                  {*+eu=*}
+QS "L-Phone_i"                   {*^i-*}
+QS "C-Phone_i"                   {*-i+*}
+QS "R-Phone_i"                   {*+i=*}
+QS "L-Phone_e"                   {*^e-*}
+QS "C-Phone_e"                   {*-e+*}
+QS "R-Phone_e"                   {*+e=*}
+QS "L-Phone_y"                   {*^y-*}
+QS "C-Phone_y"                   {*-y+*}
+QS "R-Phone_y"                   {*+y=*}
+QS "L-Phone_w"                   {*^w-*}
+QS "C-Phone_w"                   {*-w+*}
+QS "R-Phone_w"                   {*+w=*}
+
+
+# The following was copied from the "nnsvs/nnsvs" hed
+
+# absolute pitch (L/C/R)
+CQS "d1_absolute_pitch"                    {/D:(\NOTE)!}
+CQS "e1_absolute_pitch"                    {/E:(\NOTE)]}
+CQS "f1_absolute_pitch"                    {/F:(\NOTE)#}
+
+# relative pitch (L/C/R)
+CQS "d2_relative_pitch"                    {!(\d+)#}
+CQS "e2_relative_pitch"                    {](\d+)^}
+CQS "f2_relative_pitch"                    {#(\d+)#}
+
+# phoneme-level positional features (C)
+CQS "p12_position"                         {-(\d+)!}
+CQS "p13_position"                         {!(\d+)[}
+
+# distance between consonant and vowel
+CQS "p14_distance_from_vowel"              {[(\d+)$}
+CQS "p15_distance_from_vowel"              {$(\d+)]}
+
+# number of phonemes in a syllable (L/C/R)
+CQS "a1_number_of_phonemes"                {/A:(\d+)-}
+CQS "b1_number_of_phonemes"                {/B:(\d+)_}
+CQS "c1_number_of_phonemes"                {/C:(\d+)+}
+
+# syllable potional features (L/C/R)
+CQS "a2_position"                          {-(\d+)-}
+CQS "a3_position"                          {-(\d+)@}
+CQS "b2_position"                          {_(\d+)_}
+CQS "b3_position"                          {_(\d+)@}
+CQS "c2_position"                          {+(\d+)+}
+CQS "c3_position"                          {+(\d+)@}
+
+# length of current note (C)
+CQS "e6_length_by_syllable"                {!(\d+)@}
+CQS "e7_length_by_10ms"                    {@(\d+)#}
+CQS "e8_length_by_96th_note"               {#(\d+)+}
+
+# length of previous note (L)
+CQS "d6_length_by_syllable"                {|(\d+)&}
+CQS "d7_length_by_10ms"                    {&(\d+);}
+CQS "d8_length_by_96th_note"               {;(\d+)-}
+
+# length of next note (R)
+CQS "f6_length_by_syllable"                {$(\d+)+}
+CQS "f7_length_by_10ms"                    {+(\d+)%}
+CQS "f8_length_by_96th_note"               {%(\d+);}
+
+# note-level positional features in measures (C)
+CQS "e10_position_by_note_in_measure"      {](\d+)$}
+CQS "e11_position_by_note_in_measure"      {$(\d+)|}
+CQS "e12_position_by_10ms_in_measure"      {|(\d+)[}
+CQS "e13_position_by_10ms_in_measure"      {[(\d+)&}
+CQS "e14_position_by_96th_note_in_measure" {&(\d+)]}
+CQS "e15_position_by_96th_note_in_measure" {](\d+)=}
+CQS "e16_position_by_percent_in_measure"   {=(\d+)^}
+CQS "e17_position_by_percent_in_measure"   {^(\d+)~}
+
+# note-level positional features in phrase (C)
+CQS "e18_position_by_note"                 {~(\d+)#}
+CQS "e19_position_by_note"                 {#(\d+)_}
+CQS "e20_position_by_10ms"                 {_(\d+);}
+CQS "e21_position_by_10ms"                 {;(\d+)$}
+CQS "e22_position_by_96th_note"            {$(\d+)&}
+CQS "e23_position_by_96th_note"            {&(\d+)%}
+CQS "e24_position_by_percent"              {%(\d+)[}
+CQS "e25_position_by_percent"              {[(\d+)|}
+
+# pitch diff
+CQS "e57" {~([pm]\d+)+}
+CQS "e58" {+([pm]\d+)!}
