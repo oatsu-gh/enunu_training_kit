@@ -123,7 +123,8 @@ def prepare_data_for_acoustic_models(full_align_round_seg_files: list,
         corresponding_full_align_round_seg_files = [
             path for path in full_align_round_seg_files if f'{songname}_seg' in path
         ]
-        segment_wav(path_wav, wav_dir, corresponding_full_align_round_seg_files)
+        segment_wav(path_wav, wav_dir,
+                    corresponding_full_align_round_seg_files)
 
     # 手動設定したフルラベルファイルを複製
     print('Copying full_align_round_seg files')
@@ -144,12 +145,14 @@ def main(path_config_yaml):
     """
     フォルダを指定して全体の処理をやる
     """
-    with open(path_config_yaml, 'r') as fy:
+    with open(path_config_yaml, 'r', encoding='utf-8') as fy:
         config = yaml.load(fy, Loader=yaml.FullLoader)
     out_dir = expanduser(config['out_dir'])
 
-    full_align_round_seg_files = natsorted(glob(f'{out_dir}/full_align_round_seg/*.lab'))
-    full_score_round_seg_files = natsorted(glob(f'{out_dir}/full_score_round_seg/*.lab'))
+    full_align_round_seg_files = natsorted(
+        glob(f'{out_dir}/full_align_round_seg/*.lab'))
+    full_score_round_seg_files = natsorted(
+        glob(f'{out_dir}/full_score_round_seg/*.lab'))
     wav_files = natsorted(glob(f'{out_dir}/wav/*.wav', recursive=True))
 
     # フルラベルをtimelag用のフォルダに保存する。

@@ -9,7 +9,7 @@ from sys import argv
 from stage0 import (assert_wav_is_longer_than_lab, check_lab,
                     check_lab_after_segmentation, check_wav,
                     compare_mono_align_and_mono_score, copy_files,
-                    copy_mono_time_to_full, finalize_lab,
+                    copy_mono_time_to_full, finalize_lab_and_wav,
                     force_ust_end_with_rest, full2mono, generate_train_list,
                     merge_rest_full_score, merge_rest_mono_align, round_lab,
                     segment_lab, ust2lab)
@@ -22,7 +22,8 @@ def main(path_config_yaml):
     # ログ出力設定
     stream_handler = logging.StreamHandler()
     file_handler = logging.FileHandler(f'{__file__}.log', mode='w',)
-    logging.basicConfig(level=logging.INFO, handlers=[stream_handler, file_handler])
+    logging.basicConfig(level=logging.INFO, handlers=[
+                        stream_handler, file_handler])
 
     # singing_databaseフォルダ の中にあるファイルを dataフォルダにコピーする。
     copy_files.main(path_config_yaml)
@@ -69,7 +70,7 @@ def main(path_config_yaml):
     # - 学習用ファイルを各フォルダに配置する。
     # - wavファイルを分割してascoustic用のフォルダに置く。
     # - acoustic用のラベルの開始時刻を0にする。
-    finalize_lab.main(path_config_yaml)
+    finalize_lab_and_wav.main(path_config_yaml)
 
     # listを作成する
     generate_train_list.main(path_config_yaml)
