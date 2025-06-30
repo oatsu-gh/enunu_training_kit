@@ -1,13 +1,20 @@
-./data
-./dump
-./exp
-./nnsvs
-./singing_database
-./DB
-./DATABASE
+__pycache__
+nnsvs-master
+HN-UnifiedSourceFilterGAN-nnsvs
+ParallelWaveGAN-nnsvs
+SiFiGAN-nnsvs
+
+python-*
+PortableGit*
+
+DB
+DATABASE
+singing_database
+
 
 *.ini
 *.lab
+*.log
 *.mid
 *.ust
 *.wav
