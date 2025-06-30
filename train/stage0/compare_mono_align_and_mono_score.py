@@ -77,8 +77,10 @@ def calc_median_mean_pstdev(mono_align_lab_files: List[str],
     sigma : 標準偏差
     """
     # 全ラベルファイルを読み取る
-    mono_align_label_objects = [up.label.load(path) for path in mono_align_lab_files]
-    mono_score_label_objects = [up.label.load(path) for path in mono_score_lab_files]
+    mono_align_label_objects = [up.label.load(
+        path) for path in mono_align_lab_files]
+    mono_score_label_objects = [up.label.load(
+        path) for path in mono_score_lab_files]
     # Labelのリストを展開してPhonemeのリストにする
     mono_align_phonemes = list(chain.from_iterable(mono_align_label_objects))
     mono_score_phonemes = list(chain.from_iterable(mono_score_label_objects))
@@ -120,7 +122,8 @@ def offet_is_ok(path_mono_align_lab,
     mono_align_label = up.label.load(path_mono_align_lab)
     mono_score_label = up.label.load(path_mono_score_lab)
     # 設定した閾値以上差があるか調べる
-    duration_difference = mono_align_label[0].duration - mono_score_label[0].duration
+    duration_difference = mono_align_label[0].duration - \
+        mono_score_label[0].duration
     if not lower_threshold < duration_difference < upper_threshold:
         warning_message = \
             'DB同梱のラベルの前奏が楽譜より {} ミリ秒以上早いか、{} ミリ秒以上長いです。({} ms) ({})'.format(
@@ -187,12 +190,12 @@ def main(path_config_yaml):
     """
     全体の処理をやる。
     """
-    with open(path_config_yaml, 'r') as fy:
+    with open(path_config_yaml, 'r', encoding='utf-8') as fy:
         config = yaml.load(fy, Loader=yaml.FullLoader)
     out_dir = config['out_dir']
     mono_align_files = natsorted(glob(f'{out_dir}/mono_align_round/*.lab'))
     mono_score_files = natsorted(glob(f'{out_dir}/mono_score_round/*.lab'))
-    duration_check_mode = config['stage0']['vowel_duration_check']
+    duration_check_mode = config['vowel_duration_check']
 
     # mono_align_labの最初の音素が時刻0から始まるようにする。
     print('Overwriting mono-align-LAB so that it starts with zero.')

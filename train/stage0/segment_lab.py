@@ -48,8 +48,6 @@ def all_phonemes_are_rest(label: Union[Label, HTSFullLabel]) -> bool:
 #     raise ValueError("Argument 'label' must be Label object or HTSFullLabel object.")
 
 
-
-
 def split_mono_label_short(label: Label) -> List[Label]:
     """
     モノラベルを分割する。分割後の複数のLabelからなるリストを返す。
@@ -207,7 +205,7 @@ def split_label(label: Union[Label, HTSFullLabel], mode: str, middle_frequency: 
     """
     if mode not in ('short', 'middle', 'long'):
         raise ValueError('Argument "mode" must be "short" or "long".')
-
+    result = ''
     if isinstance(label, Label):
         if mode == 'short':
             result = split_mono_label_short(label)
@@ -238,16 +236,20 @@ def main(path_config_yaml):
     """
     ラベルファイルを取得して分割する。
     """
-    with open(path_config_yaml, 'r') as fy:
+    with open(path_config_yaml, 'r', encoding='utf-8') as fy:
         config = yaml.load(fy, Loader=yaml.FullLoader)
     out_dir = config['out_dir']
-    mode = config['stage0']['segmentation_mode']
-    middle_frequency = config['stage0']['middle_frequency']
+    mode = config['segmentation_mode']
+    middle_frequency = config['segmentation_frequency']
 
-    full_score_round_files = natsorted(glob(f'{out_dir}/full_score_round/*.lab'))
-    mono_score_round_files = natsorted(glob(f'{out_dir}/mono_score_round/*.lab'))
-    full_align_round_files = natsorted(glob(f'{out_dir}/full_align_round/*.lab'))
-    mono_align_round_files = natsorted(glob(f'{out_dir}/mono_align_round/*.lab'))
+    full_score_round_files = natsorted(
+        glob(f'{out_dir}/full_score_round/*.lab'))
+    mono_score_round_files = natsorted(
+        glob(f'{out_dir}/mono_score_round/*.lab'))
+    full_align_round_files = natsorted(
+        glob(f'{out_dir}/full_align_round/*.lab'))
+    mono_align_round_files = natsorted(
+        glob(f'{out_dir}/mono_align_round/*.lab'))
 
     makedirs(f'{out_dir}/full_score_round_seg', exist_ok=True)
     makedirs(f'{out_dir}/full_align_round_seg', exist_ok=True)

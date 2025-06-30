@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2021 oatsu
+# Copyright (c) 2021-2025 oatsu
 """
 歌唱DBから必要そうなファイルを全てコピーする。
 USTとMusicXMLとLABとWAVとINI
@@ -32,7 +32,7 @@ def make_gitignore(out_dir):
     {out_dir}/.gitignoreファイルを作る。
     """
     makedirs(f'{out_dir}', exist_ok=True)
-    with open(f'{out_dir}/.gitignore', 'w') as f:
+    with open(f'{out_dir}/.gitignore', 'w', encoding='utf-8') as f:
         f.write('*\n')
 
 
@@ -41,10 +41,10 @@ def main(path_config_yaml):
     設定ファイルを読み取って、使いそうなファイルを複製する。
     """
     # 設定ファイルを読み取る
-    with open(path_config_yaml, 'r') as fy:
+    with open(path_config_yaml, 'r', encoding='utf-8') as fy:
         config = yaml.load(fy, Loader=yaml.FullLoader)
     # 歌唱DBのパスを取得
-    db_root = expanduser(config['stage0']['db_root']).strip('"')
+    db_root = expanduser(config['db_root']).strip('"')
     # ファイルのコピー先を取得
     out_dir = config['out_dir'].strip('"')
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2021 oatsu
+# Copyright (c) 2025 oatsu
 """
 UST版
 フルラベルを生成する。また、DB中のモノラベルを複製する。
@@ -88,7 +88,10 @@ def main(path_config_yaml):
         config = yaml.load(fy, Loader=yaml.FullLoader)
     exclude_songs = config['exclude_songs']
     out_dir = config['out_dir'].strip('"')
-    path_table = config['table_path'].strip('"')
+    if 'table_path' in config:
+        path_table = config['table_path'].strip('"')
+    else:
+        path_table = config['utaupy_table_path'].strip('"')
 
     ust_dir = join(out_dir, 'ust')
     mono_align_dir = join(out_dir, 'lab')
