@@ -3,6 +3,8 @@
 ./exp
 ./nnsvs
 ./singing_database
+./DB
+./DATABASE
 
 *.ini
 *.lab
