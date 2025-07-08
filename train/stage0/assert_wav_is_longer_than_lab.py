@@ -3,12 +3,14 @@
 """
 WAVファイルが full_align_lab より長いことを確認する（concurrent.futures 使用）。
 """
+
 import warnings
 from concurrent.futures import ProcessPoolExecutor
 from glob import glob
 from logging import warning
 from os.path import join
 from sys import argv
+from typing import Optional
 
 import utaupy
 import yaml
@@ -20,7 +22,7 @@ with warnings.catch_warnings():
     from pydub import AudioSegment
 
 
-def check_wav_and_lab_pair(paths: tuple[str, str]) -> str | None:
+def check_wav_and_lab_pair(paths: tuple[str, str]) -> Optional[str]:
     """
     WAVとLABのペアを受け取り、WAVが短ければ警告メッセージを返す。
     """
@@ -32,8 +34,7 @@ def check_wav_and_lab_pair(paths: tuple[str, str]) -> str | None:
         lab_endtime_sec = label[-1].end / 10000000
 
         # WAVファイルの長さを取得 [sec]
-        wav_length_sec = AudioSegment.from_file(
-            path_wav, 'wav').duration_seconds
+        wav_length_sec = AudioSegment.from_file(path_wav, 'wav').duration_seconds
 
         if wav_length_sec < lab_endtime_sec:
             return f'WAV is shorter than LAB or score. ({path_wav}) ({path_lab})'
@@ -60,10 +61,9 @@ def compare_wav_and_lab_parallel(wav_dir_in, lab_dir_in):
 
     # マルチプロセスまたはマルチスレッドで処理する。
     with ProcessPoolExecutor() as executor:
-        results = list(tqdm(
-            executor.map(check_wav_and_lab_pair, pairs),
-            total=len(pairs)
-        ))
+        results = list(
+            tqdm(executor.map(check_wav_and_lab_pair, pairs), total=len(pairs))
+        )
         warnings_found = [r for r in results if r]
 
     for msg in warnings_found:
@@ -75,8 +75,8 @@ def main(path_config_yaml):
     configを読み取ってフォルダを指定し、全体の処理を実行する。
     """
     print('Asserting WAV files are longer than full_align_round label files')
-    with open(path_config_yaml, 'r', encoding='utf-8') as fy:
-        config = yaml.load(fy, Loader=yaml.FullLoader)
+    with open(path_config_yaml, encoding='utf-8') as fy:
+        config = yaml.safe_load(fy)
 
     out_dir = config['out_dir']
     wav_dir_in = join(out_dir, 'wav')

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2021 oatsu
+# Copyright (c) 2021-2025 oatsu
 """
 eval.list と dev.list と train.list を生成する。
 utt_list.txtは作らなくていい気がする。
@@ -50,10 +50,17 @@ def generate_train_list(out_dir, interval: Union[int, None] = None):
     print(f'generate_train_list.py: interval = {interval}')
 
     # 各種曲名リストを作る
-    eval_list = [songname for idx, songname in enumerate(utt_list) if idx % interval == 0]
-    dev_list = [songname for idx, songname in enumerate(utt_list) if idx % interval == 5]
-    train_list = [songname for idx, songname in enumerate(utt_list)
-                  if (idx % interval != 0 and idx % interval != 5)]
+    eval_list = [
+        songname for idx, songname in enumerate(utt_list) if idx % interval == 0
+    ]
+    dev_list = [
+        songname for idx, songname in enumerate(utt_list) if idx % interval == 5
+    ]
+    train_list = [
+        songname
+        for idx, songname in enumerate(utt_list)
+        if (idx % interval != 0 and idx % interval != 5)
+    ]
 
     # ファイルの出力パス
     path_utt_list = join(out_dir, 'list', 'utt_list.txt')
@@ -75,8 +82,8 @@ def main(path_config_yaml):
     """
     フォルダを指定して実行
     """
-    with open(path_config_yaml, 'r') as fy:
-        config = yaml.load(fy, Loader=yaml.FullLoader)
+    with open(path_config_yaml) as fy:
+        config = yaml.safe_load(fy)
     out_dir = expanduser(config['out_dir'])
     generate_train_list(out_dir)
 

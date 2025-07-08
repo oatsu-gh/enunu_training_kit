@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
-# Copyright (c) 2021 oatsu
+# Copyright (c) 2021-2025 oatsu
 """
 モノラベルを休符周辺で切断する。
 pau の直前で切断する。休符がすべて結合されていると考えて実行する。
 """
+
 from glob import glob
 from os import makedirs
 from os.path import basename, splitext
 from sys import argv
-from typing import List, Union
+from typing import Union
 
 import utaupy as up
 import yaml
@@ -24,8 +25,8 @@ def all_phonemes_are_rest(label: Union[Label, HTSFullLabel]) -> bool:
     """
     rests = {'pau', 'sil'}
     # 全部の音素が休符であるか否か
-    result = all(phoneme.symbol in rests for phoneme in label)
-    return result
+    return all(phoneme.symbol in rests for phoneme in label)
+
 
 # def all_phonemes_are_rest_old(label: Union[Label, HTSFullLabel]) -> bool:
 #     """
@@ -48,7 +49,7 @@ def all_phonemes_are_rest(label: Union[Label, HTSFullLabel]) -> bool:
 #     raise ValueError("Argument 'label' must be Label object or HTSFullLabel object.")
 
 
-def split_mono_label_short(label: Label) -> List[Label]:
+def split_mono_label_short(label: Label) -> list[Label]:
     """
     モノラベルを分割する。分割後の複数のLabelからなるリストを返す。
     """
@@ -66,7 +67,7 @@ def split_mono_label_short(label: Label) -> List[Label]:
     return result
 
 
-def split_mono_label_middle(label: Label, frequency) -> List[Label]:
+def split_mono_label_middle(label: Label, frequency) -> list[Label]:
     """
     モノラベルを分割する。分割後の複数のLabelからなるリストを返す。
     pauが10回出現するたびに分割する。
@@ -95,7 +96,7 @@ def split_mono_label_middle(label: Label, frequency) -> List[Label]:
     return result
 
 
-def split_mono_label_long(label: Label) -> List[Label]:
+def split_mono_label_long(label: Label) -> list[Label]:
     """
     モノラベルを分割する。分割後の複数のLabelからなるリストを返す。
     [pau][pau], [pau][sil] のいずれかの並びで切断する。
@@ -106,7 +107,10 @@ def split_mono_label_long(label: Label) -> List[Label]:
     new_label.append(label[0])
     for i, current_phoneme in enumerate(label[1:-1]):
         previous_phoneme = label[i - 1]
-        if (previous_phoneme.symbol, current_phoneme.symbol) in [('pau', 'sil'), ('pau', 'pau')]:
+        if (previous_phoneme.symbol, current_phoneme.symbol) in [
+            ('pau', 'sil'),
+            ('pau', 'pau'),
+        ]:
             new_label = Label()
             result.append(new_label)
         new_label.append(current_phoneme)
@@ -137,7 +141,9 @@ def split_full_label_short(full_label: HTSFullLabel) -> list:
     return result
 
 
-def split_full_label_middle(full_label: HTSFullLabel, frequency: int) -> List[HTSFullLabel]:
+def split_full_label_middle(
+    full_label: HTSFullLabel, frequency: int
+) -> list[HTSFullLabel]:
     """
     モノラベルを分割する。分割後の複数のLabelからなるリストを返す。
     pauが10回出現するたびに分割する。
@@ -181,8 +187,10 @@ def split_full_label_long(full_label: HTSFullLabel) -> list:
     result = [new_label]
 
     for oneline in full_label[1:-1]:
-        if ((oneline.previous_phoneme.identity, oneline.phoneme.identity)
-                in [('pau', 'sil'), ('pau', 'pau')]):
+        if (oneline.previous_phoneme.identity, oneline.phoneme.identity) in [
+            ('pau', 'sil'),
+            ('pau', 'pau'),
+        ]:
             print(oneline.previous_phoneme.identity, oneline.phoneme.identity)
             new_label = HTSFullLabel()
             result.append(new_label)
@@ -197,8 +205,9 @@ def split_full_label_long(full_label: HTSFullLabel) -> list:
     return result
 
 
-def split_label(label: Union[Label, HTSFullLabel], mode: str, middle_frequency: int
-                ) -> List[Union[Label, HTSFullLabel]]:
+def split_label(
+    label: Union[Label, HTSFullLabel], mode: str, middle_frequency: int
+) -> list[Union[Label, HTSFullLabel]]:
     """
     ラベルを分割してリストにして返す。フルラベルとモノラベルを自動で使い分ける。
     mode: 'short' か 'long' のいずれか
@@ -236,20 +245,16 @@ def main(path_config_yaml):
     """
     ラベルファイルを取得して分割する。
     """
-    with open(path_config_yaml, 'r', encoding='utf-8') as fy:
-        config = yaml.load(fy, Loader=yaml.FullLoader)
+    with open(path_config_yaml, encoding='utf-8') as fy:
+        config = yaml.safe_load(fy)
     out_dir = config['out_dir']
     mode = config['segmentation_mode']
     middle_frequency = config['segmentation_frequency']
 
-    full_score_round_files = natsorted(
-        glob(f'{out_dir}/full_score_round/*.lab'))
-    mono_score_round_files = natsorted(
-        glob(f'{out_dir}/mono_score_round/*.lab'))
-    full_align_round_files = natsorted(
-        glob(f'{out_dir}/full_align_round/*.lab'))
-    mono_align_round_files = natsorted(
-        glob(f'{out_dir}/mono_align_round/*.lab'))
+    full_score_round_files = natsorted(glob(f'{out_dir}/full_score_round/*.lab'))
+    mono_score_round_files = natsorted(glob(f'{out_dir}/mono_score_round/*.lab'))
+    full_align_round_files = natsorted(glob(f'{out_dir}/full_align_round/*.lab'))
+    mono_align_round_files = natsorted(glob(f'{out_dir}/mono_align_round/*.lab'))
 
     makedirs(f'{out_dir}/full_score_round_seg', exist_ok=True)
     makedirs(f'{out_dir}/full_align_round_seg', exist_ok=True)

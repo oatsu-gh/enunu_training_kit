@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-# Copyright (c) 2021 oatsu
+# Copyright (c) 2021-2025 oatsu
 """
 歌唱DBに含まれるモノラベルに不具合がないか点検する。
 
 - 極端に短い音素(5ms以下)がないか
 - 時刻の順序が逆転しているラベルがないか
 """
+
 import logging
 import sys
 from glob import glob
@@ -28,7 +29,9 @@ def check_lab_files(lab_dir, threshold=0):
         if not label.is_valid(threshold):
             invalid_lab_files.append(path_mono)
     if len(invalid_lab_files) != threshold:
-        print('LABファイルの発声時刻に不具合があります。以下のファイルを点検してください。')
+        print(
+            'LABファイルの発声時刻に不具合があります。以下のファイルを点検してください。'
+        )
         pprint(invalid_lab_files)
         raise Exception
 
@@ -49,7 +52,9 @@ def repair_too_short_phoneme(lab_dir, threshold=5) -> None:
             continue
         # 短い音素が連続しても不具合が起こらないように逆向きにループする
         if label[0].duration < threshold_100ns:  # pylint: disable=no-member
-            raise ValueError(f'最初の音素が短いです。修正できません。: {label[0]} ({path_mono})')
+            raise ValueError(
+                f'最初の音素が短いです。修正できません。: {label[0]} ({path_mono})'
+            )
         for i, phoneme in enumerate(reversed(label)):
             # 発声時間が閾値より短い場合
             if phoneme.duration < threshold_100ns:
@@ -71,8 +76,8 @@ def main(path_config_yaml):
     そのDB中のLABファイルを点検する。
     """
     # 設定ファイルを読み取る
-    with open(path_config_yaml, 'r') as fy:
-        config = yaml.load(fy, Loader=yaml.FullLoader)
+    with open(path_config_yaml, encoding='utf-8') as fy:
+        config = yaml.safe_load(fy)
     # 歌唱DBのパスを取得する
     config_dir = dirname(path_config_yaml)
     out_dir = expanduser(join(config_dir, config['out_dir'])).strip('"')

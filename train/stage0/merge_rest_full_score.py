@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-# Copyright (c) 2021 oatsu
+# Copyright (c) 2021-2025 oatsu
 """
 フルラベル中の休符を結合して上書きする。
 いったんSongオブジェクトを経由するので、
 utaupyの仕様に沿ったフルラベルになってしまうことに注意。
 """
+
 from copy import copy
 from glob import glob
 from os.path import basename
@@ -37,13 +38,17 @@ def merge_rests_full(song: Song) -> Song:
     prev_note = first_note
     for note in song[1:]:
         # 転調したり拍子やテンポが変わっていない場合のみ実行
-        if all((note.is_rest(),
+        if all(
+            (
+                note.is_rest(),
                 prev_note.is_rest(),
                 note.beat == prev_note.beat,
                 note.tempo == prev_note.tempo,
                 note.key == prev_note.key,
                 note.length != 'xx',
-                prev_note.length != 'xx')):
+                prev_note.length != 'xx',
+            )
+        ):
             # 直前のノート(休符)の長さを延長する
             prev_note.length = int(prev_note.length) + int(note.length)
         # 拍子が変わっていたり、音符だった場合は普通に追加
@@ -135,8 +140,8 @@ def main(path_config_yaml):
     musicxmlから生成されたラベルと、DBに同梱されていたラベルの、休符をすべて結合する。
     ついでにround版も作る。
     """
-    with open(path_config_yaml, 'r') as fy:
-        config = yaml.load(fy, Loader=yaml.FullLoader)
+    with open(path_config_yaml) as fy:
+        config = yaml.safe_load(fy)
     out_dir = config['out_dir']
 
     # フルラベルを処理する。

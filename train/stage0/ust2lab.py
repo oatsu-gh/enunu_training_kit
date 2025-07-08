@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2025 oatsu
+# Copyright (c) 2021-2025 oatsu
 """
 UST版
 フルラベルを生成する。また、DB中のモノラベルを複製する。
@@ -8,6 +8,7 @@ UST版
 - '{out_dir}/sinsy_mono' にモノラベルを生成する。(この工程は省略した)
 - '{out_dir}/mono_label' にDBのモノラベルを複製する
 """
+
 import logging
 from glob import glob
 from os import makedirs
@@ -45,8 +46,9 @@ def compare_number_of_ustfiles_and_labfiles(ust_dir, mono_align_dir):
     # DB内のラベルファイル一覧を取得
     mono_files = natsorted(glob(f'{mono_align_dir}/*.lab'))
     # 個数が合うか点検
-    assert len(ust_files) == len(mono_files), \
+    assert len(ust_files) == len(mono_files), (
         f'USTファイル数({len(ust_files)})とLABファイル数({len(mono_files)})が一致しません'
+    )
 
 
 def compare_name_of_ustfiles_and_labfiles(ust_dir, mono_align_dir):
@@ -71,7 +73,9 @@ def compare_name_of_ustfiles_and_labfiles(ust_dir, mono_align_dir):
             logging.error('USTファイル名とLABファイル名が一致しません:')
             logging.error('  path_ust: %s', path_ust_and_path_lab[0])
             logging.error('  path_lab: %s', path_ust_and_path_lab[1])
-        raise ValueError('USTファイル名とLABファイル名が一致しませんでした。ファイル名を点検してください')
+        raise ValueError(
+            'USTファイル名とLABファイル名が一致しませんでした。ファイル名を点検してください'
+        )
 
 
 def main(path_config_yaml):
@@ -84,8 +88,8 @@ def main(path_config_yaml):
     3. USTファイルからフルラベルを生成する。
     """
     # 設定ファイルを読み取る
-    with open(path_config_yaml, 'r') as fy:
-        config = yaml.load(fy, Loader=yaml.FullLoader)
+    with open(path_config_yaml, encoding='utf-8') as fy:
+        config = yaml.safe_load(fy)
     exclude_songs = config['exclude_songs']
     out_dir = config['out_dir'].strip('"')
     if 'table_path' in config:

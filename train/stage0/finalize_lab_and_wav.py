@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2021 oatsu
-#
+# Copyright (c) 2021-2025 oatsu
 """
 各種ラベルが正常かチェックして、
 timelag とか duration とか acoustic の学習用フォルダにコピーする。
@@ -8,6 +7,7 @@ timelag とか duration とか acoustic の学習用フォルダにコピーす�
 
 音声の offset_correction がよくわからんので実装できてない。
 """
+
 import warnings
 from glob import glob
 from os import makedirs
@@ -41,7 +41,8 @@ def lab_fix_offset(path_lab):
 
 
 def prepare_data_for_timelag_models(
-        full_align_round_seg_files: list, full_score_round_seg_files: list, timelag_dir):
+    full_align_round_seg_files: list, full_score_round_seg_files: list, timelag_dir
+):
     """
     timilagモデル用にラベルファイルをコピーする
 
@@ -80,13 +81,16 @@ def prepare_data_for_duration_models(full_align_round_seg_files: list, duration_
         lab_fix_offset(path_lab_out)
 
 
-def segment_wav(path_wav_in, acoustic_wav_dir, corresponding_full_align_round_seg_files: list):
+def segment_wav(
+    path_wav_in, acoustic_wav_dir, corresponding_full_align_round_seg_files: list
+):
     """
     音声ファイルを切り出して出力する。
     - pydubをつかうと16bitにされずに済みそう。(32bitになる)
     - pydubをつかうと入力にwav以外も使えそう。
 
-    full_align_round_seg_files: full_align_round_seg の中にあるファイル(切断時刻のデータを持っている)
+    full_align_round_seg_files: full_align_round_seg の中にあるファイル
+    (切断時刻のデータを持っている)
     """
     # 音声ファイルを読み取る
     wav = AudioSegment.from_file(path_wav_in, format='wav')
@@ -102,9 +106,12 @@ def segment_wav(path_wav_in, acoustic_wav_dir, corresponding_full_align_round_se
         wav_slice.export(path_wav_seg_out, format='wav')
 
 
-def prepare_data_for_acoustic_models(full_align_round_seg_files: list,
-                                     full_score_round_seg_files: list,
-                                     wav_files: list, acoustic_dir: str):
+def prepare_data_for_acoustic_models(
+    full_align_round_seg_files: list,
+    full_score_round_seg_files: list,
+    wav_files: list,
+    acoustic_dir: str,
+):
     """
     acousticモデル用に音声ファイルとラベルファイルを複製する。
     """
@@ -123,8 +130,7 @@ def prepare_data_for_acoustic_models(full_align_round_seg_files: list,
         corresponding_full_align_round_seg_files = [
             path for path in full_align_round_seg_files if f'{songname}_seg' in path
         ]
-        segment_wav(path_wav, wav_dir,
-                    corresponding_full_align_round_seg_files)
+        segment_wav(path_wav, wav_dir, corresponding_full_align_round_seg_files)
 
     # 手動設定したフルラベルファイルを複製
     print('Copying full_align_round_seg files')
@@ -145,21 +151,24 @@ def main(path_config_yaml):
     """
     フォルダを指定して全体の処理をやる
     """
-    with open(path_config_yaml, 'r', encoding='utf-8') as fy:
-        config = yaml.load(fy, Loader=yaml.FullLoader)
+    with open(path_config_yaml, encoding='utf-8') as fy:
+        config = yaml.safe_load(fy)
     out_dir = expanduser(config['out_dir'])
 
     full_align_round_seg_files = natsorted(
-        glob(f'{out_dir}/full_align_round_seg/*.lab'))
+        glob(f'{out_dir}/full_align_round_seg/*.lab')
+    )
     full_score_round_seg_files = natsorted(
-        glob(f'{out_dir}/full_score_round_seg/*.lab'))
+        glob(f'{out_dir}/full_score_round_seg/*.lab')
+    )
     wav_files = natsorted(glob(f'{out_dir}/wav/*.wav', recursive=True))
 
     # フルラベルをtimelag用のフォルダに保存する。
     print('Preparing data for time-lag models')
     timelag_dir = f'{out_dir}/timelag'
-    prepare_data_for_timelag_models(full_align_round_seg_files,
-                                    full_score_round_seg_files, timelag_dir)
+    prepare_data_for_timelag_models(
+        full_align_round_seg_files, full_score_round_seg_files, timelag_dir
+    )
 
     # フルラベルのオフセット修正をして、duration用のフォルダに保存する。
     print('Preparing data for acoustic models')
@@ -171,9 +180,9 @@ def main(path_config_yaml):
     # wavファイルの前後にどのくらい余白を設けるか
     print('Preparing data for acoustic models')
     acoustic_dir = f'{out_dir}/acoustic'
-    prepare_data_for_acoustic_models(full_align_round_seg_files,
-                                     full_score_round_seg_files,
-                                     wav_files, acoustic_dir)
+    prepare_data_for_acoustic_models(
+        full_align_round_seg_files, full_score_round_seg_files, wav_files, acoustic_dir
+    )
 
 
 if __name__ == '__main__':

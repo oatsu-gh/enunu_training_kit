@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-# Copyright (c) 2021 oatsu
+# Copyright (c) 2021-2025 oatsu
 """
 USTファイルの最終ノートを休符にする。
 """
+
 import logging
 from glob import glob
 from os.path import join
@@ -32,8 +33,8 @@ def main(path_config_yaml):
     フォルダとかを指定
     """
     # 設定ファイルを読み取る
-    with open(path_config_yaml, 'r') as fy:
-        config = yaml.load(fy, Loader=yaml.FullLoader)
+    with open(path_config_yaml) as fy:
+        config = yaml.safe_load(fy, Loader=yaml.FullLoader)
     # 処理対象のフォルダを指定
     out_dir = config['out_dir'].strip('"')
     ust_dir = join(out_dir, 'ust')

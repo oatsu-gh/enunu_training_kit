@@ -41,8 +41,8 @@ def main(path_config_yaml):
     設定ファイルを読み取って、使いそうなファイルを複製する。
     """
     # 設定ファイルを読み取る
-    with open(path_config_yaml, 'r', encoding='utf-8') as fy:
-        config = yaml.load(fy, Loader=yaml.FullLoader)
+    with open(path_config_yaml, encoding='utf-8') as fy:
+        config = yaml.safe_load(fy)
     # 歌唱DBのパスを取得
     db_root = expanduser(config['db_root']).strip('"')
     # ファイルのコピー先を取得

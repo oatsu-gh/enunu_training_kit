@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-# Copyright (c) 2021 oatsu
+# Copyright (c) 2021-2025 oatsu
 """
 フルラベルを読み取ってモノラベルにして保存する。
 """
+
 from glob import glob
 from os import makedirs
 from os.path import basename, join
@@ -30,8 +31,8 @@ def main(path_config_yaml):
     configファイルからフォルダを指定して、全体の処理を実行する。
     """
     # 設定ファイルを読み取る
-    with open(path_config_yaml, 'r') as fy:
-        config = yaml.load(fy, Loader=yaml.FullLoader)
+    with open(path_config_yaml) as fy:
+        config = yaml.safe_load(fy)
     out_dir = config['out_dir'].strip('"')
 
     full_score_dir = join(out_dir, 'full_score_round')
