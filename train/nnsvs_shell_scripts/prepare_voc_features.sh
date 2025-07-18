@@ -8,7 +8,7 @@ do
     else
         ext=""
     fi
-    xrun python $NNSVS_ROOT/nnsvs/bin/prepare_voc_features.py $ext acoustic=$acoustic_features \
+    xrun $PYTHON_EXE -m nnsvs.bin.prepare_voc_features $ext acoustic=$acoustic_features \
         in_dir=$dump_norm_dir/$s/out_acoustic/ \
         out_dir=$dump_norm_dir/$s/in_vocoder \
         utt_list=data/list/$s.list
@@ -64,6 +64,6 @@ fi
 
 # Compute statistics of vocoder's input features
 # NOTE: no-op if the acoustic features don't have dynamic features
-xrun python $NNSVS_COMMON_ROOT/scaler_joblib2npy_voc.py \
+xrun $PYTHON_EXE $NNSVS_COMMON_ROOT/scaler_joblib2npy_voc.py \
     $dump_norm_dir/out_acoustic_scaler.joblib $dump_norm_dir/ \
     --sample_rate $sample_rate $ext

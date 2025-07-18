@@ -10,7 +10,7 @@ do
         else
             ext=""
         fi
-        xrun python $NNSVS_ROOT/nnsvs/bin/prepare_features.py $ext \
+        xrun $PYTHON_EXE -m nnsvs.bin.prepare_features $ext \
             utt_list=data/$dbname/list/$s.list out_dir=$dump_org_dir/$s/  \
             question_path=$question_path \
             timelag=$timelag_features duration=$duration_features acoustic=$acoustic_features \
@@ -40,7 +40,7 @@ for inout in "in" "out"; do
         fi
         find $dump_org_dir/$train_set/${inout}_${typ} -name "*feats.npy" > train_list.txt
         scaler_path=$dump_org_dir/${inout}_${typ}_scaler.joblib
-        xrun nnsvs-fit-scaler list_path=train_list.txt scaler._target_=$scaler_class \
+        xrun $PYTHON_EXE nnsvs.bin.fit_scaler list_path=train_list.txt scaler._target_=$scaler_class \
             out_path=$scaler_path ${ext}
         rm -f train_list.txt
         cp -v $scaler_path $dump_norm_dir/${inout}_${typ}_scaler.joblib
@@ -52,7 +52,7 @@ for s in ${datasets[@]}; do
     for inout in "in" "out"; do
         for typ in timelag duration acoustic;
         do
-            xrun nnsvs-preprocess-normalize in_dir=$dump_org_dir/$s/${inout}_${typ}/ \
+            xrun $PYTHON_EXE nnsvs.bin.preprocess_normalize in_dir=$dump_org_dir/$s/${inout}_${typ}/ \
                 scaler_path=$dump_org_dir/${inout}_${typ}_scaler.joblib \
                 out_dir=$dump_norm_dir/$s/${inout}_${typ}/
         done

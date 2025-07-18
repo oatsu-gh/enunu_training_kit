@@ -36,7 +36,7 @@ else
 fi
 
 for s in ${testsets[@]}; do
-    xrun python $NNSVS_ROOT/nnsvs/bin/anasyn.py $ext \
+    xrun $PYTHON_EXE -m nnsvs.bin.anasyn $ext \
         synthesis=$synthesis \
         synthesis.sample_rate=$sample_rate \
         acoustic.model_yaml=$expdir/${acoustic_model}/model.yaml \

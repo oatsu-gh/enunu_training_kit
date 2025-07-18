@@ -19,14 +19,14 @@ do
     else
         ext=""
     fi
-    xrun python $NNSVS_ROOT/nnsvs/bin/prepare_features.py $ext \
+    xrun $PYTHON_EXE -m nnsvs.bin.prepare_features $ext \
         utt_list=data/list/$s.list out_dir=$dump_org_dir/$s/ \
         question_path=$question_path \
         timelag=$timelag_features duration=$duration_features acoustic=$acoustic_features \
         acoustic.sample_rate=$sample_rate \
         acoustic.trajectory_smoothing=${trajectory_smoothing} \
         acoustic.trajectory_smoothing_cutoff=${trajectory_smoothing_cutoff} \
-        ++num_workers=24
+        ++max_workers=$CPU_COUNT
 
 done
 
@@ -50,10 +50,9 @@ for inout in "in" "out"; do
         fi
         find $dump_org_dir/$train_set/${inout}_${typ} -name "*feats.npy" > train_list.txt
         scaler_path=$dump_org_dir/${inout}_${typ}_scaler.joblib
-        xrun python $NNSVS_ROOT/nnsvs/bin/fit_scaler.py \
+        xrun $PYTHON_EXE -m nnsvs.bin.fit_scaler \
             list_path=train_list.txt scaler._target_=$scaler_class \
-            out_path=$scaler_path ${ext} \
-            ++num_workers=24
+            out_path=$scaler_path ${ext}
         rm -f train_list.txt
         cp -v $scaler_path $dump_norm_dir/${inout}_${typ}_scaler.joblib
     done
@@ -65,10 +64,11 @@ for s in ${datasets[@]}; do
         for typ in timelag duration acoustic postfilter;
         do
             if [ -e $dump_org_dir/${inout}_${typ}_scaler.joblib ]; then
-                xrun nnsvs-preprocess-normalize in_dir=$dump_org_dir/$s/${inout}_${typ}/ \
+                xrun $PYTHON_EXE -m nnsvs.bin.preprocess_normalize in_dir=$dump_org_dir/$s/${inout}_${typ}/ \
                     scaler_path=$dump_org_dir/${inout}_${typ}_scaler.joblib \
                     out_dir=$dump_norm_dir/$s/${inout}_${typ}/ \
-                    ++num_workers=24
+                    ++max_workers=$CPU_COUNT \
+                    ++num_workers=$CPU_COUNT
             fi
         done
     done

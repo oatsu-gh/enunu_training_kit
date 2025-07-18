@@ -29,7 +29,7 @@ else
     post_args=""
 fi
 
-xrun python $NNSVS_ROOT/nnsvs/bin/train_postfilter.py  $ext $hydra_opt \
+xrun $PYTHON_EXE -m nnsvs.bin.train_postfilter $ext $hydra_opt \
     model=$postfilter_model train=$postfilter_train data=$postfilter_data \
     data.train_no_dev.in_dir=$expdir/$acoustic_model/norm/$train_set/in_postfilter \
     data.train_no_dev.out_dir=$dump_norm_dir/$train_set/out_postfilter \
