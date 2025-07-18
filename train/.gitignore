@@ -2,7 +2,7 @@
 python-*-embed-*
 PortableGit*
 
-# Config files
+# Config files ---------------
 conf/*
 !config.yaml
 !myconfig.yaml
