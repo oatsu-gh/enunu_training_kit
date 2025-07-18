@@ -13,14 +13,17 @@ function xrun () {
 }
 
 # use embed python executional file
-PYTHON_EXE="python.exe"
+# PYTHON_EXE="./python-3.9.13-embed-amd64/python.exe"
+PYTHON_EXE="python"
 CONFIG_PATH="config.yaml"
+CPU_COUNT=$(nproc)
 
 script_dir=$(cd $(dirname ${BASH_SOURCE:-$0}); pwd)
-NNSVS_ROOT=$script_dir/nnsvs-master
-NNSVS_COMMON_ROOT=$NNSVS_ROOT/recipes/_common/spsvs
-NO2_ROOT=$NNSVS_ROOT/recipes/_common/no2
-. $NNSVS_ROOT/utils/yaml_parser.sh || exit 1;
+NNSVS_COMMON_ROOT=./nnsvs_scripts  # original: $NNSVS_ROOT/recipes/_common/spsvs
+. $NNSVS_COMMON_ROOT/yaml_parser.sh || exit 1;
+# NNSVS_ROOT=/path/to/nnsvs
+# NO2_ROOT=$NNSVS_ROOT/recipes/_common/no2
+# . $NNSVS_ROOT/utils/yaml_parser.sh || exit 1;
 
 eval $(parse_yaml "./config.yaml" "")
 
@@ -37,7 +40,8 @@ dump_norm_dir=$dumpdir/$spk/norm
 stage=0
 stop_stage=0
 
-. $NNSVS_ROOT/utils/parse_options.sh || exit 1;
+# . $NNSVS_ROOT/utils/parse_options.sh || exit 1;
+. $NNSVS_COMMON_ROOT/parse_options.sh || exit 1;
 
 # exp name
 if [ -z ${tag:=} ]; then
@@ -83,11 +87,11 @@ fi
 # Enunu Training Kit Customized Stage 0 FROM HERE -------------------------------------------------------
 # Prepare files in singing-database for training
 if [ ${stage} -le 0 ] && [ ${stop_stage} -ge 0 ]; then
-    echo "#########################################"
+    echo "========================================="
     echo "#                                       #"
     echo "#  stage 0: Data preparation            #"
     echo "#                                       #"
-    echo "#########################################"
+    echo "========================================="
     rm -rf $out_dir
     rm -f preprocess_data.py.log
     $PYTHON_EXE preprocess_data.py $CONFIG_PATH || exit 1;
@@ -103,9 +107,4 @@ fi
 if [ ${stage} -le 101 ] && [ ${stop_stage} -ge 101 ]; then
     echo "stage 101: Feature generation"
     . $NNSVS_COMMON_ROOT/feature_generation2.sh
-fi
-
-if [ ${stage} -le 104 ] && [ ${stop_stage} -ge 104 ]; then
-    echo "stage 104: Training acoustic model"
-    . $NNSVS_COMMON_ROOT/train_acoustic2.sh
 fi
