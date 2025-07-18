@@ -1,17 +1,26 @@
-__pycache__
-nnsvs-master
-HN-UnifiedSourceFilterGAN-nnsvs
-ParallelWaveGAN-nnsvs
-SiFiGAN-nnsvs
-
-python-*
+# Portable Applications ------
+python-*-embed-*
 PortableGit*
 
-DB
-DATABASE
-singing_database
+# Config files
+conf/*
+!config.yaml
+!myconfig.yaml
 
+# Training Output Dirs -------
+data/*
+dump*/*
+exp/*
+outputs
+tensorboard
+release
 
+# Input Dataset Dirs ---------
+DB/*
+DATABASE/*
+singing_database/*
+
+# Ignored File Extensions ----
 *.ini
 *.lab
 *.log
@@ -21,3 +30,6 @@ singing_database
 *.xml
 *.musicxml
 *.zip
+
+# Other Dirs and Files -----------------
+__pycache__
