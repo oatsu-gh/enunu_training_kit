@@ -34,7 +34,7 @@ def main(path_config_yaml):
     """
     # 設定ファイルを読み取る
     with open(path_config_yaml) as fy:
-        config = yaml.safe_load(fy, Loader=yaml.FullLoader)
+        config = yaml.safe_load(fy)
     # 処理対象のフォルダを指定
     out_dir = config['out_dir'].strip('"')
     ust_dir = join(out_dir, 'ust')

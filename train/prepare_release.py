@@ -82,11 +82,11 @@ def copy_enuconfig(path_config_yaml, path_enuconfig_yaml, release_dir):
     enuconfig の hed ファイル名を、学習に使ったものに合わせる。
     """
     # 学習フォルダにあるconfigとenuconfigを読み取る
-    with open(path_enuconfig_yaml, 'r', encoding='utf-8') as f:
+    with open(path_enuconfig_yaml, encoding='utf-8') as f:
         enuconfig = yaml.safe_load(f)
-    with open(path_config_yaml, 'r', encoding='utf-8') as f:
+    with open(path_config_yaml, encoding='utf-8') as f:
         config = yaml.safe_load(f)
-    with open(path_enuconfig_yaml, 'r', encoding='utf-8') as f:
+    with open(path_enuconfig_yaml, encoding='utf-8') as f:
         s = f.read()
 
     # hedファイルを指定する項目を上書きする
@@ -106,7 +106,7 @@ def main(path_config_yaml):
     各種ファイルをコピーする
     """
     # load settings
-    with open(path_config_yaml, 'r') as f_yaml:
+    with open(path_config_yaml) as f_yaml:
         config = yaml.safe_load(f_yaml)
     singer = config['spk'].strip('"\'')
     config_dir = 'conf'
