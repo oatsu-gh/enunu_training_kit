@@ -1,6 +1,6 @@
 ### General settings.
 ## The name of singer
-spk: "EnunuTraininKit_2025"
+spk: "EnunuTrainingKit"
 
 ## exp tag(for managing experiments)
 tag:
@@ -14,6 +14,11 @@ db_root: "./DB"
 # will be saved in the following directory
 out_dir: "./data"
 
+# # Audio sampling rate
+# # CAUTION: Changing sample_rate may affect the dimension number of acoustic features.
+# # DO NOT CHANGE this unless you know the relationship between the dim of bap and sample_rate.
+sample_rate: 48000
+
 ## Songs to be excluded from training.
 exclude_songs: []
 
@@ -22,10 +27,10 @@ exclude_songs: []
 # This singing voice database contains the unvoiced vowels "I" and "U".
 # To enable the unvoiced vowels, modified version of sinsy dictionary files
 # are needed.
-utaupy_table_path: kana2phonemes_002_oto2lab.table
+utaupy_table_path: "./dic/kana2phonemes_etk_001.table"
 
 ## HTS-style question used for extracting musical/linguistic context from musicxml files
-question_path: "./hed/jp_dev_latest_6style-minus_all.hed"
+question_path: "./hed/jp_etk_001.hed"
 
 ### EnunuTrainingKit Custom Settings from here------------------------------------------------------
 ## How to segment LAB and WAV before training
@@ -36,7 +41,7 @@ question_path: "./hed/jp_dev_latest_6style-minus_all.hed"
 # If "middle", LAB is devided at the start of each <middle_frequency> "pau"s.
 # If "short",  LAB is devided at the start of each "pau" phoneme.
 segmentation_mode: middle
-segmentation_frequency: 3
+segmentation_frequency: 2
 
 # Choices are [strict, middle, lenient]
 vowel_duration_check: middle
@@ -64,12 +69,6 @@ vowel_duration_check: middle
 
 # suppress_start_end_pau: True
 # start_end_pau_suppression_ratio: 0.2
-
-# # Audio sampling rate
-# # CAUTION: Changing sample_rate may affect the dimension number of acoustic features.
-# # DO NOT CHANGE this unless you know the relationship between the dim of bap and sample_rate.
-# sample_rate: 48000
-
 # gain_normalize: False
 #### NNSVS's Original Data Preparation Related Settings until here -----------------------------
 
@@ -105,14 +104,12 @@ duration_model: duration_vp_mdn
 duration_train: myconfig
 duration_data: myconfig
 
-# NOTE: the following configs are for diffusion-based acoustic model
-# training is very slow.
-acoustic_model: acoustic_nnsvs_world_multi_ar_f0_diff_mgcbap
-acoustic_train: diffusion
-acoustic_data: world_diffusion
+acoustic_model: acoustic_nnsvs_world_multi_ar_f0
+acoustic_train: myconfig
+acoustic_data: world
 
-postfilter_model: postfilter_mgc
-postfilter_train: mgc
+postfilter_model: postfilter_bap
+postfilter_train: bap
 postfilter_data: myconfig
 
 # Pretrained model dir (leave empty to disable)
@@ -149,7 +146,7 @@ postfilter_eval_checkpoint: latest.pth
 ###########################################################
 
 # NOTE: conf/parallel_wavegan/${vocoder_model}.yaml must exist.
-vocoder_model: nnsvs_world_parallel_hn_usfgan_sr48k
+vocoder_model:
 # Pretrained checkpoint path for the vocoder model
 # NOTE: if you want to try fine-tuning, please specify the path here
 pretrained_vocoder_checkpoint:
