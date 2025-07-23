@@ -10,7 +10,7 @@ dev:
 
 # data loader
 num_workers: 0
-batch_size: 8
+batch_size: 2
 pin_memory: true
 # Number of maximum frames to be loaded in a single mini-batch
 # If specified, batch sizes are dynamically adjusted based on the number of frames
@@ -26,11 +26,16 @@ filter_long_segments: false
 filter_num_frames: 6000
 filter_min_num_frames: 0
 
+in_scaler_path: null
+out_scaler_path: null
+
 # mini-batch sampling
 # If max_time_frames is specified, (max_time_frames) frames are randomly sampled
 # to create a mini-batch. Otherwise, all frames are used.
 # consider setting the value (e.g., 256 or 512) to avoid GPU OOM.
-max_time_frames: -1
+max_time_frames: 256
 
-in_scaler_path: null
-out_scaler_path: null
+sample_rate: 48000
+
+# Use world codec for spectral envelope or not
+use_world_codec: true

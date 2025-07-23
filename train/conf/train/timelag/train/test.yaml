@@ -10,15 +10,15 @@ use_ddp: false
 
 # steps can either be specified by steps or epochs
 max_train_steps: -1
-nepochs: 20
-checkpoint_epoch_interval: 50
+nepochs: 2
+checkpoint_epoch_interval: 2
 
 # mse (mean squared error; l2 loss) or mae (mean absolute error; l1 loss)
 # NOTE: no effect for MDN models
 feats_criterion: mse
 
 stream_wise_loss: false
-use_detect_anomaly: false
+use_detect_anomaly: true
 
 optim:
   optimizer:

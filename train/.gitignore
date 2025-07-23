@@ -3,10 +3,10 @@ python-*-embed-*
 PortableGit*
 
 # Config files ---------------
-conf/*
-!config.yaml
-!myconfig.yaml
-!test.yaml
+# conf/*
+# !config.yaml
+# !myconfig.yaml
+# !test.yaml
 
 # Training Output Dirs -------
 data/*

@@ -1,0 +1,16 @@
+defaults:
+  - timelag: defaults
+  - duration: defaults
+  - acoustic: defaults
+  - vocoder: defaults
+  - synthesis: defaults
+  - override hydra/job_logging: colorlog
+  - override hydra/hydra_logging: colorlog
+  - _self_
+
+verbose: 100
+device: cuda # or cpu
+
+utt_list:
+in_dir:
+out_dir:
