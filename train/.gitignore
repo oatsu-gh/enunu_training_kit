@@ -9,9 +9,9 @@ PortableGit*
 # !test.yaml
 
 # Training Output Dirs -------
-data/*
-dump*/*
-exp/*
+train_data
+dump*
+exp
 outputs
 tensorboard
 release

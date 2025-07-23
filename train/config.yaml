@@ -12,7 +12,7 @@ db_root: "./DB"
 ## Output directory
 # All the generated labels, intermediate files, and segmented wav files
 # will be saved in the following directory
-out_dir: "./data"
+out_dir: "./train_data"
 
 # # Audio sampling rate
 # # CAUTION: Changing sample_rate may affect the dimension number of acoustic features.
