@@ -6,6 +6,7 @@ PortableGit*
 conf/*
 !config.yaml
 !myconfig.yaml
+!test.yaml
 
 # Training Output Dirs -------
 data/*
