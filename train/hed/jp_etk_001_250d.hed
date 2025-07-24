@@ -1,8 +1,8 @@
 #########################################################################
 #
 #  feature_dim: 256 for acoustic model, 250 for duration/timelag
-#  in_rest_idx: 0
-#  in_lf0_idx: 51
+#  in_rest_idx: 1
+#  in_lf0_idx: 235
 #
 #  modified from "jp_dev_latest_6style-minus_all.hed"
 #
@@ -25,7 +25,7 @@
 # PAUSES (3) =====================================================================================
 QS "L-Phone_Muon"     {*^sil-*,*^pau-*}
 QS "C-Phone_Muon"     {*-sil+*,*-pau+*}
-QS "C-Phone_Muon"     {*+sil=*,*+pau=*}
+QS "R-Phone_Muon"     {*+sil=*,*+pau=*}
 
 # VOICED PHONES (1) =====================================================================================
 QS "C-VUV_Voiced" {*-a+*,*-i+*,*-u+*,*-e+*,*-o+*,*-v+*,*-b+*,*-by+*,*-m+*,*-my+*,*-w+*,*-z+*,*-j+*,*-d+*,*-dy+*,*-n+*,*-ny+*,*-N+*,*-r+*,*-ry+*,*-g+*,*-gy+*,*-y+*}
