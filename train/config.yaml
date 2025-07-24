@@ -12,7 +12,7 @@ db_root: "./DB"
 ## Output directory
 # All the generated labels, intermediate files, and segmented wav files
 # will be saved in the following directory
-out_dir: "./train_data"
+out_dir: "./data"
 
 # # Audio sampling rate
 # # CAUTION: Changing sample_rate may affect the dimension number of acoustic features.
@@ -30,7 +30,7 @@ exclude_songs: []
 utaupy_table_path: "./dic/kana2phonemes_etk_001.table"
 
 ## HTS-style question used for extracting musical/linguistic context from musicxml files
-question_path: "./hed/jp_etk_001.hed"
+question_path: "./hed/jp_etk_001_250d.hed"
 
 ### EnunuTrainingKit Custom Settings from here------------------------------------------------------
 ## How to segment LAB and WAV before training
@@ -96,16 +96,16 @@ trajectory_smoothing_cutoff: 50
 # NOTE: *_model: model definition, *_train: general train configs,
 # *_data: data configs (e.g., batch size)
 
-timelag_model: timelag_vp_mdn
-timelag_train: myconfig
+timelag_model: myconfig_vp_mdn
+timelag_train: myconfig_schedulefree
 timelag_data: myconfig
 
-duration_model: duration_vp_mdn
-duration_train: myconfig
+duration_model: myconfig_vp_mdn
+duration_train: myconfig_schedulefree
 duration_data: myconfig
 
 acoustic_model: acoustic_nnsvs_world_multi_ar_f0
-acoustic_train: myconfig
+acoustic_train: myconfig_schedulefree
 acoustic_data: world
 
 postfilter_model: postfilter_bap

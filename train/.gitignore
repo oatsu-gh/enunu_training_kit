@@ -9,7 +9,7 @@ PortableGit*
 # !test.yaml
 
 # Training Output Dirs -------
-train_data
+# data
 dump*
 exp
 outputs
