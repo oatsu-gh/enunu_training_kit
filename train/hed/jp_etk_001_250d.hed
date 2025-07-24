@@ -1,6 +1,6 @@
 #########################################################################
 #
-#  feature_dim: 256 for acoustic model, 250 for duration/timelag
+#  feature_dim: 254 for acoustic model, 250 for duration/timelag
 #  in_rest_idx: 1
 #  in_lf0_idx: 235
 #
