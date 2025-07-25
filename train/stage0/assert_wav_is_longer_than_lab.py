@@ -5,7 +5,6 @@ WAVファイルが full_align_lab より長いことを確認する（concurrent
 """
 
 import warnings
-from concurrent.futures import ProcessPoolExecutor
 from glob import glob
 from logging import warning
 from os.path import join
@@ -15,7 +14,7 @@ from typing import Optional
 import utaupy
 import yaml
 from natsort import natsorted
-from tqdm import tqdm
+from tqdm.contrib.concurrent import process_map
 
 with warnings.catch_warnings():
     warnings.simplefilter('ignore')
@@ -57,15 +56,10 @@ def compare_wav_and_lab_parallel(wav_dir_in, lab_dir_in):
         warning(f'No files found in {wav_dir_in} or {lab_dir_in}')
         return
 
-    warnings_found = []
-
     # マルチプロセスまたはマルチスレッドで処理する。
-    with ProcessPoolExecutor() as executor:
-        results = list(
-            tqdm(executor.map(check_wav_and_lab_pair, pairs), total=len(pairs))
-        )
-        warnings_found = [r for r in results if r]
-
+    results = process_map(check_wav_and_lab_pair, pairs)
+    # 結果から警告メッセージを抽出
+    warnings_found = [r for r in results if r]
     for msg in warnings_found:
         warning(msg)
 

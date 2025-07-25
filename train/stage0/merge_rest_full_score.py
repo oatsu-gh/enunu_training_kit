@@ -8,7 +8,6 @@ utaupyの仕様に沿ったフルラベルになってしまうことに注意�
 
 from copy import copy
 from glob import glob
-from os.path import basename
 from sys import argv
 
 import utaupy as up

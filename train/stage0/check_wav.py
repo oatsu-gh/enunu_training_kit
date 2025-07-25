@@ -11,7 +11,6 @@
 
 import logging
 import warnings
-from concurrent.futures import ProcessPoolExecutor
 from glob import glob
 from os.path import join
 from statistics import mode
@@ -19,7 +18,7 @@ from sys import argv
 
 import yaml
 from natsort import natsorted
-from tqdm.auto import tqdm
+from tqdm.contrib.concurrent import process_map
 
 with warnings.catch_warnings():
     warnings.simplefilter('ignore')
@@ -58,11 +57,7 @@ def check_all_wav_files(wav_dir_in):
         return False, False, False
 
     # 並列処理: ProcessPoolExecutor を使用して get_audio_info を並列実行
-    with ProcessPoolExecutor() as executor:
-        # executor.map を tqdm でラップし、進捗バーを表示
-        audio_info = list(
-            tqdm(executor.map(get_audio_info, wav_files), total=len(wav_files))
-        )
+    audio_info = process_map(get_audio_info, wav_files)
 
     # None（エラー）が含まれていないか
     if any(info is None for info in audio_info):
