@@ -4,11 +4,11 @@ stream_weights: [1]
 
 netG:
   _target_: nnsvs.model.VariancePredictor
-  in_dim: 250
+  in_dim: 254
   out_dim: 1
-  hidden_dim: 32
-  num_layers: 3
-  kernel_size: 3
+  hidden_dim: 256
+  num_layers: 5
+  kernel_size: 5
   dropout: 0.5
   use_mdn: true
   num_gaussians: 4

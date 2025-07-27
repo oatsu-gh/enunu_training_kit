@@ -30,7 +30,7 @@ exclude_songs: []
 utaupy_table_path: "./dic/kana2phonemes_etk_001.table"
 
 ## HTS-style question used for extracting musical/linguistic context from musicxml files
-question_path: "./hed/jp_etk_001_250d.hed"
+question_path: "./hed/jp_etk_001.hed"
 
 ### EnunuTrainingKit Custom Settings from here------------------------------------------------------
 ## How to segment LAB and WAV before training
@@ -96,17 +96,17 @@ trajectory_smoothing_cutoff: 50
 # NOTE: *_model: model definition, *_train: general train configs,
 # *_data: data configs (e.g., batch size)
 
-timelag_model: myconfig_vp_mdn
-timelag_train: myconfig_schedulefree
-timelag_data: myconfig
+timelag_model: etk_timelag_vp_mdn
+timelag_train: etk_schedulefree
+timelag_data: etk
 
-duration_model: myconfig_vp_mdn
-duration_train: myconfig_schedulefree
-duration_data: myconfig
+duration_model: etk_duration_vp_mdn
+duration_train: etk_schedulefree
+duration_data: etk
 
-acoustic_model: acoustic_nnsvs_world_multi_ar_f0
-acoustic_train: myconfig_schedulefree
-acoustic_data: world
+acoustic_model: etk_acoustic_nnsvs_world_multi_ar_f0
+acoustic_train: etk_schedulefree
+acoustic_data: etk_world
 
 postfilter_model: postfilter_bap
 postfilter_train: bap
@@ -136,10 +136,10 @@ acoustic_hydra_optuna_sweeper_n_trials: 100
 synthesis: world_gv
 
 # latest.pth or best.pth
-timelag_eval_checkpoint: latest.pth
-duration_eval_checkpoint: latest.pth
-acoustic_eval_checkpoint: latest.pth
-postfilter_eval_checkpoint: latest.pth
+timelag_eval_checkpoint: best_loss.pth
+duration_eval_checkpoint: best_loss.pth
+acoustic_eval_checkpoint: best_loss.pth
+postfilter_eval_checkpoint: best_loss.pth
 
 ###########################################################
 #                VOCODER SETTING                          #

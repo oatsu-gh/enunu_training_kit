@@ -10,7 +10,7 @@ use_ddp: false
 
 # steps can either be specified by steps or epochs
 max_train_steps: -1
-nepochs: 150
+nepochs: 200
 checkpoint_epoch_interval: 50
 
 # mse (mean squared error; l2 loss) or mae (mean absolute error; l1 loss)
@@ -24,7 +24,7 @@ optim:
   optimizer:
     name: RAdamScheduleFree
     params:
-      lr: 0.005
+      lr: 0.02
       betas: [0.9, 0.999]
       weight_decay: 0.0
   lr_scheduler:
