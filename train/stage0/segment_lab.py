@@ -5,6 +5,7 @@
 pau の直前で切断する。休符がすべて結合されていると考えて実行する。
 """
 
+from functools import partial
 from glob import glob
 from os import makedirs
 from os.path import basename, splitext
@@ -14,7 +15,7 @@ from typing import Union
 import utaupy as up
 import yaml
 from natsort import natsorted
-from tqdm import tqdm
+from tqdm.contrib.concurrent import process_map
 from utaupy.hts import HTSFullLabel
 from utaupy.label import Label
 
@@ -26,27 +27,6 @@ def all_phonemes_are_rest(label: Union[Label, HTSFullLabel]) -> bool:
     rests = {'pau', 'sil'}
     # 全部の音素が休符であるか否か
     return all(phoneme.symbol in rests for phoneme in label)
-
-
-# def all_phonemes_are_rest_old(label: Union[Label, HTSFullLabel]) -> bool:
-#     """
-#     フルラベル中に休符しかないかどうか判定(旧実装)
-#     """
-#     rests = set(['pau', 'sil'])
-#     # モノラベルのとき
-#     if isinstance(label, Label):
-#         for phoneme in label:
-#             if phoneme.symbol not in rests:
-#                 return False
-#         return True
-#     # フルラベルのとき
-#     if isinstance(label, HTSFullLabel):
-#         for oneline in label:
-#             if oneline.phoneme.identity not in rests:
-#                 return False
-#         return True
-#     # フルラベルでもモノラベルでもないとき
-#     raise ValueError("Argument 'label' must be Label object or HTSFullLabel object.")
 
 
 def split_mono_label_short(label: Label) -> list[Label]:
@@ -232,7 +212,7 @@ def split_label(
     return result
 
 
-def remove_zensou_and_kousou(path_lab):
+def remove_zensou_and_kousou(path_lab) -> None:
     """
     長すぎてGPUメモリを食いつぶすような音素を除去(前奏、間奏、後奏とか)
     """
@@ -241,58 +221,86 @@ def remove_zensou_and_kousou(path_lab):
     label.write(path_lab)
 
 
-def main(path_config_yaml):
+def process_label_file(path, out_dir, mode, frequency, file_type) -> None:
+    """ラベルファイルを処理する共通関数
+
+    Args:
+        path: 処理対象ファイルのパス
+        out_dir: 出力ディレクトリ
+        mode: セグメンテーションモード
+        frequency: セグメンテーション頻度
+        file_type: ファイルタイプ ('full_score_round', 'full_align_round', 'mono_score_round', 'mono_align_round')
     """
-    ラベルファイルを取得して分割する。
+    songname = splitext(basename(path))[0]
+
+    # ファイルタイプに応じてラベルをロード
+    if file_type.startswith('full'):
+        label = up.hts.load(path)
+    else:  # mono
+        label = up.label.load(path)
+
+    # セグメント化と保存
+    for idx, segment in enumerate(split_label(label, mode, frequency)):
+        path_out = f'{out_dir}/{file_type}_seg/{songname}_seg{idx}.lab'
+
+        # ファイルタイプに応じて書き込み
+        if file_type.startswith('full'):
+            segment.write(path_out, strict_sinsy_style=False)
+        else:  # mono
+            segment.write(path_out)
+
+
+def main(path_config_yaml, max_workers=None) -> None:
+    """
+    ラベルファイルを取得して分割する。（並列処理版）
+
+    Args:
+        path_config_yaml: 設定ファイルのパス
+        max_workers: 並列処理の最大ワーカー数
     """
     with open(path_config_yaml, encoding='utf-8') as fy:
         config = yaml.safe_load(fy)
     out_dir = config['out_dir']
     mode = config['segmentation_mode']
-    middle_frequency = config['segmentation_frequency']
+    frequency = config['segmentation_frequency']
 
+    # ファイル一覧を取得
     full_score_round_files = natsorted(glob(f'{out_dir}/full_score_round/*.lab'))
     mono_score_round_files = natsorted(glob(f'{out_dir}/mono_score_round/*.lab'))
     full_align_round_files = natsorted(glob(f'{out_dir}/full_align_round/*.lab'))
     mono_align_round_files = natsorted(glob(f'{out_dir}/mono_align_round/*.lab'))
 
+    # 出力ディレクトリを作成
     makedirs(f'{out_dir}/full_score_round_seg', exist_ok=True)
     makedirs(f'{out_dir}/full_align_round_seg', exist_ok=True)
     makedirs(f'{out_dir}/mono_score_round_seg', exist_ok=True)
     makedirs(f'{out_dir}/mono_align_round_seg', exist_ok=True)
 
-    print('Segmenting full_score_round label files')
-    for path in tqdm(full_score_round_files):
-        songname = splitext(basename(path))[0]
-        label = up.hts.load(path)
-        for idx, segment in enumerate(split_label(label, mode, middle_frequency)):
-            path_out = f'{out_dir}/full_score_round_seg/{songname}_seg{idx}.lab'
-            segment.write(path_out, strict_sinsy_style=False)
+    # ファイルタイプごとの設定
+    file_configs = [
+        ('full_score_round', full_score_round_files),
+        ('full_align_round', full_align_round_files),
+        ('mono_score_round', mono_score_round_files),
+        ('mono_align_round', mono_align_round_files),
+    ]
 
-    print('Segmenting full_align_round label files')
-    for path in tqdm(full_align_round_files):
-        songname = splitext(basename(path))[0]
-        label = up.hts.load(path)
-        for idx, segment in enumerate(split_label(label, mode, middle_frequency)):
-            path_out = f'{out_dir}/full_align_round_seg/{songname}_seg{idx}.lab'
-            segment.write(path_out, strict_sinsy_style=False)
-
-    print('Segmenting mono_score_round label files')
-    for path in tqdm(mono_score_round_files):
-        songname = splitext(basename(path))[0]
-        label = up.label.load(path)
-        for idx, segment in enumerate(split_label(label, mode, middle_frequency)):
-            path_out = f'{out_dir}/mono_score_round_seg/{songname}_seg{idx}.lab'
-            segment.write(path_out)
-
-    print('Segmenting mono_align_round label files')
-    # NOTE: ここだけ出力フォルダ名が 入力フォルダ名_seg ではないので注意
-    for path in tqdm(mono_align_round_files):
-        songname = splitext(basename(path))[0]
-        label = up.label.load(path)
-        for idx, segment in enumerate(split_label(label, mode, middle_frequency)):
-            path_out = f'{out_dir}/mono_align_round_seg/{songname}_seg{idx}.lab'
-            segment.write(path_out)
+    # 各ファイルタイプを並列処理
+    for file_type, file_list in file_configs:
+        # ファイルが見つからない場合はエラーを出力
+        if not file_list:
+            raise FileNotFoundError(
+                f'No {file_type} label files found in {out_dir}/{file_type}/'
+            )
+        print(f'Segmenting {file_type} label files')
+        # 共通処理関数に必要なパラメータを部分適用
+        process_func = partial(
+            process_label_file,
+            out_dir=out_dir,
+            mode=mode,
+            frequency=frequency,
+            file_type=file_type,
+        )
+        process_map(process_func, file_list, max_workers=max_workers, desc=file_type)
 
 
 if __name__ == '__main__':
