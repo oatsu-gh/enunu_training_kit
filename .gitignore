@@ -12,3 +12,6 @@ singing_database
 *.musicxml
 *.zip
 *.code-workspace
+*.npy
+*.pth
+train/packed_models
