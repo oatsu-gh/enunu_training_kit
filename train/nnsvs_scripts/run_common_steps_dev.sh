@@ -11,7 +11,6 @@ if [ ${stage} -le 1 ] && [ ${stop_stage} -ge 1 ]; then
     . $NNSVS_COMMON_ROOT/feature_generation.sh
 fi
 
-
 if [ ${stage} -le 2 ] && [ ${stop_stage} -ge 2 ]; then
     echo "========================================="
     echo "#                                       #"
@@ -20,7 +19,6 @@ if [ ${stage} -le 2 ] && [ ${stop_stage} -ge 2 ]; then
     echo "========================================="
     . $NNSVS_COMMON_ROOT/train_timelag.sh
 fi
-
 
 if [ ${stage} -le 3 ] && [ ${stop_stage} -ge 3 ]; then
     echo "========================================="
@@ -31,7 +29,6 @@ if [ ${stage} -le 3 ] && [ ${stop_stage} -ge 3 ]; then
     . $NNSVS_COMMON_ROOT/train_duration.sh
 fi
 
-
 if [ ${stage} -le 4 ] && [ ${stop_stage} -ge 4 ]; then
     echo "========================================="
     echo "#                                       #"
@@ -40,7 +37,6 @@ if [ ${stage} -le 4 ] && [ ${stop_stage} -ge 4 ]; then
     echo "========================================="
     . $NNSVS_COMMON_ROOT/train_acoustic.sh
 fi
-
 
 if [ ${stage} -le 6 ] && [ ${stop_stage} -ge 6 ]; then
     echo "========================================="
@@ -51,7 +47,6 @@ if [ ${stage} -le 6 ] && [ ${stop_stage} -ge 6 ]; then
     . $NNSVS_COMMON_ROOT/synthesis.sh
 fi
 
-
 if [ ${stage} -le 7 ] && [ ${stop_stage} -ge 7 ]; then
     echo "=============================================================#"
     echo "#                                                            #"
@@ -60,7 +55,6 @@ if [ ${stage} -le 7 ] && [ ${stop_stage} -ge 7 ]; then
     echo "=============================================================#"
     . $NNSVS_COMMON_ROOT/prepare_postfilter.sh
 fi
-
 
 if [ ${stage} -le 8 ] && [ ${stop_stage} -ge 8 ]; then
     echo "============================================================="
@@ -71,7 +65,6 @@ if [ ${stage} -le 8 ] && [ ${stop_stage} -ge 8 ]; then
     . $NNSVS_COMMON_ROOT/train_postfilter.sh
 fi
 
-
 if [ ${stage} -le 9 ] && [ ${stop_stage} -ge 9 ]; then
     echo "============================================================="
     echo "#                                                           #"
@@ -80,7 +73,6 @@ if [ ${stage} -le 9 ] && [ ${stop_stage} -ge 9 ]; then
     echo "============================================================="
     . $NNSVS_COMMON_ROOT/prepare_voc_features.sh
 fi
-
 
 if [ ${stage} -le 10 ] && [ ${stop_stage} -ge 10 ]; then
     echo "============================================================="
@@ -94,14 +86,14 @@ if [ ${stage} -le 10 ] && [ ${stop_stage} -ge 10 ]; then
         extra_args=""
     fi
     # NOTE: copy normalization stats to expdir for convenience
+    echo $dump_norm_dir/$train_set/in_vocoder
     mkdir -p $expdir/$vocoder_model
     cp -v $dump_norm_dir/in_vocoder*.npy $expdir/$vocoder_model
-    xrun parallel-wavegan-train --config conf/train_parallel_wavegan/${vocoder_model}.yaml \
-    --train-dumpdir $dump_norm_dir/$train_set/in_vocoder \
-    --dev-dumpdir $dump_norm_dir/$dev_set/in_vocoder/ \
-    --outdir $expdir/$vocoder_model $extra_args
+    xrun $PYTHON_EXE -m parallel_wavegan.bin.train --config conf/train_parallel_wavegan/${vocoder_model}.yaml \
+        --train-dumpdir $dump_norm_dir/$train_set/in_vocoder \
+        --dev-dumpdir $dump_norm_dir/$dev_set/in_vocoder/ \
+        --outdir $expdir/$vocoder_model $extra_args
 fi
-
 
 if [ ${stage} -le 11 ] && [ ${stop_stage} -ge 11 ]; then
     echo "============================================================="
@@ -112,7 +104,6 @@ if [ ${stage} -le 11 ] && [ ${stop_stage} -ge 11 ]; then
     . $NNSVS_COMMON_ROOT/train_usfgan.sh
 fi
 
-
 if [ ${stage} -le 12 ] && [ ${stop_stage} -ge 12 ]; then
     echo "============================================================="
     echo "#                                                           #"
@@ -121,7 +112,6 @@ if [ ${stage} -le 12 ] && [ ${stop_stage} -ge 12 ]; then
     echo "============================================================="
     . $NNSVS_COMMON_ROOT/anasyn.sh
 fi
-
 
 if [ ${stage} -le 13 ] && [ ${stop_stage} -ge 13 ]; then
     echo "============================================================="
@@ -132,7 +122,6 @@ if [ ${stage} -le 13 ] && [ ${stop_stage} -ge 13 ]; then
     . $NNSVS_COMMON_ROOT/train_sifigan.sh
 fi
 
-
 if [ ${stage} -le 99 ] && [ ${stop_stage} -ge 99 ]; then
     echo "========================================="
     echo "#                                       #"
@@ -142,8 +131,8 @@ if [ ${stage} -le 99 ] && [ ${stop_stage} -ge 99 ]; then
     # PWG
     if [[ -z "${vocoder_eval_checkpoint}" && -f ${expdir}/${vocoder_model}/config.yml ]]; then
         vocoder_eval_checkpoint="$(ls -dt "$expdir/$vocoder_model"/*.pkl | head -1 || true)"
-        # uSFGAN
-        elif [[ -z "${vocoder_eval_checkpoint}" && -f ${expdir}/${vocoder_model}/config.yaml ]]; then
+    # uSFGAN
+    elif [[ -z "${vocoder_eval_checkpoint}" && -f ${expdir}/${vocoder_model}/config.yaml ]]; then
         vocoder_eval_checkpoint="$(ls -dt "$expdir/$vocoder_model"/*.pkl | head -1 || true)"
     fi
     # Determine the directory name of a packed model
@@ -155,12 +144,12 @@ if [ ${stage} -le 99 ] && [ ${stop_stage} -ge 99 ]; then
             voc_config=${voc_dir}/config.yml
             vocoder_config_name=$(basename $(grep config: ${voc_config} | awk '{print $2}'))
             vocoder_config_name=${vocoder_config_name/.yaml/}
-            # uSFGAN
-            elif [ -e ${voc_dir}/config.yaml ]; then
+        # uSFGAN
+        elif [ -e ${voc_dir}/config.yaml ]; then
             voc_config=${voc_dir}/config.yaml
             vocoder_config_name=$(basename $(grep out_dir: ${voc_config} | awk '{print $2}'))
-            # Packed model's dir
-            elif [ -e ${voc_dir}/vocoder_model.yaml ]; then
+        # Packed model's dir
+        elif [ -e ${voc_dir}/vocoder_model.yaml ]; then
             # NOTE: assuming PWG for now
             voc_config=${voc_dir}/vocoder_model.yaml
             vocoder_config_name=$(basename $(grep config: ${voc_config} | awk '{print $2}'))
@@ -173,13 +162,13 @@ if [ ${stage} -le 99 ] && [ ${stop_stage} -ge 99 ]; then
     else
         dst_dir=packed_models/${expname}_${timelag_model}_${duration_model}_${acoustic_model}
     fi
-    
+
     if [[ ${acoustic_features} == *"melf0"* ]]; then
         feature_type="melf0"
     else
         feature_type="world"
     fi
-    
+
     # ----- original NNSVS scripts from here ------------------------------------------------
     # # Find settings needed for inference
     # local_config_path=conf/prepare_features/acoustic/${acoustic_features}.yaml
@@ -212,10 +201,10 @@ if [ ${stage} -le 99 ] && [ ${stop_stage} -ge 99 ]; then
         exit 1
     fi
     # ----- ETK modified until here-----------------------------------------------
-    
+
     mkdir -p $dst_dir
     # global config file
-    cat > ${dst_dir}/config.yaml <<EOL
+    cat >${dst_dir}/config.yaml <<EOL
 # Global configs
 sample_rate: ${sample_rate}
 frame_period: ${frame_period}
@@ -235,6 +224,6 @@ acoustic:
     force_clip_input_features: true
     relative_f0: ${relative_f0}
 EOL
-    
+
     . $NNSVS_COMMON_ROOT/pack_model.sh
 fi
