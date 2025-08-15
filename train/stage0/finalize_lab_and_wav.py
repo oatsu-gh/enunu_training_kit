@@ -128,7 +128,7 @@ def prepare_data_for_acoustic_models(
     for path_wav in tqdm(wav_files):
         songname = splitext(basename(path_wav))[0]
         corresponding_full_align_round_seg_files = [
-            path for path in full_align_round_seg_files if f'{songname}_seg' in path
+            path for path in full_align_round_seg_files if f'{songname}__seg' in path
         ]
         segment_wav(path_wav, wav_dir, corresponding_full_align_round_seg_files)
 
@@ -164,14 +164,14 @@ def main(path_config_yaml):
     wav_files = natsorted(glob(f'{out_dir}/wav/*.wav', recursive=True))
 
     # フルラベルをtimelag用のフォルダに保存する。
-    print('Preparing data for time-lag models')
+    print('Preparing data for timelag models')
     timelag_dir = f'{out_dir}/timelag'
     prepare_data_for_timelag_models(
         full_align_round_seg_files, full_score_round_seg_files, timelag_dir
     )
 
     # フルラベルのオフセット修正をして、duration用のフォルダに保存する。
-    print('Preparing data for acoustic models')
+    print('Preparing data for duration models')
     duration_dir = f'{out_dir}/duration'
     prepare_data_for_duration_models(full_align_round_seg_files, duration_dir)
 

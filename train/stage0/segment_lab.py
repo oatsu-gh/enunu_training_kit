@@ -241,7 +241,7 @@ def process_label_file(path, out_dir, mode, frequency, file_type) -> None:
 
     # セグメント化と保存
     for idx, segment in enumerate(split_label(label, mode, frequency)):
-        path_out = f'{out_dir}/{file_type}_seg/{songname}_seg{idx}.lab'
+        path_out = f'{out_dir}/{file_type}_seg/{songname}__seg{idx}.lab'
 
         # ファイルタイプに応じて書き込み
         if file_type.startswith('full'):
