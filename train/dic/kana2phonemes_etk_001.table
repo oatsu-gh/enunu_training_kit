@@ -222,7 +222,7 @@ sil sil
 ぱ p a
 ヒ h I
 ひ h i
-ビ B I
+ビ b I
 び b i
 ピ p I
 ぴ p i
@@ -266,12 +266,13 @@ sil sil
 ふぉ f o
 ヘ h E
 へ h e
+ベ b E
 べ b e
 ペ p E
 ぺ p e
 ホ h O
 ほ h o
-ボ B O
+ボ b O
 ぼ b o
 ポ p O
 ぽ p o
@@ -324,7 +325,7 @@ sil sil
 ン N
 ん N
 フャ fy A
-ふゃ fy A
+ふゃ fy a
 フュ fy U
 ふゅ fy u
 フィェ fy E
