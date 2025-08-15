@@ -6,7 +6,7 @@ set -e
 set -u
 set -o pipefail
 
-function xrun () {
+function xrun() {
     set -x
     $@
     set +x
@@ -18,14 +18,17 @@ PYTHON_EXE="python"
 CONFIG_PATH="config.yaml"
 CPU_COUNT=$(nproc)
 
-script_dir=$(cd $(dirname ${BASH_SOURCE:-$0}); pwd)
-NNSVS_COMMON_ROOT=./nnsvs_scripts  # original: $NNSVS_ROOT/recipes/_common/spsvs
-. $NNSVS_COMMON_ROOT/yaml_parser.sh || exit 1;
+script_dir=$(
+    cd $(dirname ${BASH_SOURCE:-$0})
+    pwd
+)
+NNSVS_COMMON_ROOT=./nnsvs_scripts # original: $NNSVS_ROOT/recipes/_common/spsvs
+. $NNSVS_COMMON_ROOT/yaml_parser.sh || exit 1
 # NNSVS_ROOT=/path/to/nnsvs
 # NO2_ROOT=$NNSVS_ROOT/recipes/_common/no2
 # . $NNSVS_ROOT/utils/yaml_parser.sh || exit 1;
 
-eval $(parse_yaml "./config.yaml" "")
+eval $(parse_yaml $CONFIG_PATH "")
 
 train_set="train_no_dev"
 dev_set="dev"
@@ -41,7 +44,7 @@ stage=0
 stop_stage=0
 
 # . $NNSVS_ROOT/utils/parse_options.sh || exit 1;
-. $NNSVS_COMMON_ROOT/parse_options.sh || exit 1;
+. $NNSVS_COMMON_ROOT/parse_options.sh || exit 1
 
 # exp name
 if [ -z ${tag:=} ]; then
@@ -53,7 +56,7 @@ expdir=exp/$expname
 
 if [ ${stage} -le -1 ] && [ ${stop_stage} -ge -1 ]; then
     if [ ! -e $db_root ]; then
-	cat<<EOF
+        cat <<EOF
 stage -1: Downloading
 
 This recipe does not download the archive of singing voice database automatically to
@@ -64,7 +67,6 @@ and read the term of services, and then download the singing voice database manu
 EOF
     fi
 fi
-
 
 # # NNSVS ORIGINAL STAGE 0 FROM HERE -------------------------------------------------------------------
 # if [ ${stage} -le 0 ] && [ ${stop_stage} -ge 0 ]; then
@@ -94,11 +96,10 @@ if [ ${stage} -le 0 ] && [ ${stop_stage} -ge 0 ]; then
     echo "========================================="
     rm -rf $out_dir
     rm -f preprocess_data.py.log
-    $PYTHON_EXE preprocess_data.py $CONFIG_PATH || exit 1;
+    $PYTHON_EXE preprocess_data.py $CONFIG_PATH || exit 1
     echo ""
 fi
 # Enunu Training Kit Customized STAGE 0 UNTIL HERE -------------------------------------------------------------------
-
 
 # Run the rest of the steps
 # Please check the script file for more details
