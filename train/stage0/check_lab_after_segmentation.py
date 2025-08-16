@@ -25,12 +25,9 @@ def check_lab_files(lab_dir, threshold=0):
         if not label.is_valid(threshold):
             invalid_lab_files.append(path_mono)
             logging.error('LABファイルの発声時刻に不具合があります。(%s)', path_mono)
-            print()
     if len(invalid_lab_files) != 0:
         message = '  \n'.join(
-            [
-                'LABファイルの発声時刻に不具合があります。以下のファイルを点検してください。'
-            ]
+            ['LABファイルの発声時刻に不具合があります。以下のファイルを点検してください。']
             + invalid_lab_files
         )
         # logging.exception(message)
