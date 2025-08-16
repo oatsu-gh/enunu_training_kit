@@ -12,8 +12,7 @@ if [[ -z ${trajectory_smoothing+x} ]]; then
     trajectory_smoothing_cutoff=50
 fi
 
-for s in ${datasets[@]};
-do
+for s in ${datasets[@]}; do
     if [ -d conf/prepare_features ]; then
         ext="--config-dir conf/prepare_features"
     else
@@ -26,7 +25,8 @@ do
         acoustic.sample_rate=$sample_rate \
         acoustic.trajectory_smoothing=${trajectory_smoothing} \
         acoustic.trajectory_smoothing_cutoff=${trajectory_smoothing_cutoff} \
-        ++max_workers=$CPU_COUNT
+        ++max_workers=$CPU_COUNT \
+        ++num_workers=$CPU_COUNT
 
 done
 
@@ -38,8 +38,7 @@ for inout in "in" "out"; do
     else
         scaler_class="sklearn.preprocessing.StandardScaler"
     fi
-    for typ in timelag duration acoustic postfilter;
-    do
+    for typ in timelag duration acoustic postfilter; do
         if [ ! -d $dump_org_dir/$train_set/${inout}_${typ} ]; then
             continue
         fi
@@ -48,7 +47,7 @@ for inout in "in" "out"; do
         else
             ext=""
         fi
-        find $dump_org_dir/$train_set/${inout}_${typ} -name "*feats.npy" > train_list.txt
+        find $dump_org_dir/$train_set/${inout}_${typ} -name "*feats.npy" >train_list.txt
         scaler_path=$dump_org_dir/${inout}_${typ}_scaler.joblib
         xrun $PYTHON_EXE -m nnsvs.bin.fit_scaler \
             list_path=train_list.txt scaler._target_=$scaler_class \
@@ -61,8 +60,7 @@ done
 # apply normalization
 for s in ${datasets[@]}; do
     for inout in "in" "out"; do
-        for typ in timelag duration acoustic postfilter;
-        do
+        for typ in timelag duration acoustic postfilter; do
             if [ -e $dump_org_dir/${inout}_${typ}_scaler.joblib ]; then
                 xrun $PYTHON_EXE -m nnsvs.bin.preprocess_normalize in_dir=$dump_org_dir/$s/${inout}_${typ}/ \
                     scaler_path=$dump_org_dir/${inout}_${typ}_scaler.joblib \
