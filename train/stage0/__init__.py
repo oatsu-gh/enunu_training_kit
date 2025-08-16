@@ -1,4 +1,4 @@
-from stage0 import (
+from stage0 import (  # noqa: F401
     assert_wav_is_longer_than_lab,
     check_lab,
     check_lab_after_segmentation,
