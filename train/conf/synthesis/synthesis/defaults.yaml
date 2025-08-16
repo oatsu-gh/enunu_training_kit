@@ -19,3 +19,4 @@ vibrato_scale: 1.0
 force_fix_vuv: false
 subphone_features: coarse_coding
 relative_f0: false
+dtype: int16
