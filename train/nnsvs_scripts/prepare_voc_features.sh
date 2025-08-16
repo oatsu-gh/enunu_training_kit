@@ -1,8 +1,7 @@
 # NOTE: the script is supposed to be used called from nnsvs recipes.
 # Please don't try to run the shell script directory.
 
-for s in ${datasets[@]};
-do
+for s in ${datasets[@]}; do
     if [ -d conf/prepare_static_features ]; then
         ext="--config-dir conf/prepare_static_features"
     else
@@ -13,7 +12,6 @@ do
         out_dir=$dump_norm_dir/$s/in_vocoder \
         utt_list=data/list/$s.list
 done
-
 
 if [[ ${acoustic_features} == *"static_deltadelta_sinevib"* ]]; then
     ext="--num_windows 3 --vibrato_mode sine"
@@ -40,7 +38,9 @@ fi
 ext="$ext --feature_type $feature_type"
 
 local_config_path=conf/prepare_static_features/acoustic/${acoustic_features}.yaml
-global_config_path=$NNSVS_ROOT/nnsvs/bin/conf/prepare_static_features/acoustic/${acoustic_features}.yaml
+# enunu_training_kit 環境では NNSVS_ROOT が存在しないのでlocalのみ使用する。
+# global_config_path=$NNSVS_ROOT/nnsvs/bin/conf/prepare_static_features/acoustic/${acoustic_features}.yaml
+global_config_path=$local_config_path
 if [ -e $local_config_path ]; then
     mgc_order=$(grep mgc_order $local_config_path | awk '{print $2}')
     use_mcep_aperiodicity=$(grep use_mcep_aperiodicity $local_config_path | awk '{print $2}')
