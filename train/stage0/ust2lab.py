@@ -10,15 +10,26 @@ UST版
 """
 
 import logging
+from functools import partial
 from glob import glob
 from os import makedirs
 from os.path import basename, join, splitext
 from sys import argv
 
 import yaml
-from natsort import natsorted
-from tqdm import tqdm
+from natsort import natsorted  # pyright: ignore[reportMissingImports]
+from tqdm.contrib.concurrent import process_map
 from utaupy.utils import ust2hts
+
+
+def _convert_one_ust_file(path_ust, path_full_dir_out, path_table, exclude_songs):
+    """1つのUSTファイルを処理（並列処理用）"""
+    songname = splitext(basename(path_ust))[0]
+    if songname in exclude_songs:
+        print(f'Skip excluded song: {songname}')
+    else:
+        path_full = f'{path_full_dir_out}/{songname}.lab'
+        ust2hts(path_ust, path_full, path_table, strict_sinsy_style=False)
 
 
 def ust2full(path_ust_dir_in, path_full_dir_out, path_table, exclude_songs):
@@ -27,14 +38,15 @@ def ust2full(path_ust_dir_in, path_full_dir_out, path_table, exclude_songs):
     """
     makedirs(path_full_dir_out, exist_ok=True)
     ust_files = glob(f'{path_ust_dir_in}/**/*.ust', recursive=True)
-
-    for path_ust in tqdm(ust_files):
-        songname = splitext(basename(path_ust))[0]
-        if songname in exclude_songs:
-            print(f'Skip excluded song: {songname}')
-        else:
-            path_full = f'{path_full_dir_out}/{songname}.lab'
-            ust2hts(path_ust, path_full, path_table, strict_sinsy_style=False)
+    # partialで固定引数を部分適用した関数を作成
+    func = partial(
+        _convert_one_ust_file,
+        path_full_dir_out=path_full_dir_out,
+        path_table=path_table,
+        exclude_songs=exclude_songs,
+    )
+    # 並列処理でUST変換
+    process_map(func, ust_files, colour='blue')
 
 
 def compare_number_of_ustfiles_and_labfiles(ust_dir, mono_align_dir):

@@ -14,7 +14,7 @@ from typing import Union
 
 import utaupy as up
 import yaml
-from natsort import natsorted
+from natsort import natsorted  # pyright: ignore[reportMissingImports]
 from tqdm.contrib.concurrent import process_map
 from utaupy.hts import HTSFullLabel
 from utaupy.label import Label
@@ -121,9 +121,7 @@ def split_full_label_short(full_label: HTSFullLabel) -> list:
     return result
 
 
-def split_full_label_middle(
-    full_label: HTSFullLabel, frequency: int
-) -> list[HTSFullLabel]:
+def split_full_label_middle(full_label: HTSFullLabel, frequency: int) -> list[HTSFullLabel]:
     """
     モノラベルを分割する。分割後の複数のLabelからなるリストを返す。
     pauが10回出現するたびに分割する。
@@ -245,7 +243,7 @@ def process_label_file(path, out_dir, mode, frequency, file_type) -> None:
 
         # ファイルタイプに応じて書き込み
         if file_type.startswith('full'):
-            segment.write(path_out, strict_sinsy_style=False)
+            segment.write(path_out, strict_sinsy_style=False)  # pyright: ignore[reportCallIssue]
         else:  # mono
             segment.write(path_out)
 
@@ -288,9 +286,7 @@ def main(path_config_yaml, max_workers=None) -> None:
     for file_type, file_list in file_configs:
         # ファイルが見つからない場合はエラーを出力
         if not file_list:
-            raise FileNotFoundError(
-                f'No {file_type} label files found in {out_dir}/{file_type}/'
-            )
+            raise FileNotFoundError(f'No {file_type} label files found in {out_dir}/{file_type}/')
         print(f'Segmenting {file_type} label files')
         # 共通処理関数に必要なパラメータを部分適用
         process_func = partial(
@@ -300,7 +296,9 @@ def main(path_config_yaml, max_workers=None) -> None:
             frequency=frequency,
             file_type=file_type,
         )
-        process_map(process_func, file_list, max_workers=max_workers, desc=file_type)
+        process_map(
+            process_func, file_list, max_workers=max_workers, desc=file_type, colour='blue'
+        )
 
 
 if __name__ == '__main__':

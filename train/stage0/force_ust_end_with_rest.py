@@ -33,7 +33,7 @@ def main(path_config_yaml):
     フォルダとかを指定
     """
     # 設定ファイルを読み取る
-    with open(path_config_yaml) as fy:
+    with open(path_config_yaml, encoding='utf-8') as fy:
         config = yaml.safe_load(fy)
     # 処理対象のフォルダを指定
     out_dir = config['out_dir'].strip('"')

@@ -17,9 +17,7 @@ import yaml
 from tqdm import tqdm
 
 
-def copy_mono_align_time_to_full(
-    path_mono_align_in, path_full_score_in, path_full_align_out
-):
+def copy_mono_align_time_to_full(path_mono_align_in, path_full_score_in, path_full_align_out):
     """
     モノラベルの発声時刻をフルラベルにコピーする。
     """
@@ -46,7 +44,7 @@ def main(path_config_yaml):
     """
     モノラベルとフルラベルのファイルを取得して処理を実行する。
     """
-    with open(path_config_yaml) as fy:
+    with open(path_config_yaml, encoding='utf-8') as fy:
         config = yaml.safe_load(fy)
     out_dir = config['out_dir']
 
@@ -63,20 +61,14 @@ def main(path_config_yaml):
         'Copying times of mono-LAB (mono_align_round) to '
         'full-LAB (full_score_round) and save into full_align_round'
     )
-    for path_mono_align, path_full_score in zip(
-        tqdm(mono_align_files), full_score_files
-    ):
+    for path_mono_align, path_full_score in zip(tqdm(mono_align_files), full_score_files):
         path_full_align = f'{full_align_dir}/{basename(path_full_score)}'
         copy_mono_align_time_to_full(path_mono_align, path_full_score, path_full_align)
 
 
 if __name__ == '__main__':
-    print(
-        '----------------------------------------------------------------------------------'
-    )
+    print('----------------------------------------------------------------------------------')
     print('[ Stage 0 ] [ Step 3a ]')
     print('Copy mono_align phonemes to full_score and save in full_align.')
-    print(
-        '----------------------------------------------------------------------------------'
-    )
+    print('----------------------------------------------------------------------------------')
     main(argv[1])

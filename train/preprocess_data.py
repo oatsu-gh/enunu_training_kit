@@ -8,6 +8,9 @@ import logging
 import sys
 from os.path import dirname
 from sys import argv
+from shutil import rmtree
+from yaml import safe_load
+from pathlib import Path
 
 sys.path.append(dirname(__file__))
 
@@ -42,6 +45,16 @@ def main(path_config_yaml):
         mode='w',
     )
     logging.basicConfig(level=logging.INFO, handlers=[stream_handler, file_handler])
+
+    # 設定ファイルの読み込み
+    with open(path_config_yaml, encoding='utf-8') as fy:
+        config = safe_load(fy)
+
+    # 既存ファイルを削除する
+    out_dir = Path(config['out_dir'])
+    if out_dir.exists():
+        print(f'Removing existing output directory: {out_dir}')
+        rmtree(out_dir, ignore_errors=True)
 
     # singing_databaseフォルダ の中にあるファイルを dataフォルダにコピーする。
     copy_files.main(path_config_yaml)

@@ -57,7 +57,7 @@ def check_all_wav_files(wav_dir_in):
         return False, False, False
 
     # 並列処理: ProcessPoolExecutor を使用して get_audio_info を並列実行
-    audio_info = process_map(get_audio_info, wav_files)
+    audio_info = process_map(get_audio_info, wav_files, colour='blue')
 
     # None（エラー）が含まれていないか
     if any(info is None for info in audio_info):
@@ -77,9 +77,7 @@ def check_all_wav_files(wav_dir_in):
         mode_frame_rate = mode(all_frame_rates)
         for info in audio_info:
             if info['frame_rate'] != mode_frame_rate:
-                logging.error(
-                    'サンプリングレートが他のファイルと一致しません。: %s', info['path']
-                )
+                logging.error('サンプリングレートが他のファイルと一致しません。: %s', info['path'])
         sample_rate_ok = False
 
     # ビット深度チェック
@@ -89,9 +87,7 @@ def check_all_wav_files(wav_dir_in):
         mode_bit_depth = mode(all_sample_widths)
         for info in audio_info:
             if info['sample_width'] != mode_bit_depth:
-                logging.error(
-                    'ビット深度が他のファイルと一致しません。: %s', info['path']
-                )
+                logging.error('ビット深度が他のファイルと一致しません。: %s', info['path'])
         bit_depth_ok = False
 
     return mono_ok, sample_rate_ok, bit_depth_ok
@@ -112,9 +108,7 @@ def main(path_config_yaml):
     mono_ok, sample_rate_ok, bit_depth_ok = check_all_wav_files(wav_dir_in)
 
     if not mono_ok:
-        raise ValueError(
-            'モノラルではない音声ファイルがあります。ログを確認して修正して下さい。'
-        )
+        raise ValueError('モノラルではない音声ファイルがあります。ログを確認して修正して下さい。')
     if not sample_rate_ok:
         raise ValueError(
             'サンプリングレートが異なる音声ファイルがあります。ログを確認して修正して下さい。'

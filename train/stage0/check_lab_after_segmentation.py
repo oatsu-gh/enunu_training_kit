@@ -40,7 +40,7 @@ def main(path_config_yaml):
     そのDB中のLABファイルを点検する。
     """
     # 設定ファイルを読み取る
-    with open(path_config_yaml) as fy:
+    with open(path_config_yaml, encoding='utf-8') as fy:
         config = yaml.safe_load(fy)
     # 歌唱DBのパスを取得する
     config_dir = dirname(path_config_yaml)

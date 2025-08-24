@@ -9,6 +9,7 @@ timelag とか duration とか acoustic の学習用フォルダにコピーす�
 """
 
 import warnings
+from functools import partial
 from glob import glob
 from os import makedirs
 from os.path import basename, expanduser, splitext
@@ -19,6 +20,7 @@ import utaupy as up
 import yaml
 from natsort import natsorted
 from tqdm import tqdm
+from tqdm.contrib.concurrent import process_map
 
 with warnings.catch_warnings():
     warnings.simplefilter('ignore')
@@ -81,19 +83,17 @@ def prepare_data_for_duration_models(full_align_round_seg_files: list, duration_
         lab_fix_offset(path_lab_out)
 
 
-def segment_wav(
-    path_wav_in, acoustic_wav_dir, corresponding_full_align_round_seg_files: list
-):
-    """
-    音声ファイルを切り出して出力する。
-    - pydubをつかうと16bitにされずに済みそう。(32bitになる)
-    - pydubをつかうと入力にwav以外も使えそう。
+def _segment_one_wav(path_wav, acoustic_wav_dir, full_align_round_seg_files):
+    """1つのWAVファイルを処理（並列処理用）"""
+    songname = splitext(basename(path_wav))[0]
 
-    full_align_round_seg_files: full_align_round_seg の中にあるファイル
-    (切断時刻のデータを持っている)
-    """
+    # 対応するセグメントファイルを取得
+    corresponding_full_align_round_seg_files = [
+        path for path in full_align_round_seg_files if f'{songname}__seg' in path
+    ]
+
     # 音声ファイルを読み取る
-    wav = AudioSegment.from_file(path_wav_in, format='wav')
+    wav = AudioSegment.from_file(path_wav, format='wav')
     for path_lab in corresponding_full_align_round_seg_files:
         label = up.label.load(path_lab)
         # 切断時刻を取得
@@ -124,13 +124,15 @@ def prepare_data_for_acoustic_models(
     makedirs(label_phone_score_dir, exist_ok=True)
 
     # wavファイルを分割して保存する
-    print('Split wav files')
-    for path_wav in tqdm(wav_files):
-        songname = splitext(basename(path_wav))[0]
-        corresponding_full_align_round_seg_files = [
-            path for path in full_align_round_seg_files if f'{songname}__seg' in path
-        ]
-        segment_wav(path_wav, wav_dir, corresponding_full_align_round_seg_files)
+    print('Split wav files (parallel)')
+    # 並列用に引数を部分適用
+    func = partial(
+        _segment_one_wav,
+        acoustic_wav_dir=wav_dir,
+        full_align_round_seg_files=full_align_round_seg_files,
+    )
+    # 並列処理で実行
+    process_map(func, wav_files, colour='blue')
 
     # 手動設定したフルラベルファイルを複製
     print('Copying full_align_round_seg files')
@@ -155,12 +157,8 @@ def main(path_config_yaml):
         config = yaml.safe_load(fy)
     out_dir = expanduser(config['out_dir'])
 
-    full_align_round_seg_files = natsorted(
-        glob(f'{out_dir}/full_align_round_seg/*.lab')
-    )
-    full_score_round_seg_files = natsorted(
-        glob(f'{out_dir}/full_score_round_seg/*.lab')
-    )
+    full_align_round_seg_files = natsorted(glob(f'{out_dir}/full_align_round_seg/*.lab'))
+    full_score_round_seg_files = natsorted(glob(f'{out_dir}/full_score_round_seg/*.lab'))
     wav_files = natsorted(glob(f'{out_dir}/wav/*.wav', recursive=True))
 
     # フルラベルをtimelag用のフォルダに保存する。

@@ -36,7 +36,7 @@ def main(path_config_yaml):
     """
     configを読み取ってフォルダを指定し、全体の処理を実行する。
     """
-    with open(path_config_yaml) as fy:
+    with open(path_config_yaml, encoding='utf-8') as fy:
         config = yaml.safe_load(fy)
     out_dir = config['out_dir']
 

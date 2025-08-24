@@ -8,13 +8,14 @@
 
 from sys import argv
 from pathlib import Path
+from functools import partial
 import utaupy
 
 from natsort import natsorted
 from utaupy.label import Label
 import yaml
 from os import makedirs
-from tqdm.contrib import tzip
+from tqdm.contrib.concurrent import process_map
 
 
 def check_labfile_count_and_names(dirs: list[Path]):
@@ -198,6 +199,42 @@ def split_label_objects(
     )
 
 
+def _process_one_song(song_paths_tuple, config, output_dirs):
+    """1曲分のラベル分割処理（並列処理用）"""
+    (orig_mono_score_path, orig_full_score_path, orig_mono_align_path, orig_full_align_path) = (
+        song_paths_tuple
+    )
+
+    # LABファイルを読み取ってLabelオブジェクトを作成する。
+    in_mono_score_lab = utaupy.label.load(orig_mono_score_path)
+    in_full_score_lab = utaupy.label.load(orig_full_score_path)
+    in_mono_align_lab = utaupy.label.load(orig_mono_align_path)
+    in_full_align_lab = utaupy.label.load(orig_full_align_path)
+
+    # Labelオブジェクトを分割してセグメント化する
+    mono_score_segments, full_score_segments, mono_align_segments, full_align_segments = (
+        split_label_objects(
+            in_mono_score_lab,
+            in_full_score_lab,
+            in_mono_align_lab,
+            in_full_align_lab,
+            max_pause_duration=config['max_pause_duration'],
+            max_segment_length=config['max_segment_length'],
+        )
+    )
+
+    # セグメントを保存する。その際、ファイル名は元のファイル名にセグメント番号を付加する。
+    for idx, (mono_score_seg, full_score_seg, mono_align_seg, full_align_seg) in enumerate(
+        zip(mono_score_segments, full_score_segments, mono_align_segments, full_align_segments)
+    ):
+        str_idx = str(idx).zfill(2)
+        segment_name = f'{orig_mono_score_path.stem}__seg{str_idx}.lab'
+        mono_score_seg.write(output_dirs[0] / segment_name)
+        full_score_seg.write(output_dirs[1] / segment_name)
+        mono_align_seg.write(output_dirs[2] / segment_name)
+        full_align_seg.write(output_dirs[3] / segment_name)
+
+
 def main(path_config_yaml: Path) -> None:
     """全体の処理をする。
 
@@ -244,48 +281,23 @@ def main(path_config_yaml: Path) -> None:
     for path in output_dirs:
         makedirs(path, exist_ok=True)
 
-    # 各曲のラベルを分割してセグメント化し、ファイルとして保存する。
-    for (
-        orig_mono_score_path,
-        orig_full_score_path,
-        orig_mono_align_path,
-        orig_full_align_path,
-    ) in tzip(
-        in_mono_score_round_lab_files,
-        in_full_score_round_lab_files,
-        in_mono_align_round_lab_files,
-        in_full_align_round_lab_files,
-        colour='blue',
-    ):
-        # LABファイルを読み取ってLabelオブジェクトを作成する。
-        in_mono_score_lab = utaupy.label.load(orig_mono_score_path)
-        in_full_score_lab = utaupy.label.load(orig_full_score_path)
-        in_mono_align_lab = utaupy.label.load(orig_mono_align_path)
-        in_full_align_lab = utaupy.label.load(orig_full_align_path)
+    print('Segmenting LAB files')
 
-        # Labelオブジェクトを分割してセグメント化する
-        print()
-        print(orig_mono_score_path.stem)
-        mono_score_segments, full_score_segments, mono_align_segments, full_align_segments = (
-            split_label_objects(
-                in_mono_score_lab,
-                in_full_score_lab,
-                in_mono_align_lab,
-                in_full_align_lab,
-                max_pause_duration=config['max_pause_duration'],
-                max_segment_length=config['max_segment_length'],
-            )
+    # 曲ごとのパス組み合わせを作成
+    song_paths = list(
+        zip(
+            in_mono_score_round_lab_files,
+            in_full_score_round_lab_files,
+            in_mono_align_round_lab_files,
+            in_full_align_round_lab_files,
         )
-        # セグメントを保存する。その際、ファイル名は元のファイル名にセグメント番号を付加する。
-        for idx, (mono_score_seg, full_score_seg, mono_align_seg, full_align_seg) in enumerate(
-            zip(mono_score_segments, full_score_segments, mono_align_segments, full_align_segments)
-        ):
-            str_idx = str(idx).zfill(2)
-            segment_name = f'{orig_mono_score_path.stem}__seg{str_idx}.lab'
-            mono_score_seg.write(out_mono_score_round_seg_dir / segment_name)
-            full_score_seg.write(out_full_score_round_seg_dir / segment_name)
-            mono_align_seg.write(out_mono_align_round_seg_dir / segment_name)
-            full_align_seg.write(out_full_align_round_seg_dir / segment_name)
+    )
+
+    # 並列処理用の関数を作成
+    process_func = partial(_process_one_song, config=config, output_dirs=output_dirs)
+
+    # 並列処理で実行
+    process_map(process_func, song_paths, colour='blue')
 
 
 if __name__ == '__main__':

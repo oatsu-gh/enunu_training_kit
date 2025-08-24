@@ -10,9 +10,9 @@ from copy import copy
 from glob import glob
 from sys import argv
 
-import utaupy as up
+import utaupy
 import yaml
-from tqdm import tqdm
+from tqdm.contrib.concurrent import process_map
 from utaupy.hts import Song
 from utaupy.label import Label
 
@@ -134,28 +134,28 @@ def remove_breath_mono(label: Label):
         label.data = new_data
 
 
+def _process_one_labfile(path_full: str) -> None:
+    """1つのフルラベルファイルを処理（並列処理用）"""
+    song = utaupy.hts.load(path_full).song
+    song = merge_rests_full(song)
+    song.reset_time()
+    song.write(path_full, strict_sinsy_style=False, as_mono=False)
+
+
 def main(path_config_yaml):
     """
     musicxmlから生成されたラベルと、DBに同梱されていたラベルの、休符をすべて結合する。
     ついでにround版も作る。
     """
-    with open(path_config_yaml) as fy:
+    with open(path_config_yaml, encoding='utf-8') as fy:
         config = yaml.safe_load(fy)
     out_dir = config['out_dir']
 
     # フルラベルを処理する。
     lab_files = glob(f'{out_dir}/full_score/*.lab')
     print('Merging rests of full-LAB files')
-    for path_full in tqdm(lab_files):
-        song = up.hts.load(path_full).song
-        # 休符を結合してもとのフルラベルを上書き
-        song = merge_rests_full(song)
-        # ブレスを除去
-        # remove_breath_full(song)
-        # Sinsyの時間計算が気に入らないので、時間を計算しなおす
-        # 楽譜と合わない発声時刻を知らない楽譜と合わない発声時刻が気に入らないよ
-        song.reset_time()
-        song.write(path_full, strict_sinsy_style=False, as_mono=False)
+    # 並列処理
+    process_map(_process_one_labfile, lab_files, colour='blue')
 
 
 if __name__ == '__main__':

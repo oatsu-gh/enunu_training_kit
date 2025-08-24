@@ -50,7 +50,7 @@ def merge_rests_mono_labfiles(mono_lab_dir):
 
 
 def main(path_config_yaml):
-    with open(path_config_yaml) as fy:
+    with open(path_config_yaml, encoding='utf-8') as fy:
         config = yaml.safe_load(fy)
     out_dir = config['out_dir']
     mono_lab_dir = join(out_dir, 'lab')

@@ -20,7 +20,7 @@ from typing import Union
 
 import utaupy as up
 import yaml
-from natsort import natsorted
+from natsort import natsorted  # type: ignore
 from tqdm import tqdm
 
 VOWELS = {'a', 'i', 'u', 'e', 'o', 'A', 'I', 'U', 'E', 'O', 'N'}
@@ -33,9 +33,7 @@ def phoneme_is_ok(path_mono_align_lab, path_mono_score_lab):
     mono_align_label = up.label.load(path_mono_align_lab)
     mono_score_label = up.label.load(path_mono_score_lab)
     # 全音素記号が一致したらTrueを返す
-    for mono_align_phoneme, mono_score_phoneme in zip(
-        mono_align_label, mono_score_label
-    ):
+    for mono_align_phoneme, mono_score_phoneme in zip(mono_align_label, mono_score_label):
         if mono_align_phoneme.symbol != mono_score_phoneme.symbol:
             error_message = '\n'.join(
                 [
@@ -95,14 +93,12 @@ def calc_median_mean_pstdev(
     mono_align_phonemes = [
         phoneme
         for i, phoneme in enumerate(mono_align_phonemes[:-1])
-        if (phoneme.symbol in vowels)
-        and mono_align_phonemes[i + 1] not in ['cl', 'pau']
+        if (phoneme.symbol in vowels) and mono_align_phonemes[i + 1] not in ['cl', 'pau']
     ]
     mono_score_phonemes = [
         phoneme
         for i, phoneme in enumerate(mono_score_phonemes[:-1])
-        if (phoneme.symbol in vowels)
-        and mono_score_phonemes[i + 1] not in ['cl', 'pau']
+        if (phoneme.symbol in vowels) and mono_score_phonemes[i + 1] not in ['cl', 'pau']
     ]
     # durationの差の一覧
     duration_differences = [
@@ -227,23 +223,17 @@ def main(path_config_yaml):
     # 音素記号や最初の休符の長さが一致するか確認する。
     print('Comparing mono-align-LAB and mono-score-LAB')
     invalid_basenames = []
-    for path_mono_align, path_mono_score in zip(
-        tqdm(mono_align_files), mono_score_files
-    ):
+    for path_mono_align, path_mono_score in zip(tqdm(mono_align_files), mono_score_files):
         if not phoneme_is_ok(path_mono_align, path_mono_score):
             invalid_basenames.append(basename(path_mono_align))
 
     # 母音のdurationの統計値を取得
     print('Calculating median, mean and stdev of duration difference')
-    _, mean_100ns, stdev_100ns = calc_median_mean_pstdev(
-        mono_align_files, mono_score_files
-    )
+    _, mean_100ns, stdev_100ns = calc_median_mean_pstdev(mono_align_files, mono_score_files)
 
     # 前奏の長さを点検
     print('Checking first pau duration')
-    for path_mono_align, path_mono_score in zip(
-        tqdm(mono_align_files), mono_score_files
-    ):
+    for path_mono_align, path_mono_score in zip(tqdm(mono_align_files), mono_score_files):
         if not offet_is_ok(
             path_mono_align,
             path_mono_score,
@@ -260,9 +250,7 @@ def main(path_config_yaml):
 
     # 音素長をチェックする。
     print('Comparing mono-align-LAB durations and mono-score-LAB durations')
-    for path_mono_align, path_mono_score in zip(
-        tqdm(mono_align_files), mono_score_files
-    ):
+    for path_mono_align, path_mono_score in zip(tqdm(mono_align_files), mono_score_files):
         vowel_durations_are_ok(
             path_mono_align,
             path_mono_score,
