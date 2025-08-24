@@ -9,12 +9,12 @@ PortableGit*
 # !test.yaml
 
 # Training Output Dirs -------
-# data
-dump*
-exp
-outputs
-tensorboard
-release
+/data
+/dump
+/exp
+/outputs
+/tensorboard
+/release
 
 # Input Dataset Dirs ---------
 DB/*
