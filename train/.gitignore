@@ -10,7 +10,7 @@ PortableGit*
 
 # Training Output Dirs -------
 /data
-/dump
+/dump*
 /exp
 /outputs
 /tensorboard
