@@ -1,8 +1,13 @@
-./data
-./dump
-./exp
-./nnsvs
-./singing_database
+/data
+/db
+/dump*
+/exp
+/nnsvs
+/outputs
+/PortableGit*
+/python-*
+/tensorboard
+/singing_database
 
 *.ini
 *.lab
@@ -12,3 +17,4 @@
 *.xml
 *.musicxml
 *.zip
+*.npy
