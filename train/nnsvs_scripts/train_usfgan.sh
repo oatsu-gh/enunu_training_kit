@@ -6,6 +6,7 @@ if [ ! -z ${pretrained_vocoder_checkpoint} ]; then
 else
     extra_args=""
 fi
+
 if [[ -z "${vocoder_model}" ]]; then
     echo "ERROR: vocoder_model is not specified."
     echo "Please specify a vocoder config name"
@@ -32,7 +33,8 @@ fi
 
 # Convert NNSVS's data to usfgan's format
 if [ ! -d dump_usfgan ]; then
-    $PYTHON_EXE $NNSVS_ROOT/utils/nnsvs2usfgan.py config.yaml dump_usfgan --feature_type $feature_type
+    # $PYTHON_EXE $NNSVS_ROOT/utils/nnsvs2usfgan.py config.yaml dump_usfgan --feature_type $feature_type
+    $PYTHON_EXE $NNSVS_COMMON_ROOT/nnsvs2usfgan.py config.yaml dump_usfgan --feature_type $feature_type
 fi
 
 # NOTE: copy normalization stats to expdir for convenience
