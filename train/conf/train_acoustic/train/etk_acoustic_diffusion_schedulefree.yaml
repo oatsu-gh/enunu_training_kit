@@ -44,7 +44,7 @@ optim:
     name: RAdamScheduleFree
     params:
       lr: 0.003 # 0.001-0.002 seems best for RAdamScheduleFree
-      betas: [0.9, 0.99]  # [0.98, 0.98] on lr=0.005 was too sensitive
+      betas: [0.9, 0.99] # [0.98, 0.98] on lr=0.005 was too sensitive
       weight_decay: 0.001 # 0.0 was sensitive
   lr_scheduler:
     name: # No need for schedulefree optimizers
