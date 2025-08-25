@@ -35,41 +35,14 @@ utaupy_table_path: "./dic/kana2phonemes_etk_001.table"
 ## HTS-style question used for extracting musical/linguistic context from musicxml files
 question_path: "./hed/jp_etk_002.hed"
 
-### EnunuTrainingKit Custom Settings from here------------------------------------------------------
 ## How to segment LAB and WAV before training on stage-0
 # Long pauses over `max_pause_duration` will be removed.
 # Each segment length will be shorter than `max_segment_length`.
-max_pause_duration: 5  # seconds
-max_segment_length: 10  # seconds
+max_pause_duration: 5 # sec
+max_segment_length: 10 # sec
 
 # Choices are [strict, middle, lenient]
 vowel_duration_check: middle
-### EnunuTrainingKit Custom Settings until here------------------------------------------------------
-
-#### NNSVS's Original Data Preparation Related Settings from here -----------------------------
-# ### Data preparation related settings.
-# ## Song segmentation by silence durations.
-# # TODO: would be better to split songs by phrasal information in the musical scores
-# # Split song by silences (in sec)
-# segmentation_threshold: 0.1
-# # Min duration for a segment
-# # note: there could be some exceptions (e.g., the last segment of a song)
-# segment_min_duration: 5.0
-# # Force split segments if long silence is found regardless of min_duration
-# force_split_threshold: 5.0
-# # Offset correction
-# # If True, offset is computed in an entire song
-# # otherwise offset is computed for each segment
-# global_offset_correction: False
-# offset_correction_threshold: 0.01
-# # Time-lag constraints to filter outliers
-# timelag_allowed_range: [-20, 19]
-# timelag_allowed_range_rest: [-40, 39]
-
-# suppress_start_end_pau: True
-# start_end_pau_suppression_ratio: 0.2
-# gain_normalize: False
-#### NNSVS's Original Data Preparation Related Settings until here -----------------------------
 
 ###########################################################
 #                FEATURE EXTRACTION SETTING               #
@@ -147,7 +120,7 @@ dtype: float32
 
 # NOTE: conf/parallel_wavegan/${vocoder_model}.yaml must exist.
 # NOTE: conf/usfgan/${vocoder_model}.yaml must exist.
-vocoder_model:
+vocoder_model: nnsvs_world_parallel_hn_usfgan_sr48k
 # Pretrained checkpoint path for the vocoder model
 # NOTE: if you want to try fine-tuning, please specify the path here
 pretrained_vocoder_checkpoint:
