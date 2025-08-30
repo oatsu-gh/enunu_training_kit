@@ -47,8 +47,9 @@ optim:
       betas: [0.95, 0.999]
       weight_decay: 0.0
   lr_scheduler:
-    name: # No need for schedulefree optimizers
+    name: LambdaLR
     params:
+      lr_lambda: 1.0 # learning rate never changes
   clip_norm: 10.0
 
 resume:
