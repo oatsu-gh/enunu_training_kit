@@ -20,10 +20,18 @@ else
     feature_type="world"
 fi
 
+# Feature_type must be in vocoder_data name
+# Raise error when acoustic_features is not in vocoder_data filename
+if [[ ${vocoder_data} != *${feature_type}* ]]; then
+    echo "ERROR: feature_type (${feature_type}) is not in vocoder_data config name (${vocoder_data})"
+    echo "Please check config.yaml and specify appropriate vocoder_data config."
+    exit 1
+fi
+
 if [ -z "${RUNNING_TEST_RECIPES+x}" ]; then
-    usfgan_data_config=nnsvs_${feature_type}_sr48k
-    usfgan_train_config=nnsvs_hn_usfgan_sr48k
-    usfgan_discriminator_config=nnsvs_univnet
+    usfgan_data_config=${vocoder_data}
+    usfgan_train_config=${vocoder_train}
+    usfgan_discriminator_config=${vocoder_discriminator}
 else
     # If we are running tests, use a config for testing purpose
     usfgan_data_config=nnsvs_${feature_type}_sr48k_test
@@ -44,7 +52,7 @@ cp -v $dump_norm_dir/in_vocoder*.npy $expdir/$vocoder_model
 # NOTE: To get the maximum performance, it is highly recommended to configure
 # training options in detail
 # NOTE: conf/usfgan/generator/${vocoder_model}.yaml must exist
-cmdstr="usfgan-train --config-dir conf/train_usfgan/ \
+cmdstr="$PYTHON_EXE -m usfgan.bin.train --config-dir conf/train_usfgan/ \
     data=$usfgan_data_config \
     discriminator=$usfgan_discriminator_config \
     train=$usfgan_train_config \

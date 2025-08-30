@@ -128,7 +128,12 @@ dtype: float32
 ###########################################################
 
 # NOTE: conf/usfgan/${vocoder_model}.yaml must exist.
-vocoder_model: nnsvs_world_parallel_hn_usfgan_sr48k
+# NOTE: vocoder_model is equal to vocoder_generator
+vocoder_model: etk_world_parallel_hn_usfgan_sr48k
+vocoder_data: etk_world_sr48k
+vocoder_discriminator: etk_univnet
+vocoder_train: etk_hn_usfgan_sr48k
+
 # Pretrained checkpoint path for the vocoder model
 # NOTE: if you want to try fine-tuning, please specify the path here
 # absolute/relative path to the checkpoint
