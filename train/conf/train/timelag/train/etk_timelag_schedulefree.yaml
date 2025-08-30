@@ -24,9 +24,9 @@ optim:
   optimizer:
     name: RAdamScheduleFree
     params:
-      lr: 0.01 # 0.01-0.02 seems best for RAdamScheduleFree
-      betas: [0.98, 0.999]
-      weight_decay: 0.01
+      lr: 0.01 # TODO: Need to search best LR
+      betas: [0.98, 0.999] # TODO: Need to search best betas
+      weight_decay: 0.01 # TODO: Need to search best weight decay
   lr_scheduler:
     name: LambdaLR
     params:

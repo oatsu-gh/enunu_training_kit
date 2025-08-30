@@ -43,13 +43,13 @@ optim:
   optimizer:
     name: RAdamScheduleFree
     params:
-      lr: 0.003 # 0.001-0.002 seems best for RAdamScheduleFree
-      betas: [0.9, 0.99] # [0.98, 0.98] on lr=0.005 was too sensitive
-      weight_decay: 0.001 # 0.0 was sensitive
+      lr: 0.01 # TODO: Need to search best LR
+      betas: [0.9, 0.98] # TODO: Need to search best betas
+      weight_decay: 0.001 # TODO: Need to search best weight decay
   lr_scheduler:
     name: LambdaLR
     params:
-      lr_lambda: 1.0 # always use the same learning rate
+      lr_lambda: 1.0 # learning rate never changes
   clip_norm: 3.0 # 10.0 was sensitive
 
 resume:
