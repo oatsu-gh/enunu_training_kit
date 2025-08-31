@@ -10,7 +10,7 @@ use_ddp: false
 
 # steps can either be specified by steps or epochs
 max_train_steps: -1
-nepochs: 400 # default: 400
+nepochs: 400 # default: 400, min:200
 checkpoint_epoch_interval: 50
 
 # mse (mean squared error; l2 loss) or mae (mean absolute error; l1 loss)
@@ -24,13 +24,13 @@ optim:
   optimizer:
     name: RAdamScheduleFree
     params:
-      lr: 0.01 # TODO: Need to search best LR
-      betas: [0.9, 0.999] # TODO: Need to search best betas
-      weight_decay: 0.001 # TODO: Need to search best weight decay
+      lr: 0.01 # default: 0.01
+      betas: [0.98, 0.999] # default: [0.98, 0.999]
+      weight_decay: 0.001 # default: 0.001
   lr_scheduler:
-    name: LambdaLR
+    name: ExponentialLR
     params:
-      lr_lambda: 1.0 # learning rate never changes
+      gamma: 1.0 # learning rate never changes
 
 resume:
   checkpoint:
