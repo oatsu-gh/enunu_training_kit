@@ -13,9 +13,9 @@ data/list/train.list
 from glob import glob
 from os import makedirs
 from os.path import basename, expanduser, join, splitext
+from pathlib import Path
 from sys import argv
 
-from pathlib import Path
 import yaml
 from natsort import natsorted  # type: ignore
 
@@ -40,14 +40,15 @@ def generate_train_list_by_segment(
     train_list = []
 
     # segment レベルで dev,eval,train に分割する場合
+    eval_idx_offset = interval // 2
     for idx, songname in enumerate(utt_list):
-        # dev は多めにする。interval=10 のとき 10%。
+        # dev は多めにする。interval=11 のとき 9%。[0,11,22,33,44,55,...]
         if idx % interval == 0:
             dev_list.append(songname)
-        # eval は少なめにする。interval=10 のとき 5%。
-        elif idx % (interval * 2) == 5:
+        # eval は少なめにする。interval=11 のとき 4.5%。[5,27,49,...]
+        elif idx % (interval * 2) == eval_idx_offset:
             eval_list.append(songname)
-        # 残りは train_no_dev にする。interval=10 のとき 85%。
+        # 残りは train_no_dev にする。interval=11 のとき 86.5%。
         else:
             train_list.append(songname)
     return utt_list, dev_list, eval_list, train_list
@@ -93,12 +94,13 @@ def generate_train_list_by_song(
             d_songnames[base_songname].append(songname)
 
     # dev, eval, train に分割する
+    eval_idx_offset = interval // 2
     for idx, base_songname in enumerate(d_songnames.values()):
         # dev は多めにする。interval=10 のとき 10%。
         if idx % interval == 0:
             dev_list += base_songname
         # eval は少なめにする。interval=10 のとき 5%。
-        elif idx % (interval * 2) == 5:
+        elif idx % (interval * 2) == eval_idx_offset:
             eval_list += base_songname
         # 残りは train_no_dev にする。interval=10 のとき 85%。
         else:
