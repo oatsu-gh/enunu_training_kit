@@ -1,6 +1,6 @@
 # Interval setting
 discriminator_train_start_steps: 0 # Number of steps to start to train discriminator.
-train_max_steps: 600000 # Number of pre-training steps. NOTE: 5,000 steps/h = 120,000 steps/day
+train_max_steps: 600000 # Number of pre-training steps (default: 600000, min: ). NOTE: 5,000 steps/h = 120,000 steps/day
 save_interval_steps: 50000 # Interval steps to save checkpoint.
 eval_interval_steps: 5000 # Interval steps to evaluate the network.
 log_interval_steps: 1000 # Interval steps to record the training log.
@@ -66,10 +66,10 @@ generator_scheduler:
   _target_: torch.optim.lr_scheduler.MultiStepLR
   gamma: 0.5
   milestones:
-    - 200000
-    - 400000
-    - 600000
-    - 800000
+    - 190000
+    - 390000
+    - 590000
+    - 790000
 generator_grad_norm: 10
 discriminator_optimizer:
   _target_: torch.optim.Adam
@@ -80,8 +80,8 @@ discriminator_scheduler:
   _target_: torch.optim.lr_scheduler.MultiStepLR
   gamma: 0.5
   milestones:
-    - 200000
-    - 400000
-    - 600000
-    - 800000
+    - 190000
+    - 390000
+    - 590000
+    - 790000
 discriminator_grad_norm: 10
