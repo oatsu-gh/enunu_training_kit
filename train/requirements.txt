@@ -1,0 +1,29 @@
+# Must
+cython
+tqdm
+utaupy
+numpy<2
+natsort
+omegaconf
+light-the-torch
+colored-traceback
+colorlog
+mlflow
+pydub
+schedulefree
+hydra-optuna-sweeper
+
+# Specific branch --------------------
+git+https://github.com/oatsu-gh/pysptk@enunu-python312
+git+https://github.com/oatsu-gh/nnmnkwii@enunu-python312
+git+https://github.com/oatsu-gh/nnsvs@enunu-python312
+git+https://github.com/oatsu-gh/ParallelWaveGAN@enunu-python312
+git+https://github.com/oatsu-gh/HN-UnifiedSourceFilterGAN@enunu-python312
+
+# Not must ---------------------------
+tensorflow
+tensorboard
+
+# You need to be installed torch by yourself.
+# torch
+# torchaudio
