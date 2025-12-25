@@ -4,13 +4,13 @@
 USTの促音を含むノートを分割する。
 その際、LABファイルの中のclの時刻に合わせる。
 """
+
 from copy import deepcopy
 from datetime import datetime
 from glob import glob
 from os import makedirs
 from os.path import basename, dirname, isfile, join, splitext
 from shutil import copy2
-from typing import List
 
 import utaupy
 
@@ -21,13 +21,15 @@ def compare_lab_and_ust(ust: utaupy.ust.Ust, lab: utaupy.label.Label, table: dic
     """
     ust_phonemes = utaupy.utils.ustobj2songobj(ust, table).as_mono()
     for idx, (ph_lab, ph_ust) in enumerate(zip(lab, ust_phonemes)):
-        if ph_lab.symbol != ph_lab.symbol:
+        if ph_lab.symbol != ph_ust.symbol:
             raise ValueError(
-                f'{idx} 番目の音素が一致しません。(lab: {ph_lab.symbol}, ust: {ph_ust.symbol})')
+                f'{idx} 番目の音素が一致しません。(lab: {ph_lab.symbol}, ust: {ph_ust.symbol})'
+            )
 
 
-def get_cl_ratio_list(ust: utaupy.ust.Ust, lab_align: utaupy.label.Label, table: dict
-                      ) -> List[float]:
+def get_cl_ratio_list(
+    ust: utaupy.ust.Ust, lab_align: utaupy.label.Label, table: dict
+) -> list[float]:
     """
     ノートの時間のうちclが占める比率を計算する。
     その比率のリストを返す。
@@ -36,10 +38,8 @@ def get_cl_ratio_list(ust: utaupy.ust.Ust, lab_align: utaupy.label.Label, table:
     # DEBUG
     # lab_score.write('score.full')
     # 促音だけを取り出す。
-    cl_phonemes_align = [
-        phoneme for phoneme in lab_align if phoneme.symbol == 'cl']
-    cl_phonemes_score = [
-        phoneme for phoneme in lab_score if phoneme.symbol == 'cl']
+    cl_phonemes_align = [phoneme for phoneme in lab_align if phoneme.symbol == 'cl']
+    cl_phonemes_score = [phoneme for phoneme in lab_score if phoneme.symbol == 'cl']
 
     assert len(cl_phonemes_align) == len(cl_phonemes_score), '長さが一致しません'
 
@@ -55,14 +55,14 @@ def get_cl_ratio_list(ust: utaupy.ust.Ust, lab_align: utaupy.label.Label, table:
         cl_ratio_list.append(cl_ratio)
 
     # NOTE: 歌詞が「っ」のノートが含まれると、正常なUSTだとしても
-    #       負の値や1より大きい値を取りうるためチェック昨日を無効。
+    #       負の値や1より大きい値を取りうるためチェック機能を無効。
     # clの占める比率が変な値でないことを確認する。
     # assert all(0 <= t <= 1 for t in cl_ratio_list)
 
     return cl_ratio_list
 
 
-def devide_cl(ust, label, table):
+def divide_cl(ust, label, table):
     """
     clが含まれているノートを、ラベルを基準にして分割する。
     """
@@ -75,7 +75,8 @@ def devide_cl(ust, label, table):
     cl_notes = [note for note in ust.notes if 'っ' in note.lyric]
     if len(cl_notes) != len(cl_ratio_list):
         raise ValueError(
-            f'UST内の促音数({len(cl_notes)}) と LAB内の促音数{len(cl_ratio_list)} が一致しません。')
+            f'UST内の促音数({len(cl_notes)}) と LAB内の促音数{len(cl_ratio_list)} が一致しません。'
+        )
 
     # UST加工後のノートのリスト
     new_notes = []
@@ -118,23 +119,24 @@ def main():
     # フォルダまたはファイルを指定
     ust_dir = input('USTファイルまたはフォルダを指定してください。\n>>> ').strip('"')
     lab_dir = input('LABファイルまたはフォルダを指定してください。\n>>> ').strip('"')
-    path_table = join(dirname(__file__),
-                      'kana2phonemes_002_oto2lab.table').strip('"')
+    path_table = join(dirname(__file__), 'kana2phonemes_002_oto2lab.table').strip('"')
     # ファイルを一括取得
-    ust_files = [ust_dir] if isfile(ust_dir) else glob(
-        join(ust_dir, '**', '*.ust'), recursive=True)
-    lab_files = [lab_dir] if isfile(lab_dir) else glob(
-        join(lab_dir, '**', '*.lab'), recursive=True)
+    ust_files = (
+        [ust_dir] if isfile(ust_dir) else glob(join(ust_dir, '**', '*.ust'), recursive=True)
+    )
+    lab_files = (
+        [lab_dir] if isfile(lab_dir) else glob(join(lab_dir, '**', '*.lab'), recursive=True)
+    )
     # ファイル数が一致していることを確認する
     if len(ust_files) != len(lab_files):
         raise ValueError(
-            f'USTファイル数({len(ust_files)}) と LABファイル数({len(lab_files)}) が一致しません。')
+            f'USTファイル数({len(ust_files)}) と LABファイル数({len(lab_files)}) が一致しません。'
+        )
 
     # かな→音素変換テーブルを読み取る
     table = utaupy.table.load(path_table)
     # バックアップフォルダを作る
-    backup_dir = join(dirname(__file__), 'backup',
-                      datetime.now().strftime('%Y-%m-%d-%H%M%S'))
+    backup_dir = join(dirname(__file__), 'backup', datetime.now().strftime('%Y-%m-%d-%H%M%S'))
     makedirs(backup_dir)
     # USTファイルを書き換える
     for path_ust, path_lab in zip(ust_files, lab_files):
@@ -151,7 +153,7 @@ def main():
         ust = utaupy.ust.load(path_ust)
         label = utaupy.label.load(path_lab)
         # Ustオブジェクトの中の促音を分割
-        devide_cl(ust, label, table)
+        divide_cl(ust, label, table)
         # USTファイルを上書き
         ust.write(path_ust)
         print('---------------------------------')
