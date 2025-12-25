@@ -34,7 +34,6 @@ def pip_install_upgrade_requirements(python_exe: str, requirements_txt: str):
     pythonのパッケージを更新する
     NOTE: uv を使って高速に実施できると嬉しい。
     """
-    #
     args = [
         python_exe,
         '-m',
