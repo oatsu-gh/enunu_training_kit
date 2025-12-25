@@ -2,7 +2,7 @@
 cython
 tqdm
 utaupy
-numpy<2
+numpy>=1.26.0,<2
 natsort
 omegaconf
 light-the-torch
@@ -12,6 +12,7 @@ mlflow
 pydub
 schedulefree
 hydra-optuna-sweeper
+hydra-core<1.4
 
 # Specific branch --------------------
 git+https://github.com/oatsu-gh/pysptk@enunu-python312
@@ -24,6 +25,6 @@ git+https://github.com/oatsu-gh/HN-UnifiedSourceFilterGAN@enunu-python312
 tensorflow
 tensorboard
 
-# You need to be installed torch by yourself.
+# You need to install torch by yourself, depending on your device.
 # torch
 # torchaudio
