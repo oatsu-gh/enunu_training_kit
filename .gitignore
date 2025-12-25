@@ -1,7 +1,27 @@
-__pycache__
-nnsvs
-singing_database
+# Portable Applications ------
+python-*-embed-*
+PortableGit*
 
+# Config files ---------------
+# conf/*
+# !config.yaml
+# !myconfig.yaml
+# !test.yaml
+
+# Training Output Dirs -------
+/data
+/dump*
+/exp
+/outputs
+/tensorboard
+/release
+
+# Input Dataset Dirs ---------
+DB/*
+DATABASE/*
+singing_database/*
+
+# Ignored File Extensions ----
 *.ini
 *.lab
 *.log
@@ -11,7 +31,10 @@ singing_database
 *.xml
 *.musicxml
 *.zip
-*.code-workspace
 *.npy
 *.pth
-train/packed_models
+*.code-workspace
+
+# Other Dirs and Files -----------------
+__pycache__
+packed_models
