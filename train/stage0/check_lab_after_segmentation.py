@@ -45,7 +45,6 @@ def main(path_config_yaml):
     # 歌唱DBのパスを取得する
     config_dir = dirname(path_config_yaml)
     out_dir = expanduser(join(config_dir, config['out_dir'])).strip('"')
-    lab_dir = join(out_dir, 'lab')
     # LABファイルを点検する
     for lab_dir in [
         f'{out_dir}/full_align_round_seg',
