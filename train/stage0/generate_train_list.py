@@ -23,8 +23,6 @@ from natsort import natsorted  # type: ignore
 def generate_train_list_by_segment(
     out_dir: Path, interval: int = 11
 ) -> tuple[list[str], list[str], list[str], list[str]]:
-    pass
-
     # 学習対象のファイル一覧を取得
     wav_dir = join(out_dir, 'acoustic', 'wav')
     utt_list = glob(f'{wav_dir}/*.wav')
