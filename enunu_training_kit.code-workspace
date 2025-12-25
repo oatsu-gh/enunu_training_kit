@@ -1,0 +1,18 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../nnsvs"
+		},
+		{
+			"path": "../ParallelWaveGAN/parallel_wavegan"
+		},
+		{
+			"path": "../HN-UnifiedSourceFilterGAN/usfgan"
+		}
+	],
+	"settings": {
+	}
+}
