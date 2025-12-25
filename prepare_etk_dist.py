@@ -134,7 +134,7 @@ def main(python_dir: Path = Path(PYTHON_DIR)):
     for folder in tqdm(necessary_blank_dirs):
         (dist_dir / folder).mkdir()
 
-    # dist 内に必要なフォルダをにコピー
+    # dist 内に必要なフォルダをコピー
     print('Copying necessary folders...')
     necessary_dirs_to_copy = [
         'conf',
