@@ -13,8 +13,8 @@ function xrun() {
 }
 
 # use embed python executional file
-# PYTHON_EXE="./python-3.9.13-embed-amd64/python.exe"
-PYTHON_EXE="python"
+PYTHON_EXE="./python-3.12.10-embed-amd64/python.exe"
+# PYTHON_EXE="python"
 CONFIG_PATH="config.yaml"
 CPU_COUNT=$(nproc)
 
