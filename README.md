@@ -1,14 +1,14 @@
 # ENUNU Training Kit
 
-USTとLABとＷAVがあれば楽にモデル生成できます。
+UST と LAB と ＷAV から NNSVS / ENUNU 用モデルを作成するツールです。
 
 ## 用途
 
-UST ファイルが同梱されている歌唱データベースから、[ENUNU](https://github.com/oatsu-gh/ENUNU) 用の歌声モデルを生成します。
+UST ファイルが同梱されている歌唱データベースから、[ENUNU](https://github.com/oatsu-gh/ENUNU) および [SimpleEnunu](https://github.com/oatsu-gh/SimpleEnunu) 用の歌声モデルを生成します。
 
 ## 動作環境
 
-- Windows 10
+- Windows 10, 11
 
 ## 必要なもの
 
@@ -19,14 +19,30 @@ UST ファイルが同梱されている歌唱データベースから、[ENUNU]
 
 ## 使い方
 
-1. フォルダ "train" を開きます。
-2. **install_pytorch_for_CPU.bat** をダブルクリックします。CUDA 環境がある場合は、代わりに **install_pytorch_for_CUDA102.bat** または **install_pytorch_for_CUDA113.bat** をダブルクリックします。 (初回のみ)
-3. フォルダ "singing_database" に、学習させたい歌唱データベースを丸ごと入れます。音声は **16bit/44.1kHz** にしておくこと。
-4. run.bat または run_rmdn.bat をダブルクリックします。
-5. 待ちます。学習データが多いほど時間がかかります。 (波音リツDBを使うと、i7-7700 + GTX1070 で実行した場合、通常モデルは1時間くらい、RMDNのほうは10時間くらいかかります。)
-6. release フォルダの中に unnamed_--- というフォルダができるので、フォルダ名を変更してください。
+### ボコーダーモデルを作成しない場合
+
+1. フォルダ **singing_database** に、学習させたい歌唱データベースを丸ごと入れます。音声フォーマットは 16bit/44.1kHz または 16bit/48kHz のいずれかに統一しておくこと。
+2. **install_torch_auto.bat** をダブルクリックします。(初回のみ)
+3. **01_PREPARE.bat** をダブルクリックして待ちます。
+4. **02_TRAIN_ESSENSIAL_MODELS.bat** をダブルクリックして待ちます。時間がかかります。
+5. **04_PACK_MODELS.bat** をダブルクリックして待ちます。
+6. フォルダ packed_models 内に unnamed_etkx.x.x のような名前のフォルダができるので、フォルダ名を変更してください。
 7. 名前を変更したフォルダに、readme.txt と character.txt と 空の oto.ini を入れてください。
-8. 名前を変更したフォルダを、UTAU の voice フォルダに入れたら完成です。
+8. 名前を変更したフォルダを、UTAU の voice フォルダに入れたら完成です。適宜 config.yaml を変更して拡張機能を有効化してください。
+
+### ボコーダーモデルを作成する場合
+
+1. フォルダ singing_database に、学習させたい歌唱データベースを丸ごと入れます。音声フォーマットは **16bit/44.1kHz** または **16bit/48kHz** にしておくこと。
+2. **install_torch_auto.bat** をダブルクリックします。(初回のみ)
+3. **01_PREPARE.bat** を実行します。
+4. **02_TRAIN_ESSENSIAL_MODELS.bat** をダブルクリックして待ちます。時間がかかります。
+5. **03_TRAIN_VOCODER_MODEL.bat** をダブルクリックして待ちます。とても時間がかかります。
+6. config.yaml の `vocoder_eval_checkpoint` に、上記で訓練した vocoder モデルのフルパスを指定してください。例： `(前略)/exp/unnamed_ETK2.0.0/etk_world_parallel_hn_usfgan_sr48k/checkpoint-50000steps.pkl`
+7. **04_PACK_MODELS.bat** をダブルクリックして待ちます。時間がかかります。
+8. フォルダ packed_models 内に unnamed_etkx.x.x のような名前のフォルダができるので、フォルダ名を変更してください。
+9. 名前を変更したフォルダに、readme.txt と character.txt と 空の oto.ini を入れてください。
+10. 名前を変更したフォルダを、UTAU の voice フォルダに入れたら完成です。適宜 config.yaml を変更して拡張機能を有効化してください。
+
 
 ## 更新履歴
 
@@ -53,3 +69,6 @@ UST ファイルが同梱されている歌唱データベースから、[ENUNU]
 - v1.0.0 (2021-11-03)
   - Python Embeddable + Portable Git をポータブル環境にした。（[ENUNU/train](https://github.com/oatsu-gh/ENUNU/tree/main/train) から複製）
   - LICENSE を GPL 2 に変更
+- v2.0.0 (2025-12-26)
+  - Python を 3.12.10 に更新
+  - uSFGAN モデル作成に対応
