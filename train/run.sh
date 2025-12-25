@@ -1,36 +1,32 @@
 #!/bin/bash
 
-##########
-# customized for Portable ENUNU Training Kit on Windows
-##########
 # Set bash to 'debug' mode, it will exit on :
 # -e 'error', -u 'undefined variable', -o ... 'error in pipeline', -x 'print commands',
 set -e
 set -u
 set -o pipefail
 
-function xrun () {
+function xrun() {
     set -x
     $@
     set +x
 }
 
 # use embed python executional file
-PYTHON_ROOT="python-3.8.10-embed-amd64"
-PYTHON_EXE="$PYTHON_ROOT/python.exe"
-PYTHON_SCRIPTS_ROOT="$PYTHON_ROOT/Scripts"
+PYTHON_EXE="./python-3.12.10-embed-amd64/python.exe"
+# PYTHON_EXE="python"
 CONFIG_PATH="config.yaml"
+CPU_COUNT=$(nproc)
 
-script_dir=$(cd $(dirname ${BASH_SOURCE:-$0}); pwd)
-
-# changed-----------------------------------------------
-# NNSVS_ROOT="nnsvs"
-# NNSVS_COMMON_ROOT="nnsvs/egs/_common/spsvs"
-# . "$NNSVS_ROOT/utils/yaml_parser.sh" || exit 1;
-# to----------------------------------------------------
-NNSVS_SHELL_SCRIPTS_ROOT="nnsvs_shell_scripts"
-. $NNSVS_SHELL_SCRIPTS_ROOT/yaml_parser.sh || exit 1;
-# ------------------------------------------------------
+script_dir=$(
+    cd $(dirname ${BASH_SOURCE:-$0})
+    pwd
+)
+NNSVS_COMMON_ROOT=./nnsvs_scripts # original: $NNSVS_ROOT/recipes/_common/spsvs
+. $NNSVS_COMMON_ROOT/yaml_parser.sh || exit 1
+# NNSVS_ROOT=/path/to/nnsvs
+# NO2_ROOT=$NNSVS_ROOT/recipes/_common/no2
+# . $NNSVS_ROOT/utils/yaml_parser.sh || exit 1;
 
 eval $(parse_yaml $CONFIG_PATH "")
 
@@ -41,141 +37,75 @@ datasets=($train_set $dev_set $eval_set)
 testsets=($dev_set $eval_set)
 
 dumpdir=dump
-dump_org_dir="$dumpdir/$spk/org"
-dump_norm_dir="$dumpdir/$spk/norm"
+dump_org_dir=$dumpdir/$spk/org
+dump_norm_dir=$dumpdir/$spk/norm
 
 stage=0
-stop_stage=-1
+stop_stage=0
 
-# changed-----------------------------------------------
-# . $NNSVS_ROOT/parse_options.sh || exit 1;
-# to----------------------------------------------------
-. $NNSVS_SHELL_SCRIPTS_ROOT/parse_options.sh || exit 1;
-# ------------------------------------------------------
+# . $NNSVS_ROOT/utils/parse_options.sh || exit 1;
+. $NNSVS_COMMON_ROOT/parse_options.sh || exit 1
 
 # exp name
 if [ -z ${tag:=} ]; then
-    expname="${spk}"
+    expname=${spk}
 else
-    expname="${spk}_${tag}"
+    expname=${spk}_${tag}
 fi
-expdir="exp/$expname"
+expdir=exp/$expname
 
+if [ ${stage} -le -1 ] && [ ${stop_stage} -ge -1 ]; then
+    if [ ! -e $db_root ]; then
+        cat <<EOF
+stage -1: Downloading
 
+This recipe does not download the archive of singing voice database automatically to
+provide you the opportunity to read the original license.
+
+Please visit https://drive.google.com/drive/folders/1XA2cm3UyRpAk_BJb1LTytOWrhjsZKbSN
+and read the term of services, and then download the singing voice database manually.
+EOF
+    fi
+fi
+
+# # NNSVS ORIGINAL STAGE 0 FROM HERE -------------------------------------------------------------------
+# if [ ${stage} -le 0 ] && [ ${stop_stage} -ge 0 ]; then
+#     echo "stage 0: Data preparation"
+#     sh $NO2_ROOT/utils/data_prep.sh ./config.yaml ust
+#     mkdir -p data/list
+
+#     echo "train/dev/eval split"
+#     # NOTE: 110 songs in total
+#     find data/acoustic/ -type f -name "*.wav" -exec basename {} .wav \; \
+# 	 | sort > data/list/utt_list.txt
+#     # # 5 songs for dev/eval
+#     grep -e ERROR data/list/utt_list.txt > data/list/$eval_set.list
+#     grep -e Baptism data/list/utt_list.txt > data/list/$dev_set.list
+#     # NOTE: exclude namine_ritsu_hana_seg12 to avoid alignment and audio length mitmatch. Probably a bug of data_prep.sh
+#     grep -v -e ERROR -e Baptism -e namine_ritsu_hana_seg12 data/list/utt_list.txt > data/list/$train_set.list
+# fi
+# # NNSVS ORIGINAL STAGE 0 UNTIL HERE -------------------------------------------------------------------
+
+# Enunu Training Kit Customized Stage 0 FROM HERE -------------------------------------------------------
 # Prepare files in singing-database for training
 if [ ${stage} -le 0 ] && [ ${stop_stage} -ge 0 ]; then
-    echo "#########################################"
+    echo "========================================="
     echo "#                                       #"
     echo "#  stage 0: Data preparation            #"
     echo "#                                       #"
-    echo "#########################################"
+    echo "========================================="
     rm -rf $out_dir
     rm -f preprocess_data.py.log
-    $PYTHON_ROOT/python preprocess_data.py $CONFIG_PATH || exit 1;
+    $PYTHON_EXE preprocess_data.py $CONFIG_PATH || exit 1
     echo ""
 fi
+# Enunu Training Kit Customized STAGE 0 UNTIL HERE -------------------------------------------------------------------
 
+# Run the rest of the steps
+# Please check the script file for more details
+. $NNSVS_COMMON_ROOT/run_common_steps_dev.sh
 
-# Analyze .wav and .lab files
-if [ ${stage} -le 1 ] && [ ${stop_stage} -ge 1 ]; then
-    echo "##########################################"
-    echo "#                                        #"
-    echo "#  stage 1: Feature generation           #"
-    echo "#                                        #"
-    echo "##########################################"
-    rm -rf $dumpdir
-    # changed-----------------------------------------------
-    # . $NNSVS_COMMON_ROOT/feature_generation.sh || exit 1;
-    # to----------------------------------------------------
-    . $NNSVS_SHELL_SCRIPTS_ROOT/feature_generation.sh || exit 1;
-    # ------------------------------------------------------
-    echo ""
-fi
-
-
-# Train time-lag model
-if [ ${stage} -le 2 ] && [ ${stop_stage} -ge 2 ]; then
-    echo "##########################################"
-    echo "#                                        #"
-    echo "#  stage 2: Time-lag model training      #"
-    echo "#                                        #"
-    echo "##########################################"
-    # changed-----------------------------------------------
-    # . $NNSVS_COMMON_ROOT/train_timelag.sh || exit 1;
-    # to----------------------------------------------------
-    . $NNSVS_SHELL_SCRIPTS_ROOT/train_timelag.sh || exit 1;
-    # ------------------------------------------------------
-    echo ""
-fi
-
-
-# Train duration model
-if [ ${stage} -le 3 ] && [ ${stop_stage} -ge 3 ]; then
-    echo "##########################################"
-    echo "#                                        #"
-    echo "#  stage 3: Duration model training      #"
-    echo "#                                        #"
-    echo "##########################################"
-    # changed-----------------------------------------------
-    # . $NNSVS_COMMON_ROOT/train_duration.sh || exit 1;
-    # to----------------------------------------------------
-    . $NNSVS_SHELL_SCRIPTS_ROOT/train_duration.sh || exit 1;
-    # ------------------------------------------------------
-    echo ""
-fi
-
-
-# Train acoustic model
-if [ ${stage} -le 4 ] && [ ${stop_stage} -ge 4 ]; then
-    echo "##########################################"
-    echo "#                                        #"
-    echo "#  stage 4: Training acoustic model      #"
-    echo "#                                        #"
-    echo "##########################################"
-    # changed-----------------------------------------------
-    # . $NNSVS_COMMON_ROOT/train_acoustic.sh || exit 1;
-    # to----------------------------------------------------
-    . $NNSVS_SHELL_SCRIPTS_ROOT/train_acoustic.sh || exit 1;
-    # ------------------------------------------------------
-    echo ""
-fi
-
-
-# Generate models from timelag/duration/acoustic models
-if [ ${stage} -le 5 ] && [ ${stop_stage} -ge 5 ]; then
-    echo "##########################################"
-    echo "#                                        #"
-    echo "#  stage 5: Feature generation           #"
-    echo "#                                        #"
-    echo "##########################################"
-    # changed-----------------------------------------------
-    # . $NNSVS_COMMON_ROOT/generate.sh || exit 1;
-    # to----------------------------------------------------
-    . $NNSVS_SHELL_SCRIPTS_ROOT/generate.sh || exit 1;
-    # ------------------------------------------------------
-    echo ""
-fi
-
-#
-# # Synthesis wav files
-# if [ ${stage} -le 6 ] && [ ${stop_stage} -ge 6 ]; then
-#     echo "##########################################"
-#     echo "#                                        #"
-#     echo "#  stage 6: Waveform synthesis           #"
-#     echo "#                                        #"
-#     echo "##########################################"
-#     . $NNSVS_COMMON_ROOT/synthesis.sh
-#     echo ""
-# fi
-#
-
-# Copy the models to release directory
-if [ ${stage} -le 7 ] && [ ${stop_stage} -ge 7 ]; then
-    echo "##########################################"
-    echo "#                                        #"
-    echo "#  stage 7: Release preparation          #"
-    echo "#                                        #"
-    echo "##########################################"
-    $PYTHON_ROOT/python prepare_release.py $CONFIG_PATH || exit 1;
-    echo ""
+if [ ${stage} -le 101 ] && [ ${stop_stage} -ge 101 ]; then
+    echo "stage 101: Feature generation"
+    . $NNSVS_COMMON_ROOT/feature_generation2.sh
 fi

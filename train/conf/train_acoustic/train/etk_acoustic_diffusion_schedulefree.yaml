@@ -1,0 +1,61 @@
+# Training config for diffusion-based acoustic models.
+# NOTE: longer training iterations are preferred to improve quality
+
+out_dir: exp
+log_dir: tensorboard/exp
+
+# Use automatic mixed precision training or not
+# only works on supported GPUs
+use_amp: true
+
+# Use distributed training or not. If true, uses distributed data parallel.
+use_ddp: false
+
+# PWG checkpoint for synthesizing waveforms
+pretrained_vocoder_checkpoint: null
+
+# steps can either be specified by steps or epochs
+max_train_steps: 30000 # default: 30000, min: 20000 with data.batch_max_frames=40000
+nepochs: -1 # default: 500, min: 200
+checkpoint_epoch_interval: 100
+
+# mse (mean squared error; l2 loss) or mae (mean absolute error; l1 loss)
+# NOTE: no effect for MDN models
+feats_criterion: l1
+
+# Weight for pitch regularization loss
+# If > 0.0, add a pitch regularization loss that biases the model to
+# predict closer F0 to the F0 derived from the musical score.
+# This is conceptually same as imposing a prior distribution of the residual F0
+# to be N(0, sigma) (if we use L2 loss)
+# https://arxiv.org/abs/2108.02776
+pitch_reg_weight: 0.0
+
+# decay_size * 0.005 sec. decay to compute pitch reg weights
+pitch_reg_decay_size: 60
+
+max_num_eval_utts: 5
+
+stream_wise_loss: false
+use_detect_anomaly: false
+
+optim:
+  optimizer:
+    name: RAdamScheduleFree
+    params:
+      lr: 0.001 # default: 0.0015 (0.001-0.003)
+      betas: [0.92, 0.98] # TODO: Need to search best betas. default:[0.9, 0.98]
+      weight_decay: 0.0001
+  lr_scheduler:
+    name: ExponentialLR
+    params:
+      gamma: 1.0 # learning rate never changes
+  clip_norm: 3.0 # default: 3.0 was stable.
+
+resume:
+  checkpoint:
+  load_optimizer: false
+
+cudnn:
+  benchmark: false
+  deterministic: true

@@ -1,51 +1,67 @@
 #!/usr/bin/env python3
-# Copyright (c) 2021 oatsu
+# Copyright (c) 2021-2025 oatsu
 """
-WAVファイルが full_align_lab より長いことを確認する。
+WAVファイルが full_align_lab より長いことを確認する（concurrent.futures 使用）。
 """
-from sys import argv
+
 import warnings
 from glob import glob
 from logging import warning
 from os.path import join
+from sys import argv
+from typing import Optional
 
 import utaupy
 import yaml
 from natsort import natsorted
-from tqdm import tqdm
+from tqdm.contrib.concurrent import process_map
 
 with warnings.catch_warnings():
     warnings.simplefilter('ignore')
     from pydub import AudioSegment
 
 
-def wav_is_longer_than_lab(path_wav: str, path_lab: str) -> bool:
+def check_wav_and_lab_pair(paths: tuple[str, str]) -> Optional[str]:
     """
-    1. wavの長さを取得する
-    2. labの最後の音素の時刻を収録する
-    3. 比較する
+    WAVとLABのペアを受け取り、WAVが短ければ警告メッセージを返す。
     """
-    # LABファイルの最後の音素の時刻を取得する。[sec]
-    label = utaupy.label.load(path_lab)
-    lab_endtime_sec = label[-1].end / 10000000
+    path_wav, path_lab = paths
 
-    # WAVファイルの長さを取得する[sec]
-    wav_length_sec = AudioSegment.from_file(path_wav, 'wav').duration_seconds
+    try:
+        # LABファイルの最後の音素の時刻を取得 [sec]
+        label = utaupy.label.load(path_lab)
+        lab_endtime_sec = label[-1].end / 10000000
 
-    # 長さを比較
-    return wav_length_sec >= lab_endtime_sec
+        # WAVファイルの長さを取得 [sec]
+        wav_length_sec = AudioSegment.from_file(path_wav, 'wav').duration_seconds
+
+        if wav_length_sec < lab_endtime_sec:
+            return f'WAV is shorter than LAB or score. ({path_wav}) ({path_lab})'
+
+    except Exception as e:
+        return f'Error comparing files: {path_wav}, {path_lab} - {str(e)}'
+
+    return None
 
 
-def compare_wav_files_and_lab_files(wav_dir_in, lab_dir_in):
+def compare_wav_and_lab_parallel(wav_dir_in, lab_dir_in):
     """
-    フォルダを指定して、その中のファイルを比較
+    concurrent.futures を使って並列に比較
     """
     wav_files = natsorted(glob(f'{wav_dir_in}/*.wav'))
     lab_files = natsorted(glob(f'{lab_dir_in}/*.lab'))
-    for path_wav, path_lab in zip(tqdm(wav_files), lab_files):
-        if not wav_is_longer_than_lab(path_wav, path_lab):
-            warning_message = f'WAV is shorter than LAB or score. ({path_wav}) ({path_lab})'
-            warning(warning_message)
+
+    pairs = list(zip(wav_files, lab_files))
+    if not pairs:
+        warning(f'No files found in {wav_dir_in} or {lab_dir_in}')
+        return
+
+    # マルチプロセスまたはマルチスレッドで処理する。
+    results = process_map(check_wav_and_lab_pair, pairs)
+    # 結果から警告メッセージを抽出
+    warnings_found = [r for r in results if r]
+    for msg in warnings_found:
+        warning(msg)
 
 
 def main(path_config_yaml):
@@ -53,19 +69,19 @@ def main(path_config_yaml):
     configを読み取ってフォルダを指定し、全体の処理を実行する。
     """
     print('Asserting WAV files are longer than full_align_round label files')
-    with open(path_config_yaml, 'r') as fy:
-        config = yaml.load(fy, Loader=yaml.FullLoader)
-    out_dir = config['out_dir']
+    with open(path_config_yaml, encoding='utf-8') as fy:
+        config = yaml.safe_load(fy)
 
-    # DBに同梱されていたLABファイルを丸める
+    out_dir = config['out_dir']
     wav_dir_in = join(out_dir, 'wav')
     full_align_dir_in = join(out_dir, 'full_align_round')
     full_score_dir_in = join(out_dir, 'full_score_round')
-    # 点検する
+
     print('Comparing length of LAB and WAV')
-    compare_wav_files_and_lab_files(wav_dir_in, full_align_dir_in)
+    compare_wav_and_lab_parallel(wav_dir_in, full_align_dir_in)
+
     print('Comparing length of score and WAV')
-    compare_wav_files_and_lab_files(wav_dir_in, full_score_dir_in)
+    compare_wav_and_lab_parallel(wav_dir_in, full_score_dir_in)
 
 
 if __name__ == '__main__':

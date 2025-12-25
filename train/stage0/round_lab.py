@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2021 oatsu
+# Copyright (c) 2021-2025 oatsu
 """
 LABファイルの時刻丸めを行う。(5ms)
 フルラベル・モノラベル問わず、
@@ -8,6 +8,7 @@ LABファイルの時刻丸めを行う。(5ms)
 {out_dir}/lab/*.lab -> {out_dir}/mono_align_round/*.lab
 {out_dir}/full_score/*.lab -> {out_dir}/full_score_round/*.lab
 """
+
 from glob import glob
 from os import makedirs
 from os.path import basename, join
@@ -35,8 +36,8 @@ def main(path_config_yaml):
     """
     configを読み取ってフォルダを指定し、全体の処理を実行する。
     """
-    with open(path_config_yaml, 'r') as fy:
-        config = yaml.load(fy, Loader=yaml.FullLoader)
+    with open(path_config_yaml, encoding='utf-8') as fy:
+        config = yaml.safe_load(fy)
     out_dir = config['out_dir']
 
     # 時刻を丸める基準[100ns]

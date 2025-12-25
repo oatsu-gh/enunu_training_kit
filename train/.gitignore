@@ -1,20 +1,36 @@
+# Portable Applications ------
+python-*-embed-*
+PortableGit*
+
+# Config files ---------------
+# conf/*
+# !config.yaml
+# !myconfig.yaml
+# !test.yaml
+
+# Training Output Dirs -------
 /data
-/db
 /dump*
 /exp
-/nnsvs
 /outputs
-/PortableGit*
-/python-*
 /tensorboard
-/singing_database
+/release
 
+# Input Dataset Dirs ---------
+DB/*
+DATABASE/*
+singing_database/*
+
+# Ignored File Extensions ----
 *.ini
 *.lab
+*.log
 *.mid
 *.ust
 *.wav
 *.xml
 *.musicxml
 *.zip
-*.npy
+
+# Other Dirs and Files -----------------
+__pycache__

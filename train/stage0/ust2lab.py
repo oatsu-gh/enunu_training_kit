@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2021 oatsu
+# Copyright (c) 2021-2025 oatsu
 """
 UST版
 フルラベルを生成する。また、DB中のモノラベルを複製する。
@@ -8,16 +8,28 @@ UST版
 - '{out_dir}/sinsy_mono' にモノラベルを生成する。(この工程は省略した)
 - '{out_dir}/mono_label' にDBのモノラベルを複製する
 """
+
 import logging
+from functools import partial
 from glob import glob
 from os import makedirs
 from os.path import basename, join, splitext
 from sys import argv
 
 import yaml
-from natsort import natsorted
-from tqdm import tqdm
+from natsort import natsorted  # pyright: ignore[reportMissingImports]
+from tqdm.contrib.concurrent import process_map
 from utaupy.utils import ust2hts
+
+
+def _convert_one_ust_file(path_ust, path_full_dir_out, path_table, exclude_songs):
+    """1つのUSTファイルを処理（並列処理用）"""
+    songname = splitext(basename(path_ust))[0]
+    if songname in exclude_songs:
+        print(f'Skip excluded song: {songname}')
+    else:
+        path_full = f'{path_full_dir_out}/{songname}.lab'
+        ust2hts(path_ust, path_full, path_table, strict_sinsy_style=False)
 
 
 def ust2full(path_ust_dir_in, path_full_dir_out, path_table, exclude_songs):
@@ -26,14 +38,15 @@ def ust2full(path_ust_dir_in, path_full_dir_out, path_table, exclude_songs):
     """
     makedirs(path_full_dir_out, exist_ok=True)
     ust_files = glob(f'{path_ust_dir_in}/**/*.ust', recursive=True)
-
-    for path_ust in tqdm(ust_files):
-        songname = splitext(basename(path_ust))[0]
-        if songname in exclude_songs:
-            print(f'Skip excluded song: {songname}')
-        else:
-            path_full = f'{path_full_dir_out}/{songname}.lab'
-            ust2hts(path_ust, path_full, path_table, strict_sinsy_style=False)
+    # partialで固定引数を部分適用した関数を作成
+    func = partial(
+        _convert_one_ust_file,
+        path_full_dir_out=path_full_dir_out,
+        path_table=path_table,
+        exclude_songs=exclude_songs,
+    )
+    # 並列処理でUST変換
+    process_map(func, ust_files, colour='blue')
 
 
 def compare_number_of_ustfiles_and_labfiles(ust_dir, mono_align_dir):
@@ -45,8 +58,9 @@ def compare_number_of_ustfiles_and_labfiles(ust_dir, mono_align_dir):
     # DB内のラベルファイル一覧を取得
     mono_files = natsorted(glob(f'{mono_align_dir}/*.lab'))
     # 個数が合うか点検
-    assert len(ust_files) == len(mono_files), \
+    assert len(ust_files) == len(mono_files), (
         f'USTファイル数({len(ust_files)})とLABファイル数({len(mono_files)})が一致しません'
+    )
 
 
 def compare_name_of_ustfiles_and_labfiles(ust_dir, mono_align_dir):
@@ -71,7 +85,9 @@ def compare_name_of_ustfiles_and_labfiles(ust_dir, mono_align_dir):
             logging.error('USTファイル名とLABファイル名が一致しません:')
             logging.error('  path_ust: %s', path_ust_and_path_lab[0])
             logging.error('  path_lab: %s', path_ust_and_path_lab[1])
-        raise ValueError('USTファイル名とLABファイル名が一致しませんでした。ファイル名を点検してください')
+        raise ValueError(
+            'USTファイル名とLABファイル名が一致しませんでした。ファイル名を点検してください'
+        )
 
 
 def main(path_config_yaml):
@@ -84,11 +100,14 @@ def main(path_config_yaml):
     3. USTファイルからフルラベルを生成する。
     """
     # 設定ファイルを読み取る
-    with open(path_config_yaml, 'r') as fy:
-        config = yaml.load(fy, Loader=yaml.FullLoader)
+    with open(path_config_yaml, encoding='utf-8') as fy:
+        config = yaml.safe_load(fy)
     exclude_songs = config['exclude_songs']
     out_dir = config['out_dir'].strip('"')
-    path_table = config['table_path'].strip('"')
+    if 'table_path' in config:
+        path_table = config['table_path'].strip('"')
+    else:
+        path_table = config['utaupy_table_path'].strip('"')
 
     ust_dir = join(out_dir, 'ust')
     mono_align_dir = join(out_dir, 'lab')

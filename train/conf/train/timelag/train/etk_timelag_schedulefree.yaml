@@ -1,0 +1,41 @@
+out_dir: exp
+log_dir: tensorboard/exp
+
+# Use automatic mixed precision training or not
+# only works on supported GPUs
+use_amp: false
+
+# Use distributed training or not. If true, uses distributed data parallel.
+use_ddp: false
+
+# steps can either be specified by steps or epochs
+max_train_steps: -1
+nepochs: 200 # default: 200, min:100
+checkpoint_epoch_interval: 50
+
+# mse (mean squared error; l2 loss) or mae (mean absolute error; l1 loss)
+# NOTE: no effect for MDN models
+feats_criterion: mse
+
+stream_wise_loss: false
+use_detect_anomaly: true
+
+optim:
+  optimizer:
+    name: RAdamScheduleFree
+    params:
+      lr: 0.01 # default: 0.01
+      betas: [0.98, 0.999] # default: [0.98, 0.999]
+      weight_decay: 0.01 # default: 0.01
+  lr_scheduler:
+    name: ExponentialLR
+    params:
+      gamma: 1.0 # learning rate never changes
+
+resume:
+  checkpoint:
+  load_optimizer: false
+
+cudnn:
+  benchmark: false
+  deterministic: true

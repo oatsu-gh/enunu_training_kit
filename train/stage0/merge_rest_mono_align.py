@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-# Copyright (c) 2021 oatsu
+# Copyright (c) 2021-2025 oatsu
 """
 DBに同梱されていたモノラベル中の休符を結合して上書きする。
 いったんSongオブジェクトを経由するので、
 utaupyの仕様に沿ったフルラベルになってしまうことに注意。
 """
+
 from glob import glob
 from os.path import join
 from sys import argv
@@ -49,8 +50,8 @@ def merge_rests_mono_labfiles(mono_lab_dir):
 
 
 def main(path_config_yaml):
-    with open(path_config_yaml, 'r') as fy:
-        config = yaml.load(fy, Loader=yaml.FullLoader)
+    with open(path_config_yaml, encoding='utf-8') as fy:
+        config = yaml.safe_load(fy)
     out_dir = config['out_dir']
     mono_lab_dir = join(out_dir, 'lab')
     print(f'Merging rests of mono-LAB files in {mono_lab_dir}')

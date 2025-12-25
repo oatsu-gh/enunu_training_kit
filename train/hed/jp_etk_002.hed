@@ -1,0 +1,353 @@
+#########################################################################
+#
+#  feature_dim: 278
+#  in_rest_idx: 1
+#  in_lf0_idx: 264
+#  in_ph_start_idx: 55
+#  in_ph_end_idx: 106
+#
+# context-dependent label format:
+#   p1@p2^p3-p4+p5=p6_p7%p8^p9_p10~p11-p12!p13[f14$p15]p16
+#   /A:a1-a2-a3@a4~a5_
+#   /B:b1_b2_b3@b4|b5
+#   /C:c1+c2+c3@c4&c5
+#   /D:d1!d2#d3$d4%d5|d6&d7;d8-d9
+#   /E:e1]e2^e3=e4~e5!e6@e7#e8+e9]e10$e11|e12[e13&e14]e15=e16^e17~e18#e19_e20;e21$e22&e23%e24[e25|e26]e27-e28^e29+e30~e31=e32@e33$e34!e35%e36#e37|e38|e39-e40&e41&e42+e43[e44;e45]e46;e47~e48~e49^e50^e51@e52[e53#e54=e55!e56~e57+e58!e59^e60
+#   /F:_f1#_f2#_f3-_f4$_f5$_f6+_f7%_f8;_f9
+#   /G:g1_g2_
+#   /H:h1_h2_
+#   /I:i1_i2
+#   /J:_j1~_j2@
+#
+# #######################################################################
+
+
+# PAUSES (1) =====================================================================================
+QS "C-Phone_Rest"     {*-sil+*,*-pau+*}
+
+# VOICED PHONES (1) =====================================================================================
+QS "C-VUV_Voiced" {*-a+*,*-i+*,*-u+*,*-e+*,*-o+*,*-v+*,*-b+*,*-by+*,*-m+*,*-my+*,*-w+*,*-z+*,*-j+*,*-d+*,*-dy+*,*-n+*,*-ng+*,*-ny+*,*-N+*,*-r+*,*-ry+*,*-g+*,*-gy+*,*-y+*,*-vy+*,*-Edge+*}
+
+# UNVOICED PHONES (1)  =====================================================================================
+# NOTE: rename "C-NOFIX_VUV_Unvoiced" to "C-VUV_Unvoiced" to enable auto correcting unvoiced phonemes
+QS "C-NOFIX_VUV_Unvoiced"  {*-A+*,*-I+*,*-U+*,*-E+*,*-O+*,*-f+*,*-p+*,*-py+*,*-s+*,*-sh+*,*-ts+*,*-ch+*,*-t+*,*-ty+*,*-k+*,*-ky+*,*-h+*,*-hy+*,*-fy+*,*-GlottalStop+*,*-br+*,*-cl+*}
+
+# L-Phones (52) =====================================================================================
+QS "L-Phone_a"   {*^a-*}
+QS "L-Phone_A"   {*^A-*}
+QS "L-Phone_b"   {*^b-*}
+QS "L-Phone_br"  {*^br-*}
+QS "L-Phone_by"  {*^by-*}
+QS "L-Phone_ch"  {*^ch-*}
+QS "L-Phone_cl"  {*^cl-*}
+QS "L-Phone_d"   {*^d-*}
+QS "L-Phone_dy"  {*^dy-*}
+QS "L-Phone_e"   {*^e-*}
+QS "L-Phone_E"   {*^E-*}
+QS "L-Phone_f"   {*^f-*}
+QS "L-Phone_fy"  {*^fy-*}
+QS "L-Phone_g"   {*^g-*}
+QS "L-Phone_gy"  {*^gy-*}
+QS "L-Phone_h"   {*^h-*}
+QS "L-Phone_hy"  {*^hy-*}
+QS "L-Phone_i"   {*^i-*}
+QS "L-Phone_I"   {*^I-*}
+QS "L-Phone_j"   {*^j-*}
+QS "L-Phone_k"   {*^k-*}
+QS "L-Phone_ky"  {*^ky-*}
+QS "L-Phone_m"   {*^m-*}
+QS "L-Phone_my"  {*^my-*}
+QS "L-Phone_n"   {*^n-*}
+QS "L-Phone_ng"  {*^ng-*}
+QS "L-Phone_N"   {*^N-*}
+QS "L-Phone_ny"  {*^ny-*}
+QS "L-Phone_o"   {*^o-*}
+QS "L-Phone_O"   {*^O-*}
+QS "L-Phone_p"   {*^p-*}
+QS "L-Phone_pau" {*^pau-*}
+QS "L-Phone_py"  {*^py-*}
+QS "L-Phone_r"   {*^r-*}
+QS "L-Phone_ry"  {*^ry-*}
+QS "L-Phone_s"   {*^s-*}
+QS "L-Phone_sh"  {*^sh-*}
+QS "L-Phone_sil" {*^sil-*}
+QS "L-Phone_t"   {*^t-*}
+QS "L-Phone_ts"  {*^ts-*}
+QS "L-Phone_ty"  {*^ty-*}
+QS "L-Phone_u"   {*^u-*}
+QS "L-Phone_U"   {*^U-*}
+QS "L-Phone_v"   {*^v-*}
+QS "L-Phone_w"   {*^w-*}
+QS "L-Phone_y"   {*^y-*}
+QS "L-Phone_z"   {*^z-*}
+QS "L-Phone_GlottalStop"  {*^GlottalStop-*}
+# consider to use VocalFry instead of Edge
+QS "L-Phone_Edge"         {*^Edge-*}
+# you can define two new phonemes
+QS "L-Phone_UserPhonemeA"     {*^UserPhonemeA-*}
+QS "L-Phone_UserPhonemeB"     {*^UserPhonemeB-*}
+QS "L-Phone_vy"   {*^vy-*}
+
+# C-Phones (52) =====================================================================================
+QS "C-Phone_a"  {*-a+*}
+QS "C-Phone_A"  {*-A+*}
+QS "C-Phone_b"  {*-b+*}
+QS "C-Phone_br" {*-br+*}
+QS "C-Phone_by" {*-by+*}
+QS "C-Phone_ch" {*-ch+*}
+QS "C-Phone_cl" {*-cl+*}
+QS "C-Phone_d"  {*-d+*}
+QS "C-Phone_dy" {*-dy+*}
+QS "C-Phone_e"  {*-e+*}
+QS "C-Phone_E"  {*-E+*}
+QS "C-Phone_f"  {*-f+*}
+QS "C-Phone_fy" {*-fy+*}
+QS "C-Phone_g"  {*-g+*}
+QS "C-Phone_gy" {*-gy+*}
+QS "C-Phone_h"  {*-h+*}
+QS "C-Phone_hy" {*-hy+*}
+QS "C-Phone_i"  {*-i+*}
+QS "C-Phone_I"  {*-I+*}
+QS "C-Phone_j"  {*-j+*}
+QS "C-Phone_k"  {*-k+*}
+QS "C-Phone_ky" {*-ky+*}
+QS "C-Phone_m"  {*-m+*}
+QS "C-Phone_my" {*-my+*}
+QS "C-Phone_n"  {*-n+*}
+QS "C-Phone_ng" {*-ng+*}
+QS "C-Phone_N"  {*-N+*}
+QS "C-Phone_ny" {*-ny+*}
+QS "C-Phone_o"  {*-o+*}
+QS "C-Phone_O"  {*-O+*}
+QS "C-Phone_p"  {*-p+*}
+QS "C-Phone_pau" {*-pau+*}
+QS "C-Phone_py" {*-py+*}
+QS "C-Phone_r"  {*-r+*}
+QS "C-Phone_ry" {*-ry+*}
+QS "C-Phone_s"  {*-s+*}
+QS "C-Phone_sh" {*-sh+*}
+QS "C-Phone_sil" {*-sil+*}
+QS "C-Phone_t"  {*-t+*}
+QS "C-Phone_ts" {*-ts+*}
+QS "C-Phone_ty" {*-ty+*}
+QS "C-Phone_u"  {*-u+*}
+QS "C-Phone_U"  {*-U+*}
+QS "C-Phone_v"  {*-v+*}
+QS "C-Phone_w"  {*-w+*}
+QS "C-Phone_y"  {*-y+*}
+QS "C-Phone_z"  {*-z+*}
+QS "C-Phone_GlottalStop"  {*-GlottalStop+*}
+# consider to use VocalFry instead of Edge
+QS "C-Phone_Edge"         {*-Edge+*}
+# you can define two new phonemes
+QS "C-Phone_UserPhonemeA"     {*-UserPhonemeA+*}
+QS "C-Phone_UserPhonemeB"     {*-UserPhonemeB+*}
+QS "C-Phone_vy"  {*-vy+*}
+
+# R-Phones (52) =====================================================================================
+QS "R-Phone_a"  {*+a=*}
+QS "R-Phone_A"  {*+A=*}
+QS "R-Phone_b"  {*+b=*}
+QS "R-Phone_br" {*+br=*}
+QS "R-Phone_by" {*+by=*}
+QS "R-Phone_ch" {*+ch=*}
+QS "R-Phone_cl" {*+cl=*}
+QS "R-Phone_d"  {*+d=*}
+QS "R-Phone_dy" {*+dy=*}
+QS "R-Phone_e"  {*+e=*}
+QS "R-Phone_E"  {*+E=*}
+QS "R-Phone_f"  {*+f=*}
+QS "R-Phone_fy" {*+fy=*}
+QS "R-Phone_g"  {*+g=*}
+QS "R-Phone_gy" {*+gy=*}
+QS "R-Phone_h"  {*+h=*}
+QS "R-Phone_hy" {*+hy=*}
+QS "R-Phone_i"  {*+i=*}
+QS "R-Phone_I"  {*+I=*}
+QS "R-Phone_j"  {*+j=*}
+QS "R-Phone_k"  {*+k=*}
+QS "R-Phone_ky" {*+ky=*}
+QS "R-Phone_m"  {*+m=*}
+QS "R-Phone_my" {*+my=*}
+QS "R-Phone_n"  {*+n=*}
+QS "R-Phone_ng" {*+ng=*}
+QS "R-Phone_N"  {*+N=*}
+QS "R-Phone_ny" {*+ny=*}
+QS "R-Phone_o"  {*+o=*}
+QS "R-Phone_O"  {*+O=*}
+QS "R-Phone_p"  {*+p=*}
+QS "R-Phone_pau" {*+pau=*}
+QS "R-Phone_py" {*+py=*}
+QS "R-Phone_r"  {*+r=*}
+QS "R-Phone_ry" {*+ry=*}
+QS "R-Phone_s"  {*+s=*}
+QS "R-Phone_sh" {*+sh=*}
+QS "R-Phone_sil" {*+sil=*}
+QS "R-Phone_t"  {*+t=*}
+QS "R-Phone_ts" {*+ts=*}
+QS "R-Phone_ty" {*+ty=*}
+QS "R-Phone_u"  {*+u=*}
+QS "R-Phone_U"  {*+U=*}
+QS "R-Phone_v"  {*+v=*}
+QS "R-Phone_w"  {*+w=*}
+QS "R-Phone_y"  {*+y=*}
+QS "R-Phone_z"  {*+z=*}
+QS "R-Phone_GlottalStop"  {*+GlottalStop=*}
+# consider to use VocalFry instead of Edge
+QS "R-Phone_Edge"     {*+Edge=*}
+# you can define two new phonemes
+QS "R-Phone_UserPhonemeA"         {*+UserPhonemeA=*}
+QS "R-Phone_UserPhonemeB"         {*+UserPhonemeB=*}
+QS "R-Phone_vy"  {*+vy=*}
+
+# L-Phone Groups (30) =====================================================================================
+QS "L-Phone_voiced"                      {*^a-*,*^i-*,*^u-*,*^e-*,*^o-*,*^v-*,*^b-*,*^by-*,*^m-*,*^my-*,*^w-*,*^z-*,*^j-*,*^d-*,*^dy-*,*^n-*,*^ng-*,*^ny-*,*^N-*,*^r-*,*^ry-*,*^g-*,*^gy-*,*^y-*,*^vy-*,*^Edge-*}
+QS "L-Phone_voiceless"                   {*^A-*,*^I-*,*^U-*,*^E-*,*^O-*,*^f-*,*^p-*,*^py-*,*^s-*,*^sh-*,*^ts-*,*^ch-*,*^t-*,*^ty-*,*^k-*,*^ky-*,*^h-*,*^hy-*,*^fy-*,*^GlottalStop-*,*^br-*,*^cl-*}
+QS "L-Phone_vowel"                       {*^a-*,*^i-*,*^u-*,*^e-*,*^o-*}
+QS "L-Phone_vowel_N"                     {*^a-*,*^i-*,*^u-*,*^e-*,*^o-*,*^N-*}
+QS "L-Phone_vowel_close"                 {*^i-*,*^u-*}
+QS "L-Phone_vowel_mid_close"             {*^e-*,*^o-*}
+QS "L-Phone_vowel_front"                 {*^i-*,*^e-*}
+QS "L-Phone_vowel_back"                  {*^a-*,*^u-*,*^o-*}
+QS "L-Phone_k_ky"                        {*^k-*,*^ky-*}
+QS "L-Phone_g_gy"                        {*^g-*,*^gy-*}
+QS "L-Phone_s_sy"                        {*^s-*,*^sh-*}
+QS "L-Phone_t_ty"                        {*^t-*,*^ty-*}
+QS "L-Phone_ch_ts"                       {*^ts-*,*^ch-*}
+QS "L-Phone_d_dy"                        {*^d-*,*^dy-*}
+QS "L-Phone_n_ny"                        {*^n-*,*^ny-*}
+QS "L-Phone_h_hy"                        {*^h-*,*^hy-*}
+QS "L-Phone_f_fy"                        {*^f-*,*^fy-*}
+QS "L-Phone_v_vy"                        {*^v-*,*^vy-*}
+QS "L-Phone_b_by"                        {*^b-*,*^by-*}
+QS "L-Phone_p_py"                        {*^p-*,*^py-*}
+QS "L-Phone_m_my"                        {*^m-*,*^my-*}
+QS "L-Phone_r_ry"                        {*^r-*,*^ry-*}
+QS "L-Phone_y_i"                         {*^y-*,*^i-*}
+QS "L-Phone_n_ng_N"                      {*^n-*,*^ng-*,*^N-*}
+QS "L-Phone_voiced_or_voiceless_vowels"  {*^a-*,*^i-*,*^u-*,*^e-*,*^o-*,*^A-*,*^I-*,*^U-*,*^E-*,*^O-*}
+QS "L-Phone_a_A"                         {*^a-*,*^A-*}
+QS "L-Phone_i_I"                         {*^i-*,*^I-*}
+QS "L-Phone_u_U"                         {*^u-*,*^U-*}
+QS "L-Phone_e_E"                         {*^e-*,*^E-*}
+QS "L-Phone_o_O"                         {*^o-*,*^O-*}
+
+# C-Phone Groups (30) =====================================================================================
+QS "C-Phone_voiced"                      {*-a+*,*-i+*,*-u+*,*-e+*,*-o+*,*-v+*,*-b+*,*-by+*,*-m+*,*-my+*,*-w+*,*-z+*,*-j+*,*-d+*,*-dy+*,*-n+*,*-ng+*,*-ny+*,*-N+*,*-r+*,*-ry+*,*-g+*,*-gy+*,*-y+*,*-vy+*,*-Edge+*}
+QS "C-Phone_voiceless"                   {*-A+*,*-I+*,*-U+*,*-E+*,*-O+*,*-f+*,*-p+*,*-py+*,*-s+*,*-sh+*,*-ts+*,*-ch+*,*-t+*,*-ty+*,*-k+*,*-ky+*,*-h+*,*-hy+*,*-fy+*,*-GlottalStop+*,*-br+*,*-cl+*}
+QS "C-Phone_vowel"                       {*-a+*,*-i+*,*-u+*,*-e+*,*-o+*}
+QS "C-Phone_vowel_N"                     {*-a+*,*-i+*,*-u+*,*-e+*,*-o+*,*-N+*}
+QS "C-Phone_vowel_close"                 {*-i+*,*-u+*}
+QS "C-Phone_vowel_mid_close"             {*-e+*,*-o+*}
+QS "C-Phone_vowel_front"                 {*-i+*,*-e+*}
+QS "C-Phone_vowel_back"                  {*-a+*,*-u+*,*-o+*}
+QS "C-Phone_k_ky"                        {*-k+*,*-ky+*}
+QS "C-Phone_g_gy"                        {*-g+*,*-gy+*}
+QS "C-Phone_s_sy"                        {*-s+*,*-sh+*}
+QS "C-Phone_t_ty"                        {*-t+*,*-ty+*}
+QS "C-Phone_ch_ts"                       {*-ts+*,*-ch+*}
+QS "C-Phone_d_dy"                        {*-d+*,*-dy+*}
+QS "C-Phone_n_ny"                        {*-n+*,*-ny+*}
+QS "C-Phone_h_hy"                        {*-h+*,*-hy+*}
+QS "C-Phone_f_fy"                        {*-f+*,*-fy+*}
+QS "C-Phone_v_vy"                        {*-v+*,*-vy+*}
+QS "C-Phone_b_by"                        {*-b+*,*-by+*}
+QS "C-Phone_p_py"                        {*-p+*,*-py+*}
+QS "C-Phone_m_my"                        {*-m+*,*-my+*}
+QS "C-Phone_r_ry"                        {*-r+*,*-ry+*}
+QS "C-Phone_y_i"                         {*-y+*,*-i+*}
+QS "C-Phone_n_ng_N"                      {*-n+*,*-ng+*,*-N+*}
+QS "C-Phone_voiced_or_voiceless_vowels"  {*-a+*,*-i+*,*-u+*,*-e+*,*-o+*,*-A+*,*-I+*,*-U+*,*-E+*,*-O+*}
+QS "C-Phone_a_A"                         {*-a+*,*-A+*}
+QS "C-Phone_i_I"                         {*-i+*,*-I+*}
+QS "C-Phone_u_U"                         {*-u+*,*-U+*}
+QS "C-Phone_e_E"                         {*-e+*,*-E+*}
+QS "C-Phone_o_O"                         {*-o+*,*-O+*}
+
+# R-Phone Groups (30) =====================================================================================
+QS "R-Phone_voiced"                      {*+a=*,*+i=*,*+u=*,*+e=*,*+o=*,*+v=*,*+b=*,*+by=*,*+m=*,*+my=*,*+w=*,*+z=*,*+j=*,*+d=*,*+dy=*,*+n=*,*+ng=*,*+ny=*,*+N=*,*+r=*,*+ry=*,*+g=*,*+gy=*,*+y=*,*+vy=*,*+Edge=*}
+QS "R-Phone_voiceless"                   {*+A=*,*+I=*,*+U=*,*+E=*,*+O=*,*+f=*,*+p=*,*+py=*,*+s=*,*+sh=*,*+ts=*,*+ch=*,*+t=*,*+ty=*,*+k=*,*+ky=*,*+h=*,*+hy=*,*+fy=*,*+GlottalStop=*,*+br=*,*+cl=*}
+QS "R-Phone_vowel"                       {*+a=*,*+i=*,*+u=*,*+e=*,*+o=*}
+QS "R-Phone_vowel_N"                     {*+a=*,*+i=*,*+u=*,*+e=*,*+o=*,*+N=*}
+QS "R-Phone_vowel_close"                 {*+i=*,*+u=*}
+QS "R-Phone_vowel_mid_close"             {*+e=*,*+o=*}
+QS "R-Phone_vowel_front"                 {*+i=*,*+e=*}
+QS "R-Phone_vowel_back"                  {*+a=*,*+u=*,*+o=*}
+QS "R-Phone_k_ky"                        {*+k=*,*+ky=*}
+QS "R-Phone_g_gy"                        {*+g=*,*+gy=*}
+QS "R-Phone_s_sy"                        {*+s=*,*+sh=*}
+QS "R-Phone_t_ty"                        {*+t=*,*+ty=*}
+QS "R-Phone_ch_ts"                       {*+ts=*,*+ch=*}
+QS "R-Phone_d_dy"                        {*+d=*,*+dy=*}
+QS "R-Phone_n_ny"                        {*+n=*,*+ny=*}
+QS "R-Phone_h_hy"                        {*+h=*,*+hy=*}
+QS "R-Phone_f_fy"                        {*+f=*,*+fy=*}
+QS "R-Phone_v_vy"                        {*+v=*,*+vy=*}
+QS "R-Phone_b_by"                        {*+b=*,*+by=*}
+QS "R-Phone_p_py"                        {*+p=*,*+py=*}
+QS "R-Phone_m_my"                        {*+m=*,*+my=*}
+QS "R-Phone_r_ry"                        {*+r=*,*+ry=*}
+QS "R-Phone_y_i"                         {*+y=*,*+i=*}
+QS "R-Phone_n_ng_N"                      {*+n=*,*+ng=*,*+N=*}
+QS "R-Phone_voiced_or_voiceless_vowels"  {*+a=*,*+i=*,*+u=*,*+e=*,*+o=*,*+A=*,*+I=*,*+U=*,*+E=*,*+O=*}
+QS "R-Phone_a_A"                         {*+a=*,*+A=*}
+QS "R-Phone_i_I"                         {*+i=*,*+I=*}
+QS "R-Phone_u_U"                         {*+u=*,*+U=*}
+QS "R-Phone_e_E"                         {*+e=*,*+E=*}
+QS "R-Phone_o_O"                         {*+o=*,*+O=*}
+
+
+# continuous Vowels (2) =====================================================================================
+QS "p3p4_LC-Phones_continuous_vowels" {*^a-a+*,*^i-i+*,*^u-u+*,*^e-e+*,*^o-o+*,*^N-N+*}
+QS "p4p5_CR-Phones_continuous_vowels" {*-a+a=*,*-i+i=*,*-u+u=*,*-e+e=*,*-o+o=*,*-N+N=*}
+
+# flag (p9) (6): You can customize freely. UST flag is reflected. =====================================================================================
+QS "p9_current_phone_flag_1" {*^a1_*}
+QS "p9_current_phone_flag_2" {*^a2_*}
+QS "p9_current_phone_flag_3" {*^a3_*}
+QS "p9_current_phone_flag_4" {*^a4_*}
+QS "p9_current_phone_flag_5" {*^a5_*}
+QS "p9_current_phone_flag_6" {*^a6_*}
+
+# singing-style (p16) (6): You can customize freely =====================================================================================
+QS "p16_current_phone_style_1" {*]b1/*}
+QS "p16_current_phone_style_2" {*]b2/*}
+QS "p16_current_phone_style_3" {*]b3/*}
+QS "p16_current_phone_style_4" {*]b4/*}
+QS "p16_current_phone_style_5" {*]b5/*}
+QS "p16_current_phone_style_6" {*]b6/*}
+
+# absolute pitch (L/C/R) (3) =====================================================================================
+CQS "d1_previous_note_absolute_pitch"   {/D:(\NOTE)!}
+CQS "e1_current_note_absolute_pitch+"   {/E:(\NOTE)]}
+CQS "f1_next_note_absolute_pitch+"      {/F:(\NOTE)#}
+
+# relative pitch (C) (0) =====================================================================================
+
+# phoneme-level positional features (C) (2) =====================================================================================
+CQS "p12_phoneme_position_in_syllable_forward"  {-(\d+)!}
+CQS "p13_phoneme_position_in_syllable_backward" {!(\d+)[}
+
+# distance between consonant and vowel (2) =====================================================================================
+CQS "p14_phoneme_distance_from_previous_vowel"  {[(\d+)$}
+CQS "p15_phoneme_distance_to_next_vowel"        {$(\d+)]}
+
+# number of phonemes in a syllable (C) (1) =====================================================================================
+CQS "b1_number_of_phonemes_in_syllable"     {/B:(\d+)_}
+
+# syllable positional features (C) (2) =====================================================================================
+CQS "b2_syllable_position_in_note_forward"  {_(\d+)_}
+CQS "b3_syllable_position_in_note_backward" {_(\d+)@}
+
+# length of current note (C) (3) =====================================================================================
+CQS "e6_note_length_by_syllable"    {!(\d+)@}
+CQS "e7_note_length_by_10ms"        {@(\d+)#}
+CQS "e8_note_length_by_96th_note"   {#(\d+)+}
+
+# note-level positional features in measures (C) (0) =====================================================================================
+
+# note-level positional features in phrase (C) (0) =====================================================================================
+
+# pitch diff (2) =====================================================================================
+CQS "e57_note_pitch_difference_between_current_and_previous"    {~([pm]\d+)+}
+CQS "e58_note_pitch_difference_between_current_and_next"        {+([pm]\d+)!}
