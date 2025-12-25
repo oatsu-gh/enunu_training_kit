@@ -1,11 +1,12 @@
 #! /usr/bin/env python3
-# coding: utf-8
 # Copyright (c) 2020 oatsu
 """
 nnsvsの学習時のログファイル train.log を読み取り、CSVに変換する。
 グラフ生成はしたいがとりあえずExcelでつくる。
 """
+
 from glob import glob
+
 # from datetime import datetime
 # from pprint import pprint
 from os.path import basename, splitext
@@ -18,7 +19,7 @@ def read_log(path_log):
     ログファイルを読み取って、結果を抽出して返す。
     """
     # ファイル読み取り
-    with open(path_log, 'r') as fl:
+    with open(path_log) as fl:
         lines = fl.readlines()
     # lossの値を格納するリスト
     loss_train_no_dev = []
@@ -38,7 +39,7 @@ def generate_csv(loss_train_no_dev, loss_dev, path_csv_out):
     loss_train_no_dev (list)
     loss_dev (list)
     """
-    epoch_number_list = (str(i+1) for i in range(len(loss_train_no_dev)))
+    epoch_number_list = (str(i + 1) for i in range(len(loss_train_no_dev)))
     l_data = list(zip(epoch_number_list, loss_train_no_dev, loss_dev))
     # 出力用の文字列にする
     s_csv = 'epoch, loss(train_no_dev), loss(dev)\n'

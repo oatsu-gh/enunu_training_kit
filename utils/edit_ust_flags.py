@@ -4,8 +4,8 @@
 指定したフォルダ内の全USTに対して、
 全ノートのフラグを全部消して、新しい値で上書きする
 """
+
 from glob import glob
-from os.path import splitext
 
 import utaupy
 from tqdm import tqdm
