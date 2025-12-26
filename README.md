@@ -33,7 +33,7 @@ UST ファイルが同梱されている歌唱データベースから、[ENUNU]
 ### ボコーダーモデルを作成する場合
 
 1. フォルダ singing_database に、学習させたい歌唱データベースを丸ごと入れます。音声フォーマットは **16bit/44.1kHz** または **16bit/48kHz** にしておくこと。
-2. **install_torch_auto.bat** をダブルクリックします。(初回のみ)
+2. **00_Install_torch_auto.bat** をダブルクリックします。(初回のみ)
 3. **01_PREPARE.bat** を実行します。
 4. **02_TRAIN_ESSENSIAL_MODELS.bat** をダブルクリックして待ちます。時間がかかります。
 5. **03_TRAIN_VOCODER_MODEL.bat** をダブルクリックして待ちます。とても時間がかかります。
