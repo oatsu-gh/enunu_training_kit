@@ -151,12 +151,12 @@ def main(python_dir: Path = Path(PYTHON_DIR)):
     # dist 内に必要なファイルをコピー
     print('Copying necessary files...')
     necessary_files_to_copy = [
+        '00_Install_torch_auto.bat',
         '01_PREPARE.bat',
         '02_TRAIN_ESSENSIAL_MODELS.bat',
         '03_TRAIN_VOCODER_MODEL.bat',
         '04_PACK_MODELS.bat',
         'config.yaml',
-        'install_torch_auto.bat',
         'install_torch_cpu.bat',
         'LICENSE.txt',
         'preprocess_data.py',
