@@ -3,7 +3,7 @@ name = "enunu_training_kit"
 version = "2.0.0"
 
 [tool.ruff]
-target-version = 'py39'
+target-version = 'py312'
 line-length = 99
 
 [tool.ruff.lint]
