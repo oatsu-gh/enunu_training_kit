@@ -9,6 +9,7 @@ import shutil
 from tqdm import tqdm
 import subprocess
 from shutil import make_archive
+import tomllib
 
 PYTHON_DIR = 'python-3.12.10-embed-amd64'
 PORTABLEGIT_DIR = 'PortableGit-2.52.0'
@@ -83,11 +84,22 @@ def copy_python_dir(python_dir: Path, dist_dir: Path):
     shutil.copytree(python_dir, dist_dir / python_dir.name)
 
 
+def get_etk_version(path_toml: Path) -> str:
+    """
+    ETKのバージョンを取得する。
+    """
+    with open(path_toml, 'rb') as f:
+        toml_dict = tomllib.load(f)
+    return toml_dict['project']['version']
+
+
 def main(python_dir: Path = Path(PYTHON_DIR)):
     """
     配布用のフォルダを作成する。
     """
-    version = input('トレーニングキットのバージョンを入力してください。\n>>> ').lstrip('v')
+    # version = input('トレーニングキットのバージョンを入力してください。\n>>> ').lstrip('v')
+    version = get_etk_version(Path(__file__).parent / 'pyproject.toml')
+    assert input(f'バージョン {version} でいいですか？(y/n): ').lower() == 'y'
     assert '.' in version
 
     script_dir = Path(__file__).resolve().parent
