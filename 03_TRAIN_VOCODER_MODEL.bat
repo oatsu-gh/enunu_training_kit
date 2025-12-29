@@ -7,7 +7,6 @@
     echo ==============================================================================================
     exit /b 1
 )
-exit /b 0
 
 @REM prepare vocoder training data (stage1 is required in advance)
 .\PortableGit-2.52.0\bin\bash.exe .\run.sh --stage 9 --stop_stage 9
