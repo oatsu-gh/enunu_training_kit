@@ -1,6 +1,6 @@
 [project]
 name = "enunu_training_kit"
-version = "2.0.0"
+version = "2.0.1"
 
 [tool.ruff]
 target-version = 'py312'
