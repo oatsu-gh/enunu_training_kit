@@ -92,7 +92,7 @@ def main(python_dir: Path = Path(PYTHON_DIR)):
 
     script_dir = Path(__file__).resolve().parent
     python_dir = script_dir / python_dir
-    dist_dir = script_dir / '_dist' / f'enunu_training_kit-{version}'
+    dist_dir = script_dir / '_dist' / f'etk-{version}'
     python_exe = python_dir / 'python.exe'
     requirements_txt = script_dir / 'requirements.txt'
 
