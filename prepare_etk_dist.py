@@ -189,7 +189,7 @@ def main(python_dir: Path = Path(PYTHON_DIR)):
         base_dir=dist_dir.name,
     )
 
-    print('Preparation of ETK distribution is complete.')
+    print('Preparation of ETK distribution is complete.:', dist_dir.name + '.zip')
 
 
 if __name__ == '__main__':
