@@ -7,7 +7,6 @@
     echo ==============================================================================================
     exit /b 1
 )
-exit /b 0
 
 @REM train timelag and acoustic models
 .\PortableGit-2.52.0\bin\bash.exe .\run.sh --stage 2 --stop_stage 3
