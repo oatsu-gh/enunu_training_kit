@@ -10,7 +10,7 @@ use_ddp: false
 
 # steps can either be specified by steps or epochs
 max_train_steps: -1
-nepochs: 200 # default: 200, min:100
+nepochs: 400 # default: 400, min:200
 checkpoint_epoch_interval: 50
 
 # mse (mean squared error; l2 loss) or mae (mean absolute error; l1 loss)
