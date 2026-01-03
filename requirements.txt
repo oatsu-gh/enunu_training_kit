@@ -22,9 +22,9 @@ git+https://github.com/oatsu-gh/ParallelWaveGAN@enunu-python312
 git+https://github.com/oatsu-gh/HN-UnifiedSourceFilterGAN@enunu-python312
 
 # Not must ---------------------------
+tensorboard<3
 tensorflow
-tensorboard
 
 # You need to install torch by yourself, depending on your device.
-# torch
+# torch<3
 # torchaudio
