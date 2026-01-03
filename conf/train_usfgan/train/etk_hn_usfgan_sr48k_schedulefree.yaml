@@ -3,7 +3,7 @@ discriminator_train_start_steps: 0 # Number of steps to start to train discrimin
 train_max_steps: 600000 # Number of pre-training steps. (default=600000, recommend: 300000-900000) (5,000 steps/h = 120,000 steps/day on RTX4070TiS)
 save_interval_steps: 50000 # Interval steps to save checkpoint.
 eval_interval_steps: 10000 # Interval steps to evaluate the network.
-log_interval_steps: 10000 # Interval steps to record the training log.
+log_interval_steps: 1000 # Interval steps to record the training log.
 resume: # Epoch to resume training.
 
 # Loss balancing coefficients.
@@ -58,8 +58,8 @@ feat_match_loss:
 
 # Optimizer and scheduler setting
 generator_optimizer:
-  _target_: torch.optim.RAdamScheduleFree
-  lr: 1e-3
+  _target_: schedulefree.RAdamScheduleFree
+  lr: 2e-4
   betas: [0.5, 0.9]
   weight_decay: 0.0
 generator_scheduler:
@@ -69,7 +69,7 @@ generator_grad_norm: 10
 
 discriminator_optimizer:
   _target_: schedulefree.RAdamScheduleFree
-  lr: 1e-3
+  lr: 4e-4
   betas: [0.5, 0.9]
   weight_decay: 0.0
 discriminator_scheduler:
