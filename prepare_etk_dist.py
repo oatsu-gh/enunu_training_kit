@@ -183,7 +183,7 @@ def main(python_dir: Path = Path(PYTHON_DIR)):
     # zip圧縮する
     print('Making ZIP archive')
     make_archive(
-        dist_dir,
+        str(dist_dir),
         format='zip',
         root_dir=dist_dir.parent,
         base_dir=dist_dir.name,
