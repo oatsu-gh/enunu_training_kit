@@ -25,7 +25,7 @@ stream_weights:
 netG:
   _target_: nnsvs.acoustic_models.NPSSMultistreamParametricModel
   # The number of total input phonetic/musical context features.
-  in_dim: 258 # NOTE: need to be changed for each hed file
+  in_dim: 282 # NOTE: need to be changed for each hed file
   out_dim: 67
 
   # Must be set as the same as the above stream_sizes
@@ -40,7 +40,7 @@ netG:
   # Please configure your hed file so that in_rest_idx to be zero. i.e.,
   # put the sil-or-not phonetic context on the first item of your hed file.
   in_rest_idx: 0 # NOTE: need to be changed for each hed file
-  in_lf0_idx: 240 # NOTE: need to be changed for each hed file
+  in_lf0_idx: 264 # NOTE: need to be changed for each hed file
   out_lf0_idx: 60
   # Please leave the following parameters unspecified if you want to
   # find the corresponding values automatically from in/out scalers.
@@ -62,11 +62,11 @@ netG:
   lf0_model:
     _target_: nnsvs.acoustic_models.BiLSTMResF0NonAttentiveDecoder
     # in_dim must be equal to netG.in_dim
-    in_dim: 258 # NOTE: need to be changed for each hed file
+    in_dim: 282 # NOTE: need to be changed for each hed file
     # out_dim must be equal to the dimension of log-F0
     out_dim: 1
-    in_ph_start_idx: 53 # NOTE: need to be changed for each hed file
-    in_ph_end_idx: 102 # NOTE: need to be changed for each hed file
+    in_ph_start_idx: 55 # NOTE: need to be changed for each hed file
+    in_ph_end_idx: 106 # NOTE: need to be changed for each hed file
     # set to null to disable phoneme embedding
     embed_dim: null
     ff_hidden_dim: 256
@@ -84,7 +84,7 @@ netG:
     reduction_factor: 4
     downsample_by_conv: true
     # This must be the same as netG.in_lf0_idx
-    in_lf0_idx: 240 # NOTE: need to be changed for each hed file
+    in_lf0_idx: 264 # NOTE: need to be changed for each hed file
     # This must be 0. Don't change
     out_lf0_idx: 0
     # OK to leave unspecified
@@ -97,11 +97,11 @@ netG:
   mgc_model:
     _target_: nnsvs.acoustic_models.BiLSTMNonAttentiveDecoder
     # in_dim must be equal to netG.in_dim + dimension of log-F0
-    in_dim: 259 # (x, lf0) # NOTE: need to be changed for each hed file
+    in_dim: 283 # (x, lf0) # NOTE: need to be changed for each hed file
     # out_dim must be equal to the dimension of MGC
     out_dim: 60
-    in_ph_start_idx: 53 # NOTE: need to be changed for each hed file
-    in_ph_end_idx: 102 # NOTE: need to be changed for each hed file
+    in_ph_start_idx: 55 # NOTE: need to be changed for each hed file
+    in_ph_end_idx: 106 # NOTE: need to be changed for each hed file
     # set to null to disable phoneme embedding
     embed_dim: null
     ff_hidden_dim: 1024
@@ -128,10 +128,10 @@ netG:
   bap_model:
     _target_: nnsvs.acoustic_models.BiLSTMNonAttentiveDecoder
     # in_dim must be equal to netG.in_dim + dimension of log-F0
-    in_dim: 259 # (x, lf0) # NOTE: need to be changed for each hed file
+    in_dim: 283 # (x, lf0) # NOTE: need to be changed for each hed file
     out_dim: 5
-    in_ph_start_idx: 53 # NOTE: need to be changed for each hed file
-    in_ph_end_idx: 102 # NOTE: need to be changed for each hed file
+    in_ph_start_idx: 55 # NOTE: need to be changed for each hed file
+    in_ph_end_idx: 106 # NOTE: need to be changed for each hed file
     # set to null to disable phoneme embedding
     embed_dim: null
     ff_hidden_dim: 1024
@@ -157,9 +157,9 @@ netG:
   # V/UV prediction model
   vuv_model:
     _target_: nnsvs.model.FFConvLSTM
-    in_dim: 319 # (x, lf0, mgc) # NOTE: need to be changed for each hed file
-    in_ph_start_idx: 53 # NOTE: need to be changed for each hed file
-    in_ph_end_idx: 102 # NOTE: need to be changed for each hed file
+    in_dim: 343 # (x, lf0, mgc) # NOTE: need to be changed for each hed file
+    in_ph_start_idx: 55 # NOTE: need to be changed for each hed file
+    in_ph_end_idx: 106 # NOTE: need to be changed for each hed file
     # set to null to disable phoneme embedding
     embed_dim: null
     ff_hidden_dim: 256
