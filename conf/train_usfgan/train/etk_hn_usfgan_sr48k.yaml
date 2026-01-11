@@ -1,8 +1,8 @@
 # Interval setting
 discriminator_train_start_steps: 0 # Number of steps to start to train discriminator.
 train_max_steps: 600000 # Number of pre-training steps. (default=600000, recommend: 300000-900000) (5,000 steps/h = 120,000 steps/day on RTX4070TiS)
-save_interval_steps: 50000 # Interval steps to save checkpoint.
-eval_interval_steps: 5000 # Interval steps to evaluate the network.
+save_interval_steps: 10000 # Interval steps to save checkpoint.
+eval_interval_steps: 1000 # Interval steps to evaluate the network.
 log_interval_steps: 1000 # Interval steps to record the training log.
 resume: # Epoch to resume training.
 
@@ -70,10 +70,11 @@ generator_scheduler:
     - 390000
     - 590000
     - 790000
+    - 990000
 generator_grad_norm: 10
 discriminator_optimizer:
   _target_: torch.optim.Adam
-  lr: 4e-4
+  lr: 2e-4
   betas: [0.5, 0.9]
   weight_decay: 0.0
 discriminator_scheduler:
@@ -84,4 +85,5 @@ discriminator_scheduler:
     - 390000
     - 590000
     - 790000
+    - 990000
 discriminator_grad_norm: 10
