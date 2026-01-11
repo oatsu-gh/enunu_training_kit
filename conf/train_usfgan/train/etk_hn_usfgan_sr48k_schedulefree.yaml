@@ -1,10 +1,10 @@
 # Interval setting
 discriminator_train_start_steps: 0 # Number of steps to start to train discriminator.
-train_max_steps: 300000 # Number training steps. (default=200000, recommend: 100000-400000) (5,000 steps/h = 120,000 steps/day on RTX4070TiS)
+train_max_steps: 200000 # Number training steps. (default=200000, recommend: 100000-400000) (5,000 steps/h = 120,000 steps/day on RTX4070TiS)
 save_interval_steps: 10000 # Interval steps to save checkpoint.
 eval_interval_steps: 1000 # Interval steps to evaluate the network.
 log_interval_steps: 1000 # Interval steps to record the training log.
-resume: # Epoch to resume training.
+resume: 32427 # Epoch to resume training.
 
 # Loss balancing coefficients.
 lambda_stft: 45.0
