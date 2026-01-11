@@ -1,8 +1,8 @@
 # Interval setting
 discriminator_train_start_steps: 0 # Number of steps to start to train discriminator.
-train_max_steps: 600000 # Number of pre-training steps. (default=600000, recommend: 300000-900000) (5,000 steps/h = 120,000 steps/day on RTX4070TiS)
-save_interval_steps: 50000 # Interval steps to save checkpoint.
-eval_interval_steps: 10000 # Interval steps to evaluate the network.
+train_max_steps: 300000 # Number training steps. (default=200000, recommend: 100000-400000) (5,000 steps/h = 120,000 steps/day on RTX4070TiS)
+save_interval_steps: 10000 # Interval steps to save checkpoint.
+eval_interval_steps: 1000 # Interval steps to evaluate the network.
 log_interval_steps: 1000 # Interval steps to record the training log.
 resume: # Epoch to resume training.
 
@@ -10,7 +10,7 @@ resume: # Epoch to resume training.
 lambda_stft: 45.0
 lambda_source: 1.0
 lambda_adv: 1.0
-lambda_feat_match: 0.0
+lambda_feat_match: 1.0
 
 # Mel-spectrogram reconstraction loss setting
 stft_loss:
@@ -59,9 +59,9 @@ feat_match_loss:
 # Optimizer and scheduler setting
 generator_optimizer:
   _target_: schedulefree.RAdamScheduleFree
-  lr: 2e-4
-  betas: [0.5, 0.9]
-  weight_decay: 0.0
+  lr: 0.0005
+  betas: [0.9, 0.999]
+  weight_decay: 0.01
 generator_scheduler:
   _target_: torch.optim.lr_scheduler.ExponentialLR
   gamma: 1.0
@@ -69,9 +69,9 @@ generator_grad_norm: 10
 
 discriminator_optimizer:
   _target_: schedulefree.RAdamScheduleFree
-  lr: 4e-4
-  betas: [0.5, 0.9]
-  weight_decay: 0.0
+  lr: 0.001
+  betas: [0.9, 0.999]
+  weight_decay: 0.01
 discriminator_scheduler:
   _target_: torch.optim.lr_scheduler.ExponentialLR
   gamma: 1.0 # always use the same learning rate
