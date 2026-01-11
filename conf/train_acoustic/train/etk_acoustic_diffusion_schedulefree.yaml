@@ -15,7 +15,7 @@ use_ddp: false
 pretrained_vocoder_checkpoint: null
 
 # steps can either be specified by steps or epochs
-max_train_steps: 30000 # default: 30000, min: 20000 with data.batch_max_frames=40000
+max_train_steps: 40000 # default: 40000, min: 20000 with data.batch_max_frames=40000
 nepochs: -1 # default: 500, min: 200
 checkpoint_epoch_interval: 100
 
