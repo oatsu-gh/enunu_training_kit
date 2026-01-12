@@ -1,8 +1,6 @@
 ###########################################################
 #               GENERAL SETTINGS                          #
 ###########################################################
-etk_version: "2.0.0" # NOTE: DO NOT CHANGE
-
 ## The name of singer
 spk: "unnamed"
 ## exp tag(for managing experiments)
