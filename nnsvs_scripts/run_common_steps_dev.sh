@@ -228,6 +228,6 @@ EOL
     . $NNSVS_COMMON_ROOT/pack_model.sh
 
     # Edit config.yaml for ENUNU --------------------------------
-    python ../utils/edit_packed_model_config.py ${dst_dir}/config.yaml ./pyproject.toml
+    python utils/edit_packed_model_config.py ${dst_dir}/config.yaml ./pyproject.toml
     # -----------------------------------------------------------
 fi
