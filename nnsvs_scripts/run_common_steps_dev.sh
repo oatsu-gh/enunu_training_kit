@@ -77,7 +77,7 @@ fi
 if [ ${stage} -le 10 ] && [ ${stop_stage} -ge 10 ]; then
     echo "============================================================="
     echo "#                                                           #"
-    echo "#   stage 10: TRAIN vocoder using parallel_wavegan          #"
+    echo "#   stage 10: TRAIN Parallel WaveGAN vocoder                #"
     echo "#                                                           #"
     echo "============================================================="
     if [ ! -z ${pretrained_vocoder_checkpoint} ]; then
@@ -226,4 +226,8 @@ acoustic:
 EOL
 
     . $NNSVS_COMMON_ROOT/pack_model.sh
+
+    # Edit config.yaml for ENUNU --------------------------------
+    python ../utils/edit_packed_model_config.py ${dst_dir}/config.yaml ./pyproject.toml
+    # -----------------------------------------------------------
 fi
