@@ -1,6 +1,7 @@
 @REM --------------------------------
 @REM Install PyTorch using light-the-torch
 @REM --------------------------------
+@setlocal
 @set python_dir=%~dp0python-3.12.10-embed-amd64\
 
 @REM Uninstall existing torch packages
@@ -14,4 +15,5 @@
 %python_dir%python.exe -m pip install --upgrade light-the-torch --no-warn-script-location --disable-pip-version-check
 %python_dir%python.exe -m light_the_torch install torch torchaudio torchvision --no-warn-script-location --disable-pip-version-check
 
+@endlocal
 PAUSE
