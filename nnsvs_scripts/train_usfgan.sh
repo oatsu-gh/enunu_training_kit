@@ -2,7 +2,7 @@
 # Please don't try to run the shell script directory.
 
 if [ ! -z ${pretrained_vocoder_checkpoint} ]; then
-    extra_args="--resume $pretrained_vocoder_checkpoint"
+    extra_args="train.resume=$pretrained_vocoder_checkpoint"
 else
     extra_args=""
 fi
