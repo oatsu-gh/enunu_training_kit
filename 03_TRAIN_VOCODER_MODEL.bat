@@ -1,4 +1,4 @@
-@REM check path (tensorflow does not support japanese path)
+@REM Check path (tensorflow does not support japanese path)
 @powershell -NoProfile -Command "$path='%CD%'; if($path -match '[^\x00-\x7F]'){exit 1}else{exit 0}" >nul 2>&1
 @if %errorlevel% neq 0 (
     echo === WARNING!! ================================================================================
@@ -8,10 +8,11 @@
     exit /b 1
 )
 
-@REM prepare vocoder training data (stage1 is required in advance)
+
+@REM Prepare vocoder training data (stage1 is required in advance)
 .\PortableGit-2.52.0\bin\bash.exe .\run.sh --stage 9 --stop_stage 9
 
-@REM train vocoder (uSFGAN) model
+@REM Train vocoder (uSFGAN) model
 .\PortableGit-2.52.0\bin\bash.exe .\run.sh --stage 11 --stop_stage 11
 
 PAUSE
