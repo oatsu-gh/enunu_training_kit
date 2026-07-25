@@ -59,4 +59,4 @@ resume:
 
 cudnn:
   benchmark: false
-  deterministic: true
+  deterministic: false
