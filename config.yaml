@@ -4,7 +4,7 @@
 ## The name of singer
 spk: "unnamed"
 ## exp tag(for managing experiments)
-tag: "etk2.0.0"
+tag: "etk2.1.0"
 # Pretrained model dir (leave empty to disable)
 pretrained_expdir:
 
@@ -138,4 +138,4 @@ pretrained_vocoder_checkpoint:
 # NOTE: the checkpoint is used for synthesis and packing
 # This doesn't have any effect on training
 # Example: E:/GitHub/enunu_training_kit/train/exp/Kodoku_ETK_test_0826/nnsvs_world_parallel_hn_usfgan_sr48k/checkpoint-600000steps.pkl
-vocoder_eval_checkpoint: C:/Users/CrazY/Desktop/enunu_training_lot_2.0.0/exp/unnamed_ETK2.0.0/etk_world_parallel_hn_usfgan_sr48k/checkpoint-50000steps.pkl
+vocoder_eval_checkpoint:
